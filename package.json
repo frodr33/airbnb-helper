@@ -1,0 +1,22 @@
+{
+  "name": "airbnb-helper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frodr33/airbnb-helper.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frodr33/airbnb-helper/issues"
+  },
+  "homepage": "https://github.com/frodr33/airbnb-helper#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
