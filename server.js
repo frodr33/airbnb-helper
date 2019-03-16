@@ -20,7 +20,6 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 // Endpoint definitions
 app.get('/api/passwords', (req, res) => {
-  const count = 5;
 
   // Return them as json
   res.json(team);
