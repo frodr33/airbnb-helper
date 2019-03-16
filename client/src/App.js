@@ -3,61 +3,44 @@ import './App.css';
 
 class App extends Component {
   // Initialize state
-  state = { passwords: [] }
+  state = { names: {} }
 
-  // Fetch passwords after first mount
+  // Fetch passwords after first mount. This function is called 
+  // automatically by react when the page first loads
   componentDidMount() {
-    this.getPasswords();
+    this.getNames();
   }
 
-  getPasswords = () => {
-    // Get the passwords and store them in state
+  getNames = () => {
+    // Get the names and netIDs
     fetch('/api/passwords')
       .then(res => res.json())
-      .then(passwords => this.setState({ passwords }));
+      .then(names => this.setState({names}))
   }
 
   render() {
-    const { passwords } = this.state;
+    const { names } = this.state; //retrieve names from state
 
     return (
       <div className="App">
-        {/* Render the passwords if we have them */}
-        {passwords.length ? (
-          <div>
-            <h1>5 Passwords.</h1>
-            <ul className="passwords">
-              {/*
-                Generally it's bad to use "index" as a key.
-                It's ok for this example because there will always
-                be the same number of passwords, and they never
-                change positions in the array.
-              */}
-              {passwords.map((password, index) =>
+        {names.length != 0 ? (
+        <div>
+          <h1>CS 4300 Final Project: Airbnb-Helper</h1>
+          <ul className="heading">
+              {Object.keys(names).map((n, index) => 
                 <li key={index}>
-                  {password}
-                </li>
+                  {n + " " + names[n]}
+                </li>                
               )}
-            </ul>
-            <button
-              className="more"
-              onClick={this.getPasswords}>
-              Get More
-            </button>
-          </div>
+          </ul>
+        </div> 
         ) : (
-          // Render a helpful message otherwise
           <div>
-            <h1>No passwords :(</h1>
-            <button
-              className="more"
-              onClick={this.getPasswords}>
-              Try Again?
-            </button>
+            <h1> ERROR RETRIEVING NAMES </h1>
           </div>
         )}
       </div>
-    );
+    )
   }
 }
 

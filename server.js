@@ -1,32 +1,31 @@
-// const express = require('express')
-// const app = express()
-// const port = 3000
-
-// app.get('/', (req, res) => res.send('Hello World!'))
-
-// app.listen((process.env.PORT || port) , () => console.log(`Example app listening on port ${port}!`))
 const express = require('express');
 const path = require('path');
-const generatePassword = require('password-generator');
 
 const app = express();
+
+// This is just for Monday, its just to display
+// our names and netIds...I could easily but this on 
+// the front end but now you guys can see how data 
+// from the backend is transferred to front end
+const team = {
+  'Frank Rodriguez': 'Fsr32',
+  'Aditya Jha': 'Aj377',
+  'Jacob Mathai': 'Jm2463',
+  'Orvill De La Torre':'Od52',
+  'Tharun Sankur':'Tps87'
+}
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Put all API endpoints under '/api'
+// Endpoint definitions
 app.get('/api/passwords', (req, res) => {
   const count = 5;
 
-  // Generate some passwords
-  const passwords = Array.from(Array(count).keys()).map(i =>
-    generatePassword(12, false)
-  )
-
   // Return them as json
-  res.json(passwords);
+  res.json(team);
 
-  console.log(`Sent ${count} passwords`);
+  console.log(`Sent team names`);
 });
 
 // The "catchall" handler: for any request that doesn't
@@ -38,4 +37,4 @@ app.get('*', (req, res) => {
 const port = process.env.PORT || 5000;
 app.listen(port);
 
-console.log(`Password generator listening on ${port}`);
+console.log(`Server listening on ${port}`);
