@@ -15,7 +15,12 @@ and front end
 `npm run dev` to start the front/backend servers in development mode. The app
 is hosted on localhost:3000 and the backend is hosted on localhost:5000. This is only
 for development. For deployment, the front end is made into a build file run by the 
-backend when deployed to Heroku
+backend when deployed to Heroku. 
+
+Note: The last command only auto-refreshes when you change client/src/app.js (frontend). 
+It will not auto refresh when you edit index.js (backend). If you want to work on just
+the front end or just the back end do `npm start` in the root directory to run backend 
+or in /client to run the react app
 
 ## Folder Structure
 |      Folders     |                Purpose                  | 
