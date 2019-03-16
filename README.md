@@ -20,6 +20,13 @@ backend when deployed to Heroku
 ## Folder Structure
 |      Folders     |                Purpose                  | 
 | ---------------- |:---------------------------------------:| 
-| client           | react front-end                         | 
+| client/src       | react front-end                         | 
 | machine-learning | All ML code will go here                |  
 | node_modules     | Libraries installed. Do not commit this |
+
+## Important Files
+|      Folders      |                Purpose                  | 
+| ----------------- |:---------------------------------------:| 
+| server.js         | The entry point to the back end server  | 
+| client/src/app.js | The entry point to the front end        |  
+
