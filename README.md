@@ -1,7 +1,7 @@
 # airbnb-helper
 
 ## Getting Set up
-After cloning the repository, use the following commands:
+First get [node](https://nodejs.org/en/download/) for your computer
 
 `npm run install-dependencies` to install requried dependncies for backend
 and front end
