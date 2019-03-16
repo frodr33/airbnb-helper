@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "dev": "concurrently --kill-others \"npm start\" \"cd client & npm start\""
+    "dev": "concurrently --kill-others \"npm start\" \"cd client & npm start\"",
+    "install-dependencies": "npm install && cd client && npm install"
   },
   "repository": {
     "type": "git",
