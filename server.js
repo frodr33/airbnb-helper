@@ -39,7 +39,11 @@ app.get('/api/users', (req, res) => {
   pool.connect().then( client => {
     client.query('SELECT * FROM team_members;', (err, res) => {
       release();
-      if (err) console.log(err);
+      if (err) {
+        console.log("ERROR CONNECTING TO CLIENT")
+        console.log(err);
+      }
+      console.log("ERROR CONVERTING TO JSON")
       res.status(200).json(res.rows)
     })
   })
