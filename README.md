@@ -38,14 +38,14 @@ or in /client to run the react app
 ## Database Set up
 First Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl). Go to the 'Local Setup' section and follow the instructions there. After that do the following steps:
 
-`psql postgres`
-`CREATE ROLE me WITH LOGIN PASSWORD 'password';`
-`ALTER ROLE me CREATEDB;`
-`\q` (to quit)
-`psql -d postgres -U me` (Then enter 'password')
-`CREATE DATABASE api;`
-`\list`
-`\c api`
+`psql postgres`  
+`CREATE ROLE me WITH LOGIN PASSWORD 'password';`  
+`ALTER ROLE me CREATEDB;`  
+`\q` (to quit)  
+`psql -d postgres -U me` (Then enter 'password')  
+`CREATE DATABASE api;`  
+`\list`  
+`\c api`  
 
 CREATE TABLE team_members (
   ID SERIAL PRIMARY KEY,
