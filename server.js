@@ -28,7 +28,7 @@ app.get('/api/passwords', (req, res) => {
   console.log(`Sent team names`);
 });
 
-app.get('/users', db.getUsers)
+app.get('/api/users', db.getUsers)
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

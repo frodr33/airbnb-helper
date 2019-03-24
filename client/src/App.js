@@ -13,7 +13,7 @@ class App extends Component {
 
   getNames = () => {
     // Get the names and netIDs
-    fetch('/api/passwords')
+    fetch('/api/users')
       .then(res => res.json())
       .then(names => this.setState({names}))
   }
@@ -27,9 +27,9 @@ class App extends Component {
         <div>
           <h1>CS 4300 Final Project: Airbnb-Helper</h1>
           <ul className="heading">
-              {Object.keys(names).map((n, index) => 
-                <li key={index}>
-                  {n + " " + names[n]}
+              {Object.keys(names).map((idx) => 
+                <li key={idx}>
+                  {names[idx].name + " " + names[idx].netid}
                 </li>                
               )}
           </ul>
