@@ -30,7 +30,7 @@ app.get('/api/passwords', (req, res) => {
 });
 
 
-app.get('/api/users', (req, res) => {
+app.get('/api/users', (req, response) => {
   let pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: true
@@ -44,7 +44,7 @@ app.get('/api/users', (req, res) => {
         console.log(err);
       }
       console.log("ERROR CONVERTING TO JSON")
-      res.status(200).json(res.rows)
+      response.status(200).json(res.rows)
     })
   })
   .catch(e=> {
