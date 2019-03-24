@@ -1,21 +1,32 @@
 const { Pool, Client } = require('pg');
 var config = require('./db-config.js');
-
 var getUsers;
+
 if (config.production){
   const client = new Client({
-    connectionString: config.host,
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
   });
+
   client.connect();
-  getUsers = (request, response) => {
-    client.query('SELECT * FROM team_members', (error, results) => {
-      if (error) {
-        console.log(error);
-      }
-      response.status(200).json(results.rows)
+  getUsers = (req, response) => {
+    let pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: true
+    });
+    
+    pool.connect().then( client => {
+      client.query('SELECT * FROM team_members;', (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        response.status(200).json(res.rows);
+      })
     })
-    client.end()
-  } 
+    .catch(e=> {
+      console.log(e);
+    })
+  };
 
 } else {
   const pool = new Pool({
@@ -25,6 +36,7 @@ if (config.production){
     password: config.local_db.password,
     host: config.local_db.host
   }); 
+  
   getUsers = (request, response) => {
     pool.query('SELECT * FROM team_members', (error, results) => {
       if (error) {
@@ -32,7 +44,7 @@ if (config.production){
       }
       response.status(200).json(results.rows)
     })
-  }
+  };
 }
 
 module.exports = {

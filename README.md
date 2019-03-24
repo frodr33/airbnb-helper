@@ -84,3 +84,4 @@ MUST be in bash to use this, not the windows terminal
 
 ## Deploying to Heroku using CLI
 git push heroku master
+heroku logs --tail
