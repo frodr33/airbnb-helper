@@ -35,3 +35,31 @@ or in /client to run the react app
 | server.js         | The entry point to the back end server  | 
 | client/src/app.js | The entry point to the front end        |  
 
+## Database Set up
+PROBLEM: When queries.js trys to connect to Postgers, it automatically signs in as
+'franr' user not 'me' user...replicate on another computer and see what happens
+
+Download Postgres
+
+psql postgres
+CREATE ROLE me WITH LOGIN PASSWORD 'password';
+ALTER ROLE me CREATEDB;
+\q (to quit)
+psql -d postgres -U me (Then enter 'password')
+CREATE DATABASE api;
+\list
+\c api
+
+CREATE TABLE team_members (
+  ID SERIAL PRIMARY KEY,
+  name VARCHAR(30),
+  netID VARCHAR(30)
+);
+
+INSERT INTO team_members (name, netID)
+  VALUES ('Frank Rodriguez', 'Fsr32'), ('Aditya Jha', 'Aj377'), 
+	('Jacob Mathai', 'Jm2463'), ('Tharun Sankur', 'Tps87');
+
+SELECT * FROM team_members;
+
+psql <username> <password>
