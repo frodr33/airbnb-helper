@@ -5,7 +5,7 @@ var getUsers;
 if (config.production){
   getUsers = (req, response) => {
     let pool = new Pool({
-      connectionString: config.host,
+      connectionString: config.prod_db.host,
       ssl: true
     });
     
