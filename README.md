@@ -42,6 +42,7 @@ Next Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#
 `psql -U postgres`  
 `CREATE ROLE me WITH LOGIN PASSWORD 'password';`  Creates user 'me'  
 `ALTER ROLE me CREATEDB;`  Allow user 'me' to create db's
+`\du` to view all users  
 `\q` (to quit)  
 `psql -d postgres -U me` Login as 'me' with the password 'password'  
 `CREATE DATABASE api;`  Create database called api  
@@ -77,6 +78,8 @@ pg:pull
 `PGUSER=postgres PGPASSWORD=password heroku pg:pull HEROKU_POSTGRESQL_MAGENTA mylocaldb --app airbnb-helper`
 
 pg:push
-`heroku pg:push mylocaldb HEROKU_POSTGRESQL_MAGENTA --app airbnb-helper`
+MUST be in bash to use this, not the windows terminal
+`PGUSER=me PGPASSWORD=password heroku pg:push api postgresql-sinuous-69154 --app airbnb-helper`
 
 ## Deploying to Heroku using CLI
+git push heroku master
