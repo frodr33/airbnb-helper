@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/frodr33/airbnb-helper#readme",
   "dependencies": {
+    "@material-ui/core": "^3.9.2",
     "express": "^4.16.4",
     "password-generator": "^2.2.0",
     "pg": "^7.9.0"
