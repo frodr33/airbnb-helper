@@ -1,6 +1,6 @@
 // const PRODUCTION = false;
 var config = {
-    production: false,
+    production: true,
     local_db : {
       host:"localhost",
       database:"api",
@@ -9,15 +9,8 @@ var config = {
       port: "5432"
     },
     prod_db : {
-      host:"process.env.DATABASE_URL",
+      host: process.env.DATABASE_URL,
     }
   }
   
-// Temporary
-// var config_production = {
-//   db:{
-//     host:"process.env.DATABASE_URL",
-//   },
-// }
-
 module.exports = config;
