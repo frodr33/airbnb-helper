@@ -25,7 +25,7 @@ if (config.production){
     .catch(e=> {
       console.log(e)
     })
-  }} 
+  };
 
 } else {
   const pool = new Pool({
@@ -45,7 +45,7 @@ if (config.production){
       console.log(results);
       response.status(200).json(results.rows)
     })
-  }
+  };
 }
 
 module.exports = {
