@@ -4,11 +4,11 @@ var config = require('./db-config.js');
 var getUsers;
 if (config.production){
   const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE,
   });
   client.connect();
   getUsers = (request, response) => {
-    client.query('SELECT * FROM team_members', (error, results) => {
+    client.query('SELECT * FROM team_members;', (error, results) => {
       if (error) {
         throw error;
       }
