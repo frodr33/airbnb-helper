@@ -33,8 +33,11 @@ if (config.production){
   getUsers = (request, response) => {
     pool.query('SELECT * FROM team_members', (error, results) => {
       if (error) {
+        console.log("ERROR CONNECTING TO CLIENT")
         console.log(error);
       }
+      console.log("ERROR CHANGING RES INTO JSON");
+      console.log(results);
       response.status(200).json(results.rows)
     })
   }
