@@ -3,15 +3,9 @@ var config = require('./db-config.js');
 var getUsers;
 
 if (config.production){
-  const client = new Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: true
-  });
-
-  client.connect();
   getUsers = (req, response) => {
     let pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: config.host,
       ssl: true
     });
     
