@@ -10,8 +10,7 @@ if (config.production){
   getUsers = (request, response) => {
     client.query('SELECT * FROM team_members', (error, results) => {
       if (error) {
-        console.log("ERRORRRR");
-        console.log(error);
+        throw error;
       }
       response.status(200).json(results.rows)
     })
