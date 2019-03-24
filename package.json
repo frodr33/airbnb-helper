@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "heroku-postbuild": "cd client && npm install && npm run build",
-    "front-end" : "npm start",
-    "back-end" : "cd client & npm start",
+    "front-end": "npm start",
+    "back-end": "cd client & npm start",
     "dev": "npm-run-all --parallel front-end back-end",
     "install-dependencies": "npm install && cd client && npm install"
   },
@@ -24,7 +24,8 @@
   "homepage": "https://github.com/frodr33/airbnb-helper#readme",
   "dependencies": {
     "express": "^4.16.4",
-    "password-generator": "^2.2.0"
+    "password-generator": "^2.2.0",
+    "pg": "^7.9.0"
   },
   "devDependencies": {
     "concurrently": "^4.1.0",

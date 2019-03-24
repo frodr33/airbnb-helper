@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const db = require('./queries')
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.get('/api/passwords', (req, res) => {
 
   console.log(`Sent team names`);
 });
+
+app.get('/users', db.getUsers)
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
