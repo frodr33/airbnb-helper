@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
-const db = require('./queries')
+const { Pool, Client } = require('pg');
+// const db = require('./queries')
 
 const app = express();
 
@@ -28,7 +29,20 @@ app.get('/api/passwords', (req, res) => {
   console.log(`Sent team names`);
 });
 
-app.get('/api/users', db.getUsers)
+
+app.get('/api/users', (req, res) => {
+  let pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true
+  })
+  
+  pool.connect().then( client => {
+    res.json("Connected");
+  })
+  .catch(e=> {
+    console.log(e)
+  })
+})
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
