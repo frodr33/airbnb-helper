@@ -39,27 +39,29 @@ or in /client to run the react app
 First Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl). Go to the 'Local Setup' section and follow the instructions there. After that do the following steps:
 
 `psql postgres`  
-`CREATE ROLE me WITH LOGIN PASSWORD 'password';`  
-`ALTER ROLE me CREATEDB;`  
+`CREATE ROLE me WITH LOGIN PASSWORD 'password';`  Creates user 'me'
+`ALTER ROLE me CREATEDB;`  Allow user 'me' to create db's
 `\q` (to quit)  
-`psql -d postgres -U me` (Then enter 'password')  
-`CREATE DATABASE api;`  
+`psql -d postgres -U me` Login as 'me' with the password 'password'  
+`CREATE DATABASE api;`  Create database called api
 `\list`  
-`\c api`  
+`\c api` Connect to database 'api'
 
-`CREATE TABLE team_members (`  
-`  ID SERIAL PRIMARY KEY,  `  
-`  name VARCHAR(30),`    
-`  netID VARCHAR(30)`    
-`);`  
+After connecting to database 'api', you can enter SQL commands. I made a table called team_members
+with our names and netIDs to show you how this works. Enter the following once you connect to the 
+'api' database:
 
-`INSERT INTO team_members (name, netID)`    
-`   VALUES ('Frank Rodriguez', 'Fsr32'), ('Aditya Jha', 'Aj377'),`      
-`   ('Jacob Mathai', 'Jm2463'), ('Tharun Sankur', 'Tps87');`    
+CREATE TABLE team_members (<br/>
+  ID SERIAL PRIMARY KEY,<br/>  
+  name VARCHAR(30),<br/>
+  netID VARCHAR(30)<br/> 
+);<br/>
 
-`SELECT * FROM team_members;`  
+INSERT INTO team_members (name, netID)<br/>
+  VALUES ('Frank Rodriguez', 'Fsr32'), ('Aditya Jha', 'Aj377'),<br/>
+    ('Jacob Mathai', 'Jm2463'), ('Tharun Sankur', 'Tps87');<br/>
 
-`psql <username> <password>`  
+`SELECT * FROM team_members;`  Should print out names and netIDs in a table
 
 After doing this, run the app using `npm run dev` or individually start the server with `npm start`. Then go
-to the endpoint `localhost:5000/users`. If you see our names and netIDs, it worked!
+to the endpoint `localhost:5000/users`. If you see our names and netIDs, it worked
