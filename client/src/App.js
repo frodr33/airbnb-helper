@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import Forms from './components/Forms'
 
 class App extends Component {
   // Initialize state
@@ -22,6 +23,8 @@ class App extends Component {
     const { names } = this.state; //retrieve names from state
 
     return (
+      <div className="content-background">
+      <div className="blurred-img"></div>
       <div className="App">
         {names.length != 0 ? (
         <div>
@@ -33,12 +36,15 @@ class App extends Component {
                 </li>                
               )}
           </ul>
+
+          <Forms></Forms>
         </div> 
         ) : (
           <div>
             <h1> ERROR RETRIEVING NAMES </h1>
           </div>
         )}
+      </div>
       </div>
     )
   }
