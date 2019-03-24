@@ -36,7 +36,8 @@ or in /client to run the react app
 | client/src/app.js | The entry point to the front end        |  
 
 ## Database Set up
-First Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl). Go to the 'Local Setup' section and follow the instructions there. After that do the following steps:
+First Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
+Next Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl). Go to the 'Local Setup' section and follow the instructions there and download the latest version. Version 11.2 might not be available on Linux. In that case get 10.7, you just won't be able to push or pull from the production database. After that do the following steps:
 
 `psql postgres`  
 `CREATE ROLE me WITH LOGIN PASSWORD 'password';`  Creates user 'me'
@@ -65,3 +66,15 @@ INSERT INTO team_members (name, netID)<br/>
 
 After doing this, run the app using `npm run dev` or individually start the server with `npm start`. Then go
 to the endpoint `localhost:5000/users`. If you see our names and netIDs, it worked
+
+## Pushing to Production Database
+https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl
+
+Connect to database: `heroku pg:psql -app airbnb-helper`
+
+pg:pull
+`heroku pg:pull postgresql-sinuous-69154 testdb --app airbnb-helper`
+`PGUSER=postgres PGPASSWORD=password heroku pg:pull HEROKU_POSTGRESQL_MAGENTA mylocaldb --app airbnb-helper`
+
+pg:push
+`heroku pg:push mylocaldb HEROKU_POSTGRESQL_MAGENTA --app airbnb-helper`
