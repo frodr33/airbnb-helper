@@ -8,19 +8,24 @@ if (config.production){
     ssl: true
   });
   client.connect();
-  getUsers = (request, response) => {
-    client.query('SELECT * FROM team_members;', (error, results) => {
-      if (error) {
-        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-        console.log(error);
-        console.log(process.env.DATABASE_URL);
-        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
-        throw error;
-      }
-      response.status(200).json(results.rows)
+  getUsers = (req, response) => {
+    let pool = new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: true
     })
-    client.end()
-  } 
+    
+    pool.connect().then( client => {
+      client.query('SELECT * FROM team_members;', (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        response.status(200).json(res.rows)
+      })
+    })
+    .catch(e=> {
+      console.log(e)
+    })
+  }} 
 
 } else {
   const pool = new Pool({
