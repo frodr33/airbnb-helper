@@ -47,16 +47,19 @@ First Install [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql
 `\list`  
 `\c api`  
 
-CREATE TABLE team_members (
-  ID SERIAL PRIMARY KEY,
-  name VARCHAR(30),
-  netID VARCHAR(30)
-);
+`CREATE TABLE team_members (  
+  ID SERIAL PRIMARY KEY,  
+  name VARCHAR(30),  
+  netID VARCHAR(30)  
+);`  
 
-INSERT INTO team_members (name, netID)
-  VALUES ('Frank Rodriguez', 'Fsr32'), ('Aditya Jha', 'Aj377'), 
-	('Jacob Mathai', 'Jm2463'), ('Tharun Sankur', 'Tps87');
+`INSERT INTO team_members (name, netID)  
+  VALUES ('Frank Rodriguez', 'Fsr32'), ('Aditya Jha', 'Aj377'),   
+	('Jacob Mathai', 'Jm2463'), ('Tharun Sankur', 'Tps87');`  
 
-SELECT * FROM team_members;
+`SELECT * FROM team_members;`  
 
-psql <username> <password>
+`psql <username> <password>`  
+
+After doing this, run the app using `npm run dev` or individually start the server with `npm start`. Then go
+to the endpoint `localhost:5000/users`. If you see our names and netIDs, it worked!
