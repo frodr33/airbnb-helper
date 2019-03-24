@@ -52,7 +52,7 @@ with our names and netIDs to show you how this works. Enter the following once y
 'api' database:
 
 CREATE TABLE team_members (<br/>
-  ID SERIAL PRIMARY KEY,<br/>  
+  ID SERIAL PRIMARY KEY,<br/>
   name VARCHAR(30),<br/>
   netID VARCHAR(30)<br/> 
 );<br/>
