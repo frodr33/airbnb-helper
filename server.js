@@ -37,7 +37,11 @@ app.get('/api/users', (req, res) => {
   })
   
   pool.connect().then( client => {
-    res.json("Connected");
+    client.query('SELECT * FROM team_members;', (err, res) => {
+      release();
+      if (err) console.log(err);
+      res.status(200).json(res.rows)
+    })
   })
   .catch(e=> {
     console.log(e)
