@@ -4,12 +4,16 @@ var config = require('./db-config.js');
 var getUsers;
 if (config.production){
   const client = new Client({
-    connectionString: process.env.DATABASE,
+    connectionString: process.env.DATABASE_URL,
   });
   client.connect();
   getUsers = (request, response) => {
     client.query('SELECT * FROM team_members;', (error, results) => {
       if (error) {
+        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
+        console.log(error);
+        console.log(process.env.DATABASE_URL);
+        console.log("ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR");
         throw error;
       }
       response.status(200).json(results.rows)
