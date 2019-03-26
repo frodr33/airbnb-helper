@@ -41,7 +41,7 @@ class App extends Component {
         </div> 
         ) : (
           <div>
-            <h1> ERROR RETRIEVING NAMES </h1>
+            <h1> ERROR RETRIEVING </h1>
           </div>
         )}
       </div>
