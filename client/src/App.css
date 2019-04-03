@@ -1,16 +1,19 @@
 .App {
-  text-align: center;
   font-family: "Courier New", monospace;
 	position:relative;
 	z-index:2;
 	color:#fff;
 }
 
-.content-background {
+/* .content-background {
   width: 100%;
   height: 800px;
 	position:relative;
   padding:15px;
+} */
+
+.NavBar {
+  font-size: 20px !important;
 }
 
 
@@ -23,8 +26,8 @@
   bottom:0;
 	background-size:cover;
 	z-index:1;
-  filter: blur(8px);
-  -webkit-filter: blur(8px);
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
 }
 
 h1 {

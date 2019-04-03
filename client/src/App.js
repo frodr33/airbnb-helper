@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Forms from './components/Forms'
+import NavBar from './components/NavBar'
 
 class App extends Component {
   // Initialize state
@@ -23,12 +24,17 @@ class App extends Component {
     const { names } = this.state; //retrieve names from state
 
     return (
-      <div className="content-background">
+      <div>
       <div className="blurred-img"></div>
       <div className="App">
+        <div className="NavBar">
+          <NavBar>
+          </NavBar>
+        </div>
+      
+
         {names.length != 0 ? (
         <div>
-          <h1>CS 4300 Final Project: Airbnb-Helper</h1>
           <ul className="heading">
               {Object.keys(names).map((idx) => 
                 <li key={idx}>
