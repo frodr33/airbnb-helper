@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 import Forms from './components/Forms'
+import NavBar from './components/NavBar'
+import TextForm from './components/TextForm'
+import CustomFooter from './components/Footer'
+import { Card } from 'antd';
 
 class App extends Component {
   // Initialize state
@@ -23,31 +27,47 @@ class App extends Component {
     const { names } = this.state; //retrieve names from state
 
     return (
-      <div className="content-background">
+      <div>
       <div className="blurred-img"></div>
-      <div className="App">
-        {names.length != 0 ? (
+      {/* <div id="appDiv" className="App"> */}
+      <div className="Header">
         <div>
-          <h1>CS 4300 Final Project: Airbnb-Helper</h1>
-          <ul className="heading">
-              {Object.keys(names).map((idx) => 
-                <li key={idx}>
-                  {names[idx].name + " " + names[idx].netid}
-                </li>                
-              )}
-          </ul>
+          <NavBar></NavBar>
+        </div>
 
-          <Forms></Forms>
-        </div> 
-        ) : (
+        {/* <TextForm></TextForm> */}
+        <div style={{paddingLeft: "28em", paddingRight: "28em", paddingTop: "10em"}}>
+          <Card title="Create a travel iternary" bordered={true}>
+            <TextForm></TextForm>
+          </Card>
+        </div>
+        {/* <div className="App">
           <div>
+<<<<<<< HEAD
             <h1> ERROR RETRIEVING </h1>
           </div>
         )}
+=======
+            <ul className="heading">
+                {Object.keys(names).map((idx) => 
+                  <li key={idx}>
+                    {names[idx].name + " " + names[idx].netid}
+                  </li>                
+                )}
+            </ul>
+          </div>       
+        </div> */}
+        
+        <div className="Footer">
+          <CustomFooter></CustomFooter>
+        </div>
+>>>>>>> master
       </div>
       </div>
     )
   }
 }
+
+
 
 export default App;
