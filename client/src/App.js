@@ -43,11 +43,6 @@ class App extends Component {
         </div>
         {/* <div className="App">
           <div>
-<<<<<<< HEAD
-            <h1> ERROR RETRIEVING </h1>
-          </div>
-        )}
-=======
             <ul className="heading">
                 {Object.keys(names).map((idx) => 
                   <li key={idx}>
@@ -61,7 +56,6 @@ class App extends Component {
         <div className="Footer">
           <CustomFooter></CustomFooter>
         </div>
->>>>>>> master
       </div>
       </div>
     )
