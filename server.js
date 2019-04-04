@@ -18,7 +18,7 @@ app.get('*', (_, res) => {
 /* Ping Heroku Address so that website doesn't sleep. Pings
    Every 5 minutes */
    setInterval(function() {
-    http.get("https://airbnb-helper.herokuapp.com/");
+    http.get("http://airbnb-helper.herokuapp.com/");
 }, 300000); 
 
 const port = process.env.PORT || 5000;
