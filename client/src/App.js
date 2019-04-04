@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './App.css';
 import Forms from './components/Forms'
 import NavBar from './components/NavBar'
+import TextForm from './components/TextForm'
+import CustomFooter from './components/Footer'
+import { Card } from 'antd';
 
 class App extends Component {
   // Initialize state
@@ -26,34 +29,39 @@ class App extends Component {
     return (
       <div>
       <div className="blurred-img"></div>
-      <div className="App">
-        <div className="NavBar">
-          <NavBar>
-          </NavBar>
-        </div>
-      
-
-        {names.length != 0 ? (
+      {/* <div id="appDiv" className="App"> */}
+      <div className="Header">
         <div>
-          <ul className="heading">
-              {Object.keys(names).map((idx) => 
-                <li key={idx}>
-                  {names[idx].name + " " + names[idx].netid}
-                </li>                
-              )}
-          </ul>
+          <NavBar></NavBar>
+        </div>
 
-          <Forms></Forms>
-        </div> 
-        ) : (
+        {/* <TextForm></TextForm> */}
+        <div style={{paddingLeft: "28em", paddingRight: "28em", paddingTop: "10em"}}>
+          <Card title="Create a travel iternary" bordered={true}>
+            <TextForm></TextForm>
+          </Card>
+        </div>
+        {/* <div className="App">
           <div>
-            <h1> ERROR RETRIEVING NAMES </h1>
-          </div>
-        )}
+            <ul className="heading">
+                {Object.keys(names).map((idx) => 
+                  <li key={idx}>
+                    {names[idx].name + " " + names[idx].netid}
+                  </li>                
+                )}
+            </ul>
+          </div>       
+        </div> */}
+        
+        <div className="Footer">
+          <CustomFooter></CustomFooter>
+        </div>
       </div>
       </div>
     )
   }
 }
+
+
 
 export default App;

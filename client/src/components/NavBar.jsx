@@ -14,7 +14,7 @@ class NavBar extends Component {
         <div>
                <PageHeader
                 title="TripIt!"
-                subTitle="CS 4300 Final Project"
+                subTitle="A personalized travel iternary"
                 extra={[
                   <Button styles={buttonStyles} key="2">Sign Up</Button>,
                     <Button styles={buttonStyles} key="1">
