@@ -2,6 +2,8 @@ import nltk
 import pandas as pd
 from collections import defaultdict
 import string
+import os.path
+import pickle
 
 class TFIDF(object):
     def __init__(self, review_file):
@@ -11,7 +13,11 @@ class TFIDF(object):
         self.stopwords = nltk.corpus.stopwords.words('english')
         self.review_df = pd.read_csv(review_file)
         print(self.review_df.shape)
-        self.idfs = self.idfs()
+        if not os.path.isfile('idfs.pickle'):
+            self.idfs()
+
+        with open('idfs.pickle', 'rb') as f:
+            self.idfs = pickle.load(f)
 
     def idfs(self):
         dfs = defaultdict(int)
@@ -26,7 +32,8 @@ class TFIDF(object):
                     dfs[w] += 1
 
         n_docs = len(self.review_data['comments'])
-        return {w: np.log(n_docs / df) for w, df in dfs.items()}
+        with open('idfs.pickle', 'w') as f:
+            pickle.dump({w: np.log(n_docs / df) for w, df in dfs.items()}, f)
 
     def get_keywords(listing_id):
         data = self.review_df
