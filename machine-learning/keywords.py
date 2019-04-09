@@ -1,21 +1,29 @@
 import nltk
 import pandas as pd
 from collections import defaultdict
+import string
 
 class TFIDF(object):
     def __init__(self, review_file):
-        self.stopwords = nltk.corpus.stopwords('english')
+        # download nltk packages if necessary
+        # nltk.download('stopwords')
+        # nltk.download('punkt')
+        self.stopwords = nltk.corpus.stopwords.words('english')
         self.review_df = pd.read_csv(review_file)
+        print(self.review_df.shape)
         self.idfs = self.idfs()
 
     def idfs(self):
         dfs = defaultdict(int)
         for review in self.review_df['comments']:
-            review_no_punc = review.translate(None, string.punctuation)
-            tokens = nltk.word_tokenize(review_no_punc)
-            tokens = set([w for w in tokens if w not in self.stopwords])
-            for w in tokens:
-                dfs[w] += 1
+            # make sure review is valid
+            if type(review) == str:
+                # remove punctuation
+                review_no_punc = review.translate(str.maketrans(dict.fromkeys(string.punctuation)))
+                tokens = nltk.word_tokenize(review_no_punc)
+                tokens = set([w for w in tokens if w not in self.stopwords])
+                for w in tokens:
+                    dfs[w] += 1
 
         n_docs = len(self.review_data['comments'])
         return {w: np.log(n_docs / df) for w, df in dfs.items()}
@@ -26,11 +34,12 @@ class TFIDF(object):
 
         tfs = defaultdict(int)
         for review in listings['comments']:
-            review_no_punc = review.translate(None, string.punctuation)
-            tokens = nltk.word_tokenize(review_no_punc)
-            tokens = [w for w in tokens if w not in self.stopwords]
-            for w in tokens:
-                tfs[w] += 1
+            if type(review) == str:
+                review_no_punc = review.translate(None, string.punctuation)
+                tokens = nltk.word_tokenize(review_no_punc)
+                tokens = [w for w in tokens if w not in self.stopwords]
+                for w in tokens:
+                    tfs[w] += 1
 
         tf_idfs = [(w, tf * self.idfs[w]) for w, tf in tfs.items()]
         tf_idfs = sorted(tf_idfs, key=lambda x: x[1], reverse=True)[:5]
@@ -39,4 +48,4 @@ class TFIDF(object):
 
 if __name__ == '__main__':
     K = TFIDF('~/CS4300/reviews.csv')
-    print(K.get_keywords('2595'))
+    print(K.get_keywords(2595))
