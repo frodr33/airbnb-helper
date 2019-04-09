@@ -8,8 +8,8 @@ import pickle
 class TFIDF(object):
     def __init__(self, review_file):
         # download nltk packages if necessary
-        # nltk.download('stopwords')
-        # nltk.download('punkt')
+        nltk.download('stopwords')
+        nltk.download('punkt')
         self.stopwords = nltk.corpus.stopwords.words('english')
         self.review_df = pd.read_csv(review_file)
         print(self.review_df.shape)
