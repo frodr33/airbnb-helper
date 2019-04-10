@@ -12,16 +12,15 @@ class App extends Component {
 
   // Fetch passwords after first mount. This function is called 
   // automatically by react when the page first loads
-  componentDidMount() {
-    this.getNames();
-  }
+  // componentDidMount() {
+  //   this.getNames();
+  // }
 
-  getNames = () => {
-    // Get the names and netIDs
-    fetch('/api/users')
-      .then(res => res.json())
-      .then(names => this.setState({names}))
-  }
+  // getNames = () => {
+  //   fetch('/api/users')
+  //     .then(res => res.json())
+  //     .then(names => this.setState({names}))
+  // }
 
   render() {
     const { names } = this.state; //retrieve names from state
