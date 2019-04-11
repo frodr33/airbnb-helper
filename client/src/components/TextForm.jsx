@@ -49,7 +49,7 @@ class TextForm extends Component {
         if (!err) {
           console.log('Destination ', values.destination);
           console.log('Slider ', values.slider);
-          console.log(values)
+          console.log(values.keyWords.split(" "))
           console.log(values["range-picker"][0]._d)
           console.log("Number of Adults: ", numAdults)
           console.log("Neighborhood: ", cityNeighborhood)
@@ -133,7 +133,6 @@ class TextForm extends Component {
                         <Option key={"option"+1} value={1}>{1} Adults</Option>
                     </Select> */}
                 </Form.Item>
-
                 <Form.Item
                     label="Max Price"
                 >
@@ -144,6 +143,15 @@ class TextForm extends Component {
                         />
                     )}
                 </Form.Item>
+                <Form.Item label="keyWords">
+                {getFieldDecorator('keyWords', {
+                    rules: [{
+                    initialValue: "",
+                    }],
+                })(
+                    <Input placeholder=""/>
+                )}
+            </Form.Item>
                 <Form.Item>
                     <Button
                         type="primary"
