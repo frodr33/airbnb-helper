@@ -6,6 +6,7 @@ import os.path
 import pickle
 
 class TFIDF(object):
+    # listings_file is path to SUMMARY listings.csv
     def __init__(self, review_file, listings_file):
         # download nltk packages if necessary
         nltk.download('stopwords')
@@ -51,11 +52,12 @@ class TFIDF(object):
                     tfs[w] += 1
 
         tf_idfs = [(w, tf * self.idfs[w]) for w, tf in tfs.items()]
+
         # don't give host name as keyword
         l_df = self.listing_df
         host_name = str(l_df.loc[l_df['id'] == listing_id]['host_name'])
-        tf_idfs = list(filter(lambda (w, _): w != host_name, tf_idfs))
-        
+        tf_idfs = list(filter(lambda (w, _): host_name not in w, tf_idfs))
+
         tf_idfs = sorted(tf_idfs, key=lambda x: x[1], reverse=True)[:5]
 
         return [x[1] for x in tf_idfs]
