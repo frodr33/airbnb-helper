@@ -6,12 +6,14 @@ import os.path
 import pickle
 
 class TFIDF(object):
-    def __init__(self, review_file):
+    def __init__(self, review_file, listings_file):
         # download nltk packages if necessary
         nltk.download('stopwords')
         nltk.download('punkt')
         self.stopwords = nltk.corpus.stopwords.words('english')
         self.review_df = pd.read_csv(review_file)
+        self.listing_df = pd.read_csv(listings_file)
+
         print(self.review_df.shape)
         if not os.path.isfile('idfs.pickle'):
             self.idfs()
@@ -35,7 +37,7 @@ class TFIDF(object):
         with open('idfs.pickle', 'w') as f:
             pickle.dump({w: np.log(n_docs / df) for w, df in dfs.items()}, f)
 
-    def get_keywords(listing_id):
+    def get_keywords(self, listing_id):
         data = self.review_df
         listings = data.loc[data['listing_id'] == listing_id]
 
@@ -53,6 +55,34 @@ class TFIDF(object):
 
         return [x[1] for x in tf_idfs]
 
+    def gen_keyword_dict(self):
+        id_keywords = defaultdict(list)
+        for listing_id in self.listing_df['id']:
+            id_keywords[listing_id] += self.get_keywords(listing_id)
+
+        with open('id_keywords.pickle', 'w') as f:
+            pickle.dump(id_keywords, f)
+
+        return id_keywords
+
+# input: list of listing ids, output: ids sorted based on similarity to keyword query
+def rank_listings(listings, query):
+    with open('id_keywords.pickle', 'rb') as f:
+        id_keywords = pickle.load(f)
+
+    query = set(query)
+    sims = []
+    for l in listings:
+        keywords = set(id_keywords[l])
+        # for now, number of keywords in common between query and listing
+        sims.append((l, len(keywords.intersection(query))))
+
+    sims = sorted(sims, key=lambda x: x[1], reverse=True)
+    return [x[0] for x in sims]
+
+
+
 if __name__ == '__main__':
     K = TFIDF('~/CS4300/reviews.csv')
     print(K.get_keywords(2595))
+    K.gen_keyword_dict()
