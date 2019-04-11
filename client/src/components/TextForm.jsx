@@ -6,7 +6,17 @@ import {
 
 const { MonthPicker, RangePicker } = DatePicker;
 const { Option } = Select;
-let formVal = 0;
+let numAdults = 1;
+let cityNeighborhood = "Midtown";
+let neighborhoods = 
+[
+  "Upper West Side",
+  "Hells Kitchen",
+  "Midtown",
+  "Upper East Side",
+  "Flushing",
+  "Jackson Heights"
+]
 
 class TextForm extends Component {
     createTable = () => {
@@ -14,7 +24,7 @@ class TextForm extends Component {
         let numberOfGuests = 16; // Max on AirBnB.com
 
         let options = [];
-        for (let i = 0; i <= numberOfGuests; i++) {
+        for (let i = 1; i <= numberOfGuests; i++) {
             options.push(<Option key={"option"+i} value={i}>{i} Adults</Option>)
         }
 
@@ -24,22 +34,12 @@ class TextForm extends Component {
 
     createNeighborhoods = () => {
         let table = [];
-        let neighborhoods = 
-        [
-          "Upper West Side",
-          "Hells Kitchen",
-          "Midtown",
-          "Upper East Side",
-          "Flushing",
-          "Jackson Heights"
-        ]
-
         let options = [];
         for (let i = 0; i <= neighborhoods.length; i++) {
         options.push(<Option key={"neighborhood"+i} value={i}>{neighborhoods[i]}</Option>)
         }
 
-        table.push(<Select key={"select-neighborhoods"} placeholder="Midtown">{options}</Select>)
+        table.push(<Select key={"select-neighborhoods"} placeholder="Midtown" onChange={this.handleNeighborhoodsChange}>{options}</Select>)
         return table;        
     }
 
@@ -47,20 +47,39 @@ class TextForm extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
-          console.log("Form is", formVal)
+          console.log('Destination ', values.destination);
+          console.log('Slider ', values.slider);
+          console.log(values)
+          console.log(values["range-picker"][0]._d)
+          console.log("Number of Adults: ", numAdults)
+          console.log("Neighborhood: ", cityNeighborhood)
         }
+        fetch('/api/airbnbListings', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                destination: values.destination,
+                maxPrice: values.slider,
+                dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
+                numberAdults: numAdults,
+                neighborhood: cityNeighborhood
+            })
+        })
+        .then(res => res.json())
+        .then(d => console.log(d))
       });
   }
 
 
   handleSelectChange = (value) => {
-    console.log(value);
-    formVal = value;
-    
-    // this.props.form.setFieldsValue({
-    //   note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
-    // });
+    numAdults = value;
+  }
+
+  handleNeighborhoodsChange = (value) => {
+      cityNeighborhood = neighborhoods[value];
   }
 
 
