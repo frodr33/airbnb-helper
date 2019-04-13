@@ -73,7 +73,8 @@ class TFIDF(object):
 
         return id_keywords
 
-# input: list of listing ids, output: ids sorted based on similarity to keyword query
+# input: list of listing ids and list of keywords
+# output: ids sorted based on similarity to keyword query
 def rank_listings(listings, query):
     with open('id_keywords.pickle', 'rb') as f:
         id_keywords = pickle.load(f)
@@ -86,7 +87,7 @@ def rank_listings(listings, query):
         sims.append((l, len(keywords.intersection(query))))
 
     sims = sorted(sims, key=lambda x: x[1], reverse=True)
-    return [x[0] for x in sims]
+    return [x[0] for x in sims][:100]
 
 
 
