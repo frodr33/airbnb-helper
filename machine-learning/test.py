@@ -1,11 +1,16 @@
 import numpy as np
 import sys
+import json
 
-arg1 = int(sys.argv[1])
-arg2 = int(sys.argv[2])
-arg3 = int(sys.argv[3])
-x = [arg1,arg2,arg3]
+try:
+    data = sys.argv[1]
+    d = json.loads(data)
+    destination, max_price, date_range = d["destination"], d["maxPrice"], d["dates"]
+    number_adults, neighborhood, keywords = d["numberAdults"], d["neighborhood"], d["keywords"]
+    destination = [destination, max_price, date_range, number_adults, neighborhood, keywords]
+except:
+    destination = "EXCEPTION"
 
-print(x)
+print(destination)
 sys.stdout.flush()
 

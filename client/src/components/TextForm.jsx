@@ -65,11 +65,12 @@ class TextForm extends Component {
                 maxPrice: values.slider,
                 dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
                 numberAdults: numAdults,
-                neighborhood: cityNeighborhood
+                neighborhood: cityNeighborhood,
+                keywords: values.keyWords.split(", ")
             })
         })
-        .then(res => res.json())
-        .then(d => console.log(d))
+        // .then(res => res.json())
+        // .then(d => console.log(d))
       });
   }
 
