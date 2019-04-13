@@ -26,31 +26,16 @@ app.get("/api", (req, res) => {
 app.post("/api/airbnbListings", (req, res) => {
   console.log("received")
   console.log(JSON.stringify(req.body))
-  // strObj = req.body.toString();
-  // console.log(JSON.parse(strObj.toString('utf8')))
   const pyProgram = spawn("Python", ["./machine-learning/test.py",JSON.stringify(req.body)])
 
   pyProgram.stdout.on("data", (chunk) => {
     console.log("return");
     console.log(chunk);
     console.log(chunk.toString('utf8'))
-    // var textChunk = JSON.parse(chunk.toString('utf8'))
-    // console.log(chunk)
-    // res.json(textChunk)
   })
 
   // res.json("successfully received form submission")
 })
-
-// Example
-// app.get("/api/pyTest", (req, res) => {
-//   const pyProgram = spawn('Python', ['./machine-learning/test.py', 1, 2, 3])
-
-//   pyProgram.stdout.on('data', (chunk) => {
-//     var textChunk = JSON.parse(chunk.toString('utf8'));
-//     res.json(textChunk);
-//   })
-// })
 
 app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));

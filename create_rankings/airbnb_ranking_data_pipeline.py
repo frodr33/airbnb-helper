@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import pickle
 import datetime
+import json
 
 
 def main():
@@ -171,4 +172,8 @@ def create_calendar_pickle():
 		pickle.dump(dictionary_of_calendar_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
+	# d = sys.argv[1]
+	# d = json.loads(data)
+    # destination, max_price, date_range = d["destination"], d["maxPrice"], d["dates"]
+    # number_adults, neighborhood, keywords = d["numberAdults"], d["neighborhood"], d["keywords"]
     main()

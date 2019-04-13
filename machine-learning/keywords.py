@@ -5,7 +5,6 @@ import string
 import os.path
 import pickle
 import numpy as np
-import sys
 
 class TFIDF(object):
     # listings_file is path to SUMMARY listings.csv
@@ -92,7 +91,6 @@ def rank_listings(listings, query):
 
 
 if __name__ == '__main__':
-    # query = sys.argv[1]
     K = TFIDF('~/CS4300/reviews.csv', '~/CS4300/listings.csv')
     print(K.get_keywords(2595))
     K.gen_keyword_dict()
