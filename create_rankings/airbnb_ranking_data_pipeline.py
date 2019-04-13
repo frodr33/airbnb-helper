@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import pickle
 import datetime
 import json
+import sys
 
 
 def main():
@@ -176,4 +177,11 @@ if __name__ == '__main__':
 	# d = json.loads(data)
     # destination, max_price, date_range = d["destination"], d["maxPrice"], d["dates"]
     # number_adults, neighborhood, keywords = d["numberAdults"], d["neighborhood"], d["keywords"]
+
     main()
+
+	# To send back to javascript to this
+	# res = list_of_listing_ids
+	# print(res)
+	# sys.stdout.flush()
+
