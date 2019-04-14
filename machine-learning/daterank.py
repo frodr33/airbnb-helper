@@ -8,7 +8,7 @@ import sys
 
 def main():
 	calendar_file = "calendar_nov_3.csv"
-	reviews_file = "reviews_nov_3.csv" 
+	reviews_file = "reviews_nov_3.csv"
 	listings_file = "listings_nov_3.csv"
 
 	# reviews_data = pd.read_csv(reviews_file, usecols = ['listing_id', 'date', 'comments'])[['listing_id', 'date', 'comments']]
@@ -29,7 +29,7 @@ def main():
 
 	#calendar_dictionary = pickle.load(open("calendar_data.pickle", "rb" ))
 	#create_optimized_dictionary(calendar_dictionary)
-	
+
 
 	optimized_calendar_dictionary = pickle.load(open("optimized_calendar_data.pickle", "rb" ))
 	neighborhood_calendar_dict= pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
@@ -55,7 +55,7 @@ def average_ratio(applicable_listings_list, optimized_calendar_dictionary, start
 	best_start_date = start_date
 	best_end_date = end_date
 
-	ratio_listing_dict = {} 
+	ratio_listing_dict = {}
 	total_listings = len(applicable_listings_list)
 	current_end_date = start_date + datetime.timedelta(days=duration_of_stay)
 	while (current_end_date < end_date):
@@ -66,18 +66,18 @@ def average_ratio(applicable_listings_list, optimized_calendar_dictionary, start
 		ratio_val = len(list_of_possible_homes)/float(total_listings)
 		if (ratio_val < min_ratio):
 			min_ratio = ratio_val
-			print (start_date)
-			print (current_end_date)
+			# print (start_date)
+			# print (current_end_date)
 			best_start_date = start_date
 			best_end_date = current_end_date
-			print (best_start_date)
-			print (best_end_date)
+			# print (best_start_date)
+			# print (best_end_date)
 
 		list_of_ratios.append(ratio_val)
 		ratio_listing_dict[ratio_val] = list_of_possible_homes
 		start_date += datetime.timedelta(days=1)
 		current_end_date = start_date + datetime.timedelta(days=duration_of_stay)
-	
+
 	return (list_of_ratios, min_ratio, ratio_listing_dict, best_start_date, best_end_date)
 
 
@@ -116,7 +116,7 @@ def check_date_range(start_date, end_date, listing, optimized_dictionary):
 			return False
 		if (dictionary_of_dates[single_date_time_object] == 'f'):
 			return False
-	return True 
+	return True
 
 
 
@@ -148,7 +148,7 @@ def calendar_date_dict(tuple_list):
 	return dict_of_dates
 
 
-def create_calendar_pickle(): 
+def create_calendar_pickle():
 	calendar_data = pd.read_csv(calendar_file, usecols = ['listing_id', 'date', 'available'])[['listing_id', 'date', 'available']]
 	calendar_data.dropna()
 	dictionary_of_calendar_data = {}
@@ -184,4 +184,3 @@ if __name__ == '__main__':
 	# res = list_of_listing_ids
 	# print(res)
 	# sys.stdout.flush()
-

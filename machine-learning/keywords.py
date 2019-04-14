@@ -5,7 +5,11 @@ import string
 import os.path
 import pickle
 import numpy as np
+import sys
 
+"""
+FOR KEYWORD GENERATION
+"""
 class TFIDF(object):
     # listings_file is path to SUMMARY listings.csv
     def __init__(self, review_file, listings_file):
@@ -73,6 +77,10 @@ class TFIDF(object):
 
         return id_keywords
 
+"""
+END KEYWORD GENERATION
+"""
+
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
 def rank_listings(listings, query):
@@ -92,6 +100,25 @@ def rank_listings(listings, query):
 
 
 if __name__ == '__main__':
-    K = TFIDF('~/CS4300/reviews.csv', '~/CS4300/listings.csv')
-    print(K.get_keywords(2595))
-    K.gen_keyword_dict()
+    d = sys.argv[1]
+    d = json.loads(d)
+    date_range, duration = d["dates"], d["duration"]
+    neighborhood, keywords = d["neighborhood"], d["keywords"]
+
+    import daterank
+
+    calendar_dict = pickle.load(open("optimized_calendar_data.pickle", "rb" ))
+	neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
+
+	listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
+    # rank + restrict by keywords
+    listings = rank_listings(listings, keywords)
+
+	start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
+	end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
+
+	_, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
+	listings = dict_ratio[min_ratio]
+
+    res = {"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings}
+    sys.stdout.flush()
