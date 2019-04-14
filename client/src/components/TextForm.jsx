@@ -54,7 +54,7 @@ class TextForm extends Component {
           console.log("Number of Adults: ", numAdults)
           console.log("Neighborhood: ", cityNeighborhood)
         }
-        fetch('/api/airbnbListings', {
+        fetch('/api/getListings', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -69,8 +69,9 @@ class TextForm extends Component {
                 keywords: values.keyWords.split(", ")
             })
         })
-        // .then(res => res.json())
-        // .then(d => console.log(d))
+        .then(res => res.json())
+        .then(d => console.log(d))
+        .catch(err => console.log(err))
       });
   }
 

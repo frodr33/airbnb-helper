@@ -4,7 +4,7 @@ import Forms from './components/Forms'
 import NavBar from './components/NavBar'
 import TextForm from './components/TextForm'
 import CustomFooter from './components/Footer'
-import { Card } from 'antd';
+import { Card, Spin } from 'antd';
 
 class App extends Component {
   // Initialize state
@@ -21,9 +21,13 @@ class App extends Component {
     //     .then(res => res.json())
     //     .then(d => console.log(d))
     // }
+    
 
   render() {
     const { names } = this.state; //retrieve names from state
+    // var image = new Image();
+    // image.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAFCAIAAADtz9qMAAAATElEQVQIHQFBAL7/AXx5eUxMS+Xq8EpIRAGSlZXp6u4G9/kGDQwBgX18+f0C+Onp/AICAWxwc/j7+gsJCuzm5wFlY131AxAAAwj29fYeIB/m1TNjOgAAAABJRU5ErkJggg=="
+
 
     return (
       <div>
@@ -40,6 +44,8 @@ class App extends Component {
             <TextForm></TextForm>
           </Card>
         </div>
+
+        <Spin tip="Loading"></Spin>
         {/* <div className="App">
           <div>
             <ul className="heading">
