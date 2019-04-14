@@ -121,4 +121,5 @@ if __name__ == '__main__':
 	listings = dict_ratio[min_ratio]
 
     res = {"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings}
+    print(res)
     sys.stdout.flush()
