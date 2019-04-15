@@ -3,9 +3,29 @@ const express = require('express');
 const path = require('path');
 const db = require('./queries');
 const app = express();
-const http = require("http");
 const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
+require('dotenv').config()
+const foursquareRequest = require('./api.js')
+
+// AFter user makes itinerary, call foursquarerequest for each
+// venue and store that data on server. So, for each app.post
+// to /api/airbnbListings endpoint, add to Map where key is the
+// listingID and the values are a json? of top10 venues at the
+// latitude and longitude of that location. Then create another
+// endpoint app.get(/api/restauraunts) that contains the listingID
+// of the listing clicked on the front end and returns as a response
+// returns name of venue, distance, addres. Then on front end, 
+// display on right side the top 10 menues when airbnb listing clicked!
+// Possible to get picture of listing from places api
+// NOTE: Can use other endpoints GET https://api.foursquare.com/v2/venues/VENUE_ID to
+// get even more details about the venue! and another endpoint GET https://api.foursquare.com/v2/venues/explore
+// returns recommended venues! Can also get a venue's photos here 
+// GET https://api.foursquare.com/v2/venues/VENUE_ID/photos
+let venues = foursquareRequest(40.7128, -74.0060, 10);
+venues.then(d => console.log(d))
+// venues.then(d => console.log(JSON.parse(d).response['venues']))
+// venues.then(d => console.log(d));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -17,7 +37,6 @@ console.log(`Server listening on ${port}`);
 
 /* Endpoints */
 // app.get('/api/users', db.getUsers)
-
 app.get("/api", (req, res) => {
   res.json("HELLO WORLD");
 })

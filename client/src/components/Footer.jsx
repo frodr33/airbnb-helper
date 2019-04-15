@@ -8,7 +8,7 @@ class CustomFooter extends Component {
         return (
         <Footer style={{ textAlign: 'center' }}>
             Cornell University CS 4300 Final Project<br/>
-            Frank Rodriguez Aditya Jha Jacob Mathai Tharun Sankur
+            Frank Rodriguez Aditya Jha Jacob Mathai Tharun Sankar
         </Footer>
         );
     }
