@@ -81,6 +81,18 @@ class TFIDF(object):
 END KEYWORD GENERATION
 """
 
+# builds map of listings to their latitude/longitude
+def build_listing_locations(listings_file):
+    with open(listings_file, 'rb') as f:
+        listing_df = pd.read_csv(f)
+
+    id_location = {}
+    for row in listing_df.itertuples():
+        id_location[str(row.id)] = {"latitude": row.latitude, "longitude": row.longitude}
+
+    with open('id_location.pickle', 'wb') as f:
+        pickle.dump(id_location, f)
+
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
 def rank_listings(listings, query):
@@ -108,18 +120,25 @@ if __name__ == '__main__':
     import daterank
 
     calendar_dict = pickle.load(open("optimized_calendar_data.pickle", "rb" ))
-	neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
+    neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
 
-	listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
+    listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
     # rank + restrict by keywords
     listings = rank_listings(listings, keywords)
 
-	start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
-	end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
+    start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
 
-	_, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
-	listings = dict_ratio[min_ratio]
+    _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
+    listings = dict_ratio[min_ratio]
 
-    res = {"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings}
+    with open('id_location.pickle', 'rb') as f:
+        id_location = pickle.load(f)
+
+    listings_locations = []
+    for l in listings:
+        listings_locations.append({'id': l, 'location': id_location[l]})
+
+    res = json.dumps({"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings_locations})
     print(res)
     sys.stdout.flush()
