@@ -4,6 +4,7 @@ import pickle
 import datetime
 import json
 import sys
+import copy
 
 
 def main():
@@ -32,9 +33,20 @@ def main():
 
 
 	optimized_calendar_dictionary = pickle.load(open("optimized_calendar_data.pickle", "rb" ))
-	neighborhood_calendar_dict= pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
+	#neighborhood_calendar_dict= pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
 
-	applicable_listings_list = applicable_listings(neighborhood_calendar_dict, 'Harlem')
+	# for key, value in neighborhood_calendar_dict.items():
+	# 	print  ('This is the key '+ str(key))
+	# 	print ('This is the value' + str(value))
+
+	#optimized_calendar_dictionary = add_neighborhood_listings_values(neighborhood_calendar_dict, optimized_calendar_dictionary)
+
+	# for nextkey, nextvalue in optimized_calendar_dictionary.items():
+	# 	print ('This is the optimized calendar  value ' + str(nextkey))
+	# 	print ('This is the optimized calendar value ' + str(nextvalue))
+
+
+	applicable_listings_list = applicable_listings(optimized_calendar_dictionary, 'Harlem')
 	start_date = datetime.datetime.strptime('2019-09-01', "%Y-%m-%d")
 	end_date = datetime.datetime.strptime('2019-09-10', "%Y-%m-%d")
 	list_of_ratios, min_ratio, dict_ratio, best_start_date, best_end_date = average_ratio(applicable_listings_list, optimized_calendar_dictionary, start_date, end_date, 4)
@@ -48,6 +60,51 @@ def main():
 
 	# current_end_date = start_date + datetime.timedelta(days=duration_of_stay)
 	# print (current_end_date)
+
+
+def add_neighborhood_listings_values(neighborhood_calendar_dict, optimized_calendar_dictionary):
+	dictionary_of_neighborhoods = {}
+	for key, value in neighborhood_calendar_dict.items():
+		if (value['neighborhood'] != None): 
+			if  (value['neighborhood'] not in dictionary_of_neighborhoods):
+				dictionary_of_neighborhoods[value['neighborhood']] = [key]
+			else:
+				dictionary_of_neighborhoods[value['neighborhood']].append(key)
+	#rint (dictionary_of_neighborhoods)
+	optimized_calendar_dictionary.update(dictionary_of_neighborhoods)
+	with open('optimized_calendar_data_2.pickle', 'wb') as handle:
+		pickle.dump(optimized_calendar_dictionary, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+	return optimized_calendar_dictionary
+
+
+	# 		list_of_applicable_listings.append(key)
+	# return list_of_applicable_listings
+
+	# for key, item in neighborhood_calendar_dict.items():
+	# 	neighborhood_value  = item['neighborhood']
+	# 	#print ('This is the neighborhood value ' +str(neighborhood_value))
+	# 	if neighborhood_value in dictionary_of_neighborhoods:
+	# 		if (key != None):
+	# 			dictionary_of_neighborhoods[neighborhood_value].append(key)
+	# 	else:
+	# 		if (key != None):
+	# 			dictionary_of_neighborhoods[neighborhood_value] = [key]
+
+	# 	print (dictionary_of_neighborhoods)
+	# 	if neighborhood_value  in  dictionary_of_neighborhoods:
+	# 		dictionary_of_neighborhoods[neighborhood_value] = dictionary_of_neighborhoods[neighborhood_value].add(key)
+	# 	else:
+	# 		dictionary_of_neighborhoods[neighborhood_value] = {key}
+	# 		#print (optimized_calendar_dictionary_2[neighborhood_value])
+
+	# optimized_calendar_dictionary.update(dictionary_of_neighborhoods)
+	# with open('optimized_calendar_data_2.pickle', 'wb') as handle:
+	# 	pickle.dump(optimized_calendar_dictionary_2, handle, protocol=pickle.HIGHEST_PROTOCOL)
+	# return optimized_calendar_dictionary
+
+
+
 
 def average_ratio(applicable_listings_list, optimized_calendar_dictionary, start_date, end_date, duration_of_stay):
 	list_of_ratios = []
@@ -82,12 +139,16 @@ def average_ratio(applicable_listings_list, optimized_calendar_dictionary, start
 
 
 
-def applicable_listings(neighborhood_calendar_dict, entered_neighborhood):
-	list_of_applicable_listings = []
-	for key, value in neighborhood_calendar_dict.items():
-		if (value['neighborhood'] == entered_neighborhood):
-			list_of_applicable_listings.append(key)
-	return list_of_applicable_listings
+def applicable_listings(optimized_calendar_dict, entered_neighborhood):
+	if entered_neighborhood in optimized_calendar_dict:
+		return optimized_calendar_dict[entered_neighborhood]
+	else:
+		print ('There was an error. ')
+	# list_of_applicable_listings = []
+	# for key, value in neighborhood_calendar_dict.items():
+	# 	if (value['neighborhood'] == entered_neighborhood):
+	# 		list_of_applicable_listings.append(key)
+	# return list_of_applicable_listings
 
 
 def add_neighborhood_data(optimized_calendar_dictionary):
