@@ -6,31 +6,16 @@ const app = express();
 const http = require("http");
 const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
-// const readData = require('./processListings')
-
-// retrieveImage(2539)
-//   .then(res => console.log(res))
-// console.log(webScraper(2595));
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
-
-async function asyncForEach(array, cb) {
-  // array.forEach((d) => {
-  //   await cb(d)
-  // })
-  for (let i = 0; i < array.length; i++) {
-    await cb(array[i]);
-  }
-}
 
 const port = process.env.PORT || 5000;
 app.listen(port);
 console.log(`Server listening on ${port}`);
 
 /* Endpoints */
-// Commenting out the database stuff for now
 // app.get('/api/users', db.getUsers)
 
 app.get("/api", (req, res) => {

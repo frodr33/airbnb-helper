@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import {
-    Form, Icon, Input, Button, DatePicker, TimePicker, Select, Col, Slider
+    Form, Icon, Input, Button, DatePicker, TimePicker, Select, Col, Slider, Spin
   } from 'antd'
 
 const { MonthPicker, RangePicker } = DatePicker;
@@ -19,6 +19,19 @@ let neighborhoods =
 ]
 
 class TextForm extends Component {
+    state = {submitted:false}  
+
+    receivedResultsHandler = (listings) => {
+        
+        // Create new Tab
+        this.props.addTab(listings);
+
+        this.setState({
+            submitted: !this.state.submitted
+        })
+    }
+
+
     createTable = () => {
         let table = [];
         let numberOfGuests = 16; // Max on AirBnB.com
@@ -43,37 +56,42 @@ class TextForm extends Component {
         return table;        
     }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Destination ', values.destination);
-          console.log('Slider ', values.slider);
-          console.log(values.keyWords.split(" "))
-          console.log(values["range-picker"][0]._d)
-          console.log("Number of Adults: ", numAdults)
-          console.log("Neighborhood: ", cityNeighborhood)
-        }
-        fetch('/api/getListings', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                destination: values.destination,
-                maxPrice: values.slider,
-                dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
-                numberAdults: numAdults,
-                neighborhood: cityNeighborhood,
-                keywords: values.keyWords.split(", ")
-            })
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.setState({
+            submitted: !this.state.submitted
         })
-        .then(res => res.json())
-        .then(d => console.log(d))
-        .catch(err => console.log(err))
-      });
-  }
+        
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+            console.log('Destination ', values.destination);
+            console.log('Slider ', values.slider);
+            console.log(values.keyWords.split(" "))
+            console.log(values["range-picker"][0]._d)
+            console.log("Number of Adults: ", numAdults)
+            console.log("Neighborhood: ", cityNeighborhood)
+            console.log("Num Day ", values.numDays)
+            }
+            fetch('/api/getListings', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    destination: values.destination,
+                    maxPrice: values.slider,
+                    dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
+                    numberAdults: numAdults,
+                    neighborhood: cityNeighborhood,
+                    keywords: values.keyWords.split(", ")
+                })
+            })
+            .then(res => res.json())
+            .then(d => this.receivedResultsHandler(d))
+            .catch(err => console.log(err))
+        });
+    }
 
 
   handleSelectChange = (value) => {
@@ -86,6 +104,7 @@ class TextForm extends Component {
 
 
   render() {
+    const { submitted } = this.state;
     const { getFieldDecorator } = this.props.form;
     const rangeConfig = {
         rules: [{ type: 'array',message: 'Please select time!' }],
@@ -106,7 +125,7 @@ class TextForm extends Component {
         <div>
 
         <Col span={8} style={{display: "block"}}>
-            <Form style={{width:"20em"}} >
+            <Form style={{width:"100%"}} >
             <Form.Item label="Destination">
                 {getFieldDecorator('destination', {
                     rules: [{
@@ -127,25 +146,21 @@ class TextForm extends Component {
             </Form>
         </Col>
         
-        <Col span={8} style={{display: "block", paddingLeft: "10em"}}>
-            <Form layout="horizontal" style={{width: "20em"}} onSubmit={this.handleSubmit}>
+        <Col span={8} style={{display: "block", paddingLeft: "3%"}}>
+            <Form layout="horizontal" style={{width: "100%"}} onSubmit={this.handleSubmit}>
                 <Form.Item label="Number of Guests">
                     {this.createTable()}
-                    {/* <Select key={"select"} placeholder="0 Adults" onChange={this.handleSelectChange}>
-                        <Option key={"option"+1} value={1}>{1} Adults</Option>
-                    </Select> */}
                 </Form.Item>
-                <Form.Item
-                    label="Max Price"
-                >
-                    {getFieldDecorator('slider')(
-                        <Slider marks={{
-                        0: 'A', 20: 'B', 40: 'C', 60: 'D', 80: 'E', 100: 'F',
-                        }}
-                        />
+                <Form.Item label="Length of Stay">
+                    {getFieldDecorator('numDays', {
+                        rules: [{
+                        initialValue: "7",
+                        }],
+                    })(
+                        <Input placeholder="7"/>
                     )}
                 </Form.Item>
-                <Form.Item label="keyWords">
+                <Form.Item label="Key words">
                 {getFieldDecorator('keyWords', {
                     rules: [{
                     initialValue: "",
@@ -154,43 +169,35 @@ class TextForm extends Component {
                     <Input placeholder=""/>
                 )}
             </Form.Item>
-                <Form.Item>
-                    <Button
-                        type="primary"
-                        htmlType="submit"
-                    >
-                    Submit 
-                    </Button>
-                </Form.Item>
             </Form> 
         </Col>
 
-        {/* <Form layout="horizontal" style={{width:"50%"}}>
-            <Form.Item label="Destination">
-                {getFieldDecorator('destination', {
-                    rules: [{
-                    initialValue: "New York City",
-                    }],
-                })(
-                    <Input placeholder="New York City"/>
-                )}
-            </Form.Item>
-            <Form.Item label="RangePicker">
-                {getFieldDecorator('range-picker', rangeConfig)(
-                    <RangePicker />
-                )}
-            </Form.Item>
-        </Form>
-        <Form layout="inline" style={{float:"left"}}>
-            <Form.Item label="Number of Guests">
-                {this.createTable()}
-            </Form.Item>
-        </Form> */}
+        <Col span={8} style={{display: "block", paddingLeft: "3%"}}>
+            <Form layout="horizontal" style={{width: "100%"}} onSubmit={this.handleSubmit}>
+                <Form.Item
+                    label="Max Price Per Night"
+                >
+                    {getFieldDecorator('slider')(
+                        <Slider min={0} max={1000} marks={{
+                        0: '$0', 200: '$200', 400: '$400', 600: '$600', 800: '$800', 1000: '$1000',
+                        }}
+                        />
+                    )}
+                </Form.Item>
+                <Form.Item>
+                {
+                    submitted ? <Spin tip="Loading"></Spin> : 
+                    <Button
+                        type="primary"
+                        htmlType="submit">
+                        Submit 
+                     </Button>
+                }
+                </Form.Item>
+            </Form> 
+        </Col>
         </div>
     );
   }
 }
-
-// const WrappedTextForm = Form.create({ name: 'normal_login' })(TextForm);
-// ReactDOM.render(<WrappedTextForm />,  document.getElementById('appDiv'));
 export default Form.create()(TextForm);;

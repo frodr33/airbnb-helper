@@ -4,69 +4,32 @@ import Forms from './components/Forms'
 import NavBar from './components/NavBar'
 import TextForm from './components/TextForm'
 import CustomFooter from './components/Footer'
+import TabsCard from './components/TabsCard';
 import { Card, Spin } from 'antd';
 
 class App extends Component {
   // Initialize state
-  state = { names: {} }
-
-  // Fetch passwords after first mount. This function is called 
-  // automatically by react when the page first loads
-    // componentDidMount() {
-    //   this.getNames();
-    // }
-
-    // getNames = () => {
-    //   fetch('/api/pyTest')
-    //     .then(res => res.json())
-    //     .then(d => console.log(d))
-    // }
-    
-
+  state = {}    
   render() {
     const { names } = this.state; //retrieve names from state
-    // var image = new Image();
-    // image.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAFCAIAAADtz9qMAAAATElEQVQIHQFBAL7/AXx5eUxMS+Xq8EpIRAGSlZXp6u4G9/kGDQwBgX18+f0C+Onp/AICAWxwc/j7+gsJCuzm5wFlY131AxAAAwj29fYeIB/m1TNjOgAAAABJRU5ErkJggg=="
-
-
     return (
       <div>
       <div className="blurred-img"></div>
-      {/* <div id="appDiv" className="App"> */}
       <div className="Header">
         <div>
           <NavBar></NavBar>
         </div>
-
-        {/* <TextForm></TextForm> */}
-        <div style={{paddingLeft: "28em", paddingRight: "28em", paddingTop: "10em"}}>
-          <Card title="Create a travel iternary" bordered={true}>
-            <TextForm></TextForm>
-          </Card>
-        </div>
-
-        <Spin tip="Loading"></Spin>
-        {/* <div className="App">
-          <div>
-            <ul className="heading">
-                {Object.keys(names).map((idx) => 
-                  <li key={idx}>
-                    {names[idx].name + " " + names[idx].netid}
-                  </li>                
-                )}
-            </ul>
-          </div>       
-        </div> */}
-        
+        <div style={{ paddingLeft:'20%', width:'80%', paddingTop:"5%", paddingBottom:"5%"}}>
+          <TabsCard></TabsCard>
+          {/* <InfiniteScroller></InfiniteScroller> */}
+        </div>     
         <div className="Footer">
           <CustomFooter></CustomFooter>
         </div>
       </div>
+
       </div>
     )
   }
 }
-
-
-
 export default App;

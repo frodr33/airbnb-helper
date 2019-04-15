@@ -10,6 +10,7 @@ function retrieveImage (listingId) {
             imgUrl = cherrio("._3nukz4e meta", html).attr('content');
             resolve(imgUrl);
         })
+        .catch(err => console.log(err))
     })
 }
 

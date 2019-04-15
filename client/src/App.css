@@ -53,3 +53,15 @@ h1 {
   font-size: 32px;
   margin-bottom: 2em;
 }
+
+.cardHeaders {
+  font-size: 10px;
+}
+
+/* .Header {
+  width: 100%;
+  font-family: "Courier New", monospace;
+  position: fixed;
+  z-index: 2;
+  color: #fff;
+} */
