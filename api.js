@@ -7,7 +7,7 @@ const rp = require('request-promise');
  * a certain location
  * @param  {String}  latitude  
  * @param  {String}  longitude 
- * @param  {String}  limit     Number of venues to return
+ * @param  {String}  limit   Number of venues to return
  * @return {Promise} Promise resulting in array of Venues
  */
 function foursquareCreateRequest (latitude, longitude, limit) {

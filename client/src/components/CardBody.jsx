@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
-import { Layout, Card, Breadcrumb } from 'antd';
+import { Card } from 'antd';
 import 'antd/dist/antd.css'
 
+/**
+ * CardBody Component contains the body of content
+ * displaying for each Tab
+ */
 class CardBody extends Component {
     constructor(props) {
         super(props);
