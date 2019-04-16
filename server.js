@@ -7,7 +7,7 @@ const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 require('dotenv').config()
 const foursquareRequest = require('./api.js')
-// const AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
 let listingVenueMap = new Map();
 
 // var s3 = new AWS.S3();
