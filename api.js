@@ -2,6 +2,14 @@ const rp = require('request-promise');
 // let clientID = "client_id=" + process.env.CLIENT_ID;
 // let secretID = "client_secret=" + process.env.CLIENT_SECRET;
     
+/**
+ * foursquareCrateRequest retrives recommended venues near 
+ * a certain location
+ * @param  {String}  latitude  
+ * @param  {String}  longitude 
+ * @param  {String}  limit     Number of venues to return
+ * @return {Promise} Promise resulting in array of Venues
+ */
 function foursquareCreateRequest (latitude, longitude, limit) {
     var options = {
         uri: "https://api.foursquare.com/v2/venues/explore",

@@ -2,7 +2,6 @@ const rp = require('request-promise');
 const cherrio = require('cheerio');
 const url = 'https://www.airbnb.com/rooms/';
 
-
 /**
  * retrieveImage scraps airbnb website and obtains
  * showcase images for rooms
