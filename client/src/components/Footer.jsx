@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import 'antd/dist/antd.css'
-const { Header, Content, Footer } = Layout;
+const { Footer } = Layout;
 
+/**
+ * CustomFooter Component is the Footer containing metadata 
+ * and other information about this application
+ */
 class CustomFooter extends Component {
     render () {
         return (

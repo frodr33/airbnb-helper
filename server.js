@@ -31,7 +31,7 @@ app.post("/api/getListings", (req, res) => {
    * listing ID's, for now, listingID is hard
    * coded below */
   let result;
-  const pyProgram = spawn("Python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
+  const pyProgram = spawn("python3", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
     let df = JSON.parse(chunk.toString('utf8'));
     let listingPromises = []
