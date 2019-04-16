@@ -64,7 +64,7 @@ app.post("/api/getListings", (req, res) => {
   /* Use python scripts and req to obtain the 
    * listing ID's, for now, listingID is hard
    * coded below */
-
+  let result;
   const pyProgram = spawn("Python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
     let df = JSON.parse(chunk.toString('utf8'));
@@ -114,101 +114,17 @@ app.post("/api/getListings", (req, res) => {
       return listings;
     })
     .then((d) => {
-      console.log(d);
-      res.json(d);
+      result = d;
     })
     .catch((err) => {
       console.log(err);
     })
   });
 
-  // let testRes = {
-  //   start_date: "2019-04-20",
-  //   end_date: "2019-04-25",
-  //   listings: [
-  //     {
-  //       id: 2539,
-  //       name: "Clean & quiet apt home by the park", 
-  //       host_name: "John",
-  //       price: 59,
-  //       location: {
-  //         latitude: 40.64749,
-  //         longitude: -73.97237
-  //       }
-  //     },
-  //     {
-  //       id: 5099,
-  //       name: "Cozy Entire Floor of Brownstone",
-  //       host_name: "Chris",
-  //       price: 80,
-  //       location: {
-  //         latitude: 40.74767,
-  //         longitude: -73.975
-  //       }
-  //     },
-  //     {
-  //       id: 16338,
-  //       name: "Lovely Room 1, Garden, Best Area, Legal rental",
-  //       host_name: "Jennifer",
-  //       price: 35,
-  //       location: {
-  //         latitude: 40.69,
-  //         longitude: -73.96788
-  //       }
-  //     },     
-  //   ]
-  // }
-
-  // let listingPromises = []
-  // let listings = []
-
-  // let listingObjs = testRes.listings;
-
-  // for (let i = 0; i < listingObjs.length; i++) {
-  //   let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
-  //   let venues = foursquareRequest(coordinates[0], coordinates[1], 10);
-  //   venues.then((d) => {
-  //     let venueDatas = [];
-  //     d.forEach((venueResponse) => {
-  //       let venue = venueResponse.venue;
-  //       let location = venue.location;
-  //       let venueData = {
-  //         id: venue.id,
-  //         name: venue.name,
-  //         address: location.address,
-  //         crossStreet: location.crossStreet,
-  //         latitude: location.lat,
-  //         longitude: location.lng,
-  //         distance: location.distance,
-  //         postalAddress: location.address + " " + location.city + " " + location.state + ", " + location.cc + ", " + location.postalCode
-  //       }
-  //       venueDatas.push(venueData);
-  //     })
-  //     listingVenueMap.set(listingObjs[i].id, venueDatas) 
-  //   })
-
-  //   listingPromises.push(retrieveImage(listingObjs[i].id));
-  // }
-
-  // Promise.all(listingPromises)
-  // .then(() => {
-  //   for (let i = 0; i < listingPromises.length; i++) {
-  //     listingPromises[i].then(d => listings.push(
-  //       {
-  //         listingID: listingObjs[i].id,
-  //         name: listingObjs[i].name,
-  //         host_name: listingObjs[i].host_name,
-  //         price: listingObjs[i].price,
-  //         listingURL: d
-  //       }
-  //     ))
-  //   }
-  //   return listings;
-  // })
-  // .then((d) => {
-  //   console.log(d);
-  //   res.json(d);
-  // })
+  pyProgram.on("close", code => {
+    res.send(result);
+  })
+  
 })
 
 app.get('*', (_, res) => {
