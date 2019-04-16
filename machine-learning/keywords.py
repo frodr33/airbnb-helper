@@ -132,6 +132,7 @@ if __name__ == '__main__':
         listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
         # print("HERE")
         # print(listings)
+        
 
         # rank + restrict by keywords
         listings = rank_listings(listings, keywords)
