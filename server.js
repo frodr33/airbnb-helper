@@ -43,7 +43,7 @@ app.get("/api", (req, res) => {
   // res.json("HELLO WORLD");
 
   var t = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":"4","neighborhood":"Hell's Kitchen","keywords":["Hot","Cool","Pool"]}
-  const pyProgram = spawn("Python", ["./machine-learning/keywords.py",JSON.stringify(t)])
+  const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(t)])
   
   pyProgram.stdout.on("data", (chunk) => {
     console.log("return");
