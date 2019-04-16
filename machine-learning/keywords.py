@@ -83,17 +83,18 @@ class TFIDF(object):
 END KEYWORD GENERATION
 """
 
-# builds map of listings to their latitude/longitude
-def build_listing_locations(listings_file):
+# builds map of listings to information
+def build_listing_info(listings_file):
     with open(listings_file, 'rb') as f:
         listing_df = pd.read_csv(f)
 
-    id_location = {}
+    id_info = {}
     for row in listing_df.itertuples():
-        id_location[str(row.id)] = {"latitude": row.latitude, "longitude": row.longitude}
+        id_info[row.id] = {"id": row.id, "name": row.name, "host_name": row.host_name,\
+            "price": row.price, "location": {"latitude": row.latitude, "longitude": row.longitude}}
 
-    with open('./machine-learning/id_location.pickle', 'wb') as f:
-        pickle.dump(id_location, f)
+    with open('id_info.pickle', 'wb') as f:
+        pickle.dump(id_info, f)
 
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
@@ -141,14 +142,13 @@ if __name__ == '__main__':
         _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
         listings = dict_ratio[min_ratio]
 
-        with open('./machine-learning/id_location.pickle', 'rb') as f:
+        with open('./machine-learning/id_info.pickle', 'rb') as f:
             id_location = pickle.load(f)
 
         listings_locations = []
-        for l in listings:
-            listingID = str(l)
+        for listingID in listings:
             if listingID in id_location:
-                listings_locations.append({'id': l, 'location': id_location[listingID]})
+                listings_locations.append(id_info[listingID])
             else:
                 print("key error:" + listingID)
 
