@@ -10,13 +10,6 @@ const foursquareRequest = require('./api.js')
 const AWS = require('aws-sdk');
 let listingVenueMap = new Map();
 
-// var s3 = new AWS.S3();
-// var params = {Bucket: 'tripit-heroku-app', Key: 'id_info.pickle'}
-// s3.getObject(params, function(err, data) {
-//   if (err) console.log(err, err.stack); // an error occurred
-//   else     console.log(data);           // successful response
-// });
-
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
