@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "heroku-postbuild": "aws s3 cp s3://tripit-heroku-app/id_info.pickle ./machine-learning && aws s3 cp s3://tripit-heroku-app/id_keywords.pickle ./machine-learning && aws s3 cp s3://tripit-heroku-app/optimized_calendar_data.pickle ./machine-learning && cd client && npm install && npm run build ",
+    "heroku-postbuild": "aws s3 cp s3://tripit-heroku-app/id_info.pickle ./machine-learning && aws s3 cp s3://tripit-heroku-app/id_keywords.pickle ./machine-learning && cd client && npm install && npm run build ",
     "front-end": "npm start",
     "back-end": "cd client & npm start",
     "dev": "npm-run-all --parallel front-end back-end",
