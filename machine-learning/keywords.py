@@ -125,11 +125,11 @@ if __name__ == '__main__':
 
         import daterank
 
-        calendar_dict = pickle.load(open("./machine-learning/optimized_calendar_data.pickle", "rb" ))
-        # neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
+        # calendar_dict = pickle.load(open("./machine-learning/optimized_calendar_data.pickle", "rb" ))
+        neighborhood_dict = pickle.load(open("./machine-learning/calendar_with_neighborhood.pickle", "rb"))
 
         # print(calendar_dict['Harlem'])
-        listings = daterank.applicable_listings(calendar_dict, neighborhood)
+        listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
         # print("HERE")
         # print(listings)
 
@@ -139,8 +139,8 @@ if __name__ == '__main__':
         start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
         end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
 
-        _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
-        listings = dict_ratio[min_ratio]
+        # _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
+        # listings = dict_ratio[min_ratio]
 
         with open('./machine-learning/id_info.pickle', 'rb') as f:
             id_location = pickle.load(f)
@@ -152,7 +152,7 @@ if __name__ == '__main__':
             else:
                 print("key error:" + listingID)
 
-        res = json.dumps({"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings_locations[:5]})
+        res = json.dumps({"start_date": "", "end_date": "", "listings": listings_locations[:5]})
         print(res)
     except Exception as e:
         print(e)
