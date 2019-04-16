@@ -43,6 +43,7 @@ app.post("/api/getListings", (req, res) => {
       venues.then((d) => {
         let venueDatas = [];
         d.forEach((venueResponse) => {
+          // console.log(venueResponse)
           let venue = venueResponse.venue;
           let location = venue.location;
           let venueData = {
@@ -66,6 +67,7 @@ app.post("/api/getListings", (req, res) => {
     Promise.all(listingPromises)
     .then(() => {
       for (let i = 0; i < listingPromises.length; i++) {
+    
         listingPromises[i].then(d => listings.push(
           {
             listingID: listingObjs[i].id,
@@ -79,16 +81,18 @@ app.post("/api/getListings", (req, res) => {
       return listings;
     })
     .then((d) => {
-      result = d;
+      // result = d;
+      res.send(d);
     })
     .catch((err) => {
       console.log(err);
     })
   });
 
-  pyProgram.on("close", code => {
-    res.send(result);
-  })
+  // pyProgram.on("close", code => {
+  //   console.log(result)
+  //   res.send(result);
+  // })
   
 })
 
