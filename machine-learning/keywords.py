@@ -6,6 +6,8 @@ import os.path
 import pickle
 import numpy as np
 import sys
+import datetime
+import json
 
 """
 FOR KEYWORD GENERATION
@@ -21,10 +23,10 @@ class TFIDF(object):
         self.listing_df = pd.read_csv(listings_file)
 
         print(self.review_df.shape)
-        if not os.path.isfile('idfs.pickle'):
+        if not os.path.isfile('./machine-learning/idfs.pickle'):
             self.idfs()
 
-        with open('idfs.pickle', 'rb') as f:
+        with open('./machine-learning/idfs.pickle', 'rb') as f:
             self.idfs = pickle.load(f)
 
     def idfs(self):
@@ -40,7 +42,7 @@ class TFIDF(object):
                     dfs[w] += 1
 
         n_docs = len(self.review_df['comments'])
-        with open('idfs.pickle', 'wb') as f:
+        with open('./machine-learning/idfs.pickle', 'wb') as f:
             pickle.dump({w: np.log(n_docs / df) for w, df in dfs.items()}, f)
 
     def get_keywords(self, listing_id):
@@ -72,7 +74,7 @@ class TFIDF(object):
         for listing_id in self.listing_df['id']:
             id_keywords[listing_id] += self.get_keywords(listing_id)
 
-        with open('id_keywords.pickle', 'wb') as f:
+        with open('./machine-learning/id_keywords.pickle', 'wb') as f:
             pickle.dump(id_keywords, f)
 
         return id_keywords
@@ -90,13 +92,13 @@ def build_listing_locations(listings_file):
     for row in listing_df.itertuples():
         id_location[str(row.id)] = {"latitude": row.latitude, "longitude": row.longitude}
 
-    with open('id_location.pickle', 'wb') as f:
+    with open('./machine-learning/id_location.pickle', 'wb') as f:
         pickle.dump(id_location, f)
 
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
 def rank_listings(listings, query):
-    with open('id_keywords.pickle', 'rb') as f:
+    with open('./machine-learning/id_keywords.pickle', 'rb') as f:
         id_keywords = pickle.load(f)
 
     query = set(query)
@@ -112,33 +114,46 @@ def rank_listings(listings, query):
 
 
 if __name__ == '__main__':
-    d = sys.argv[1]
-    d = json.loads(d)
-    date_range, duration = d["dates"], d["duration"]
-    neighborhood, keywords = d["neighborhood"], d["keywords"]
 
-    import daterank
+    # d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":"4","neighborhood":"Hell's Kitchen","keywords":["Hot","Cool","Pool"]}
+    try:
+        d = sys.argv[1]
+        d = json.loads(d)
+        date_range, duration = d["dates"], d["duration"]
+        neighborhood, keywords = d["neighborhood"], d["keywords"]
 
-    calendar_dict = pickle.load(open("optimized_calendar_data.pickle", "rb" ))
-    neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
+        import daterank
 
-    listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
-    # rank + restrict by keywords
-    listings = rank_listings(listings, keywords)
+        calendar_dict = pickle.load(open("./machine-learning/optimized_calendar_data.pickle", "rb" ))
+        # neighborhood_dict = pickle.load(open("calendar_with_neighborhood.pickle", "rb"))
 
-    start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
-    end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
+        # print(calendar_dict['Harlem'])
+        listings = daterank.applicable_listings(calendar_dict, neighborhood)
+        # print("HERE")
+        # print(listings)
 
-    _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
-    listings = dict_ratio[min_ratio]
+        # rank + restrict by keywords
+        listings = rank_listings(listings, keywords)
 
-    with open('id_location.pickle', 'rb') as f:
-        id_location = pickle.load(f)
+        start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
 
-    listings_locations = []
-    for l in listings:
-        listings_locations.append({'id': l, 'location': id_location[l]})
+        _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
+        listings = dict_ratio[min_ratio]
 
-    res = json.dumps({"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings_locations})
-    print(res)
+        with open('./machine-learning/id_location.pickle', 'rb') as f:
+            id_location = pickle.load(f)
+
+        listings_locations = []
+        for l in listings:
+            listingID = str(l)
+            if listingID in id_location:
+                listings_locations.append({'id': l, 'location': id_location[listingID]})
+            else:
+                print("key error:" + listingID)
+
+        res = json.dumps({"start_date": str(best_start_date)[:10], "end_date": str(best_end_date)[:10], "listings": listings_locations[:5]})
+        print(res)
+    except Exception as e:
+        print(e)
     sys.stdout.flush()

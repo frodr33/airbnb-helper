@@ -11,11 +11,12 @@ let cityNeighborhood = "Midtown";
 let neighborhoods = 
 [
   "Upper West Side",
-  "Hells Kitchen",
+  "Hell's Kitchen",
   "Midtown",
   "Upper East Side",
   "Flushing",
-  "Jackson Heights"
+  "Jackson Heights",
+  "Brookyln",
 ]
 
 class TextForm extends Component {
@@ -83,6 +84,7 @@ class TextForm extends Component {
                     maxPrice: values.slider,
                     dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
                     numberAdults: numAdults,
+                    duration: values.numDays,
                     neighborhood: cityNeighborhood,
                     keywords: values.keyWords.split(", ")
                 })

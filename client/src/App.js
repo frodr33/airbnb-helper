@@ -19,7 +19,7 @@ class App extends Component {
         <div>
           <NavBar></NavBar>
         </div>
-        <div style={{ paddingLeft:'20%', width:'80%', paddingTop:"5%", paddingBottom:"5%"}}>
+        <div style={{ paddingLeft:'10%', width:'90%', paddingTop:"5%", paddingBottom:"5%"}}>
           <TabsCard></TabsCard>
           {/* <InfiniteScroller></InfiniteScroller> */}
         </div>     

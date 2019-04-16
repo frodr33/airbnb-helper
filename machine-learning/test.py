@@ -5,12 +5,17 @@ import json
 try:
     data = sys.argv[1]
     d = json.loads(data)
-    destination, max_price, date_range = d["destination"], d["maxPrice"], d["dates"]
-    number_adults, neighborhood, keywords = d["numberAdults"], d["neighborhood"], d["keywords"]
-    destination = [destination, max_price, date_range, number_adults, neighborhood, keywords]
-except:
-    destination = "EXCEPTION"
+    # print(d)
+    date_range, duration = d["dates"], d["duration"]
+# except:
+    neighborhood, keywords = d["neighborhood"], d["keywords"]
+# except:
+    res = json.dumps({"start_date": "34", "end_date": "356", "listings":[]})
+    print(res)
+# except:
+except Exception as e:
+    print("EXCEPTION");
+    print(e)
 
-print(destination)
 sys.stdout.flush()
 

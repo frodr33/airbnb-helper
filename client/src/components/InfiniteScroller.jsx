@@ -14,10 +14,22 @@ const style = {
 };
 
 class InfiniteScroller extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   state = {
     items: this.props.input
   };
 
+  styles = {
+    height: this.props.infHeight,
+    overflow: "auto",
+    width: this.props.infWidth,
+    float: "left",
+    paddingLeft: this.props.infPadleft
+  }
+  
   fetchMoreData = () => {
     // a fake async api call like which sends
     // 20 more records in 1.5 secs
@@ -30,7 +42,7 @@ class InfiniteScroller extends React.Component {
 
   render() {
     return (
-      <div style={{height:"400px", overflow:"auto"}}>
+      <div style={this.styles}>
         <InfiniteScroll
           loadMore={this.fetchMoreData}
           hasMore={false}
