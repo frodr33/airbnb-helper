@@ -29,6 +29,7 @@ app.post("/api/getListings", (req, res) => {
   /* Use python scripts and req to obtain the 
    * listing ID's, for now, listingID is hard
    * coded below */
+  
   let result;
   const pyProgram = spawn("python3", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
