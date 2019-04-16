@@ -16,7 +16,7 @@ let neighborhoods =
   "Upper East Side",
   "Flushing",
   "Jackson Heights",
-  "Brookyln",
+  "Brookyln Heights",
 ]
 
 class TextForm extends Component {
