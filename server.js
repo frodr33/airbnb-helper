@@ -117,6 +117,9 @@ app.post("/api/getListings", (req, res) => {
       console.log(d);
       res.json(d);
     })
+    .catch((err) => {
+      console.log(err);
+    })
   });
 
   // let testRes = {
