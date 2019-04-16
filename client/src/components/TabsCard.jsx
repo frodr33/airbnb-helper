@@ -5,7 +5,6 @@ import '../App.css';
 import TextForm from './TextForm'
 import Listing from './Listing'
 import InfiniteScroller from './InfiniteScroller';
-// import CardBody from './CardBody';
 
 let createItineraryIcon = 
     <div style={{alignItems: 'center'}}>
