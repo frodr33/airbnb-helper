@@ -148,7 +148,7 @@ if __name__ == '__main__':
         listings_locations = []
         for listingID in listings:
             if listingID in id_location:
-                listings_locations.append(id_info[listingID])
+                listings_locations.append(id_location[listingID])
             else:
                 print("key error:" + listingID)
 

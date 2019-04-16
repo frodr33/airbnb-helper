@@ -89,7 +89,7 @@ class TabsCard extends React.Component {
         }
 
         let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="400px" infPadleft="0%" infWidth="50%" input={table}></InfiniteScroller>;
-        content[key] = <div style={{width:'50%', height:'100%'}}>{infScroller}</div>
+        content[key] = <div style={{width:'100%', height:'100%'}}>{infScroller}</div>
         let infScrollerList = this.state.infiniteScrollerList;
         infScrollerList[key] = infScroller;
 
