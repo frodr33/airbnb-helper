@@ -19,25 +19,26 @@ console.log(`Server listening on ${port}`);
 
 /* Endpoints */
 app.get("/api/getVenues/:id", (req, res) => {
-  /* Returns the venue information given the specific 
+  /* Returns the venue information given the specific
    * listing ID provided as a query parameter to the
    * endpoint */
   res.json(listingVenueMap.get(parseInt(req.params.id)))
 });
 
 app.post("/api/getListings", (req, res) => {
-  /* Use python scripts and req to obtain the 
+  /* Use python scripts and req to obtain the
    * listing ID's, for now, listingID is hard
    * coded below */
-  
+
   let result;
   const pyProgram = spawn("python3", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
+    console.log(chunk.toString('utf8'))
     let df = JSON.parse(chunk.toString('utf8'));
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;
-  
+
     for (let i = 0; i < listingObjs.length; i++) {
       let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
       let venues = foursquareRequest(coordinates[0], coordinates[1], 10);
@@ -59,16 +60,16 @@ app.post("/api/getListings", (req, res) => {
           }
           venueDatas.push(venueData);
         })
-        listingVenueMap.set(listingObjs[i].id, venueDatas) 
+        listingVenueMap.set(listingObjs[i].id, venueDatas)
       })
-  
+
       listingPromises.push(retrieveImage(listingObjs[i].id));
     }
-  
+
     Promise.all(listingPromises)
     .then(() => {
       for (let i = 0; i < listingPromises.length; i++) {
-    
+
         listingPromises[i].then(d => listings.push(
           {
             listingID: listingObjs[i].id,
@@ -94,7 +95,7 @@ app.post("/api/getListings", (req, res) => {
   //   console.log(result)
   //   res.send(result);
   // })
-  
+
 })
 
 // app.get('/api/users', db.getUsers)
