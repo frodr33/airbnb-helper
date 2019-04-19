@@ -30,7 +30,7 @@ app.post("/api/getListings", (req, res) => {
    * coded below */
 
   let result;
-  const pyProgram = spawn("python3", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
+  const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
     console.log(chunk.toString('utf8'))
     let df = JSON.parse(chunk.toString('utf8'));
