@@ -2,6 +2,7 @@ import { Card, Icon, Spin, Form, Input, Button, Modal } from 'antd';
 import 'antd/dist/antd.css'
 import React, { Component } from 'react';
 import '../App.css';
+import CollectionsPage from './CollectionsPage';
 
 const titleFont = {
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
@@ -35,7 +36,8 @@ class LogInCard extends React.Component {
     });
   }
 
-  handleOk = () => {
+  handleOk = (d) => {
+    console.log(d);
     this.setState({
       ModalText: 'The modal will be closed after two seconds',
       confirmLoading: true,
@@ -60,9 +62,6 @@ class LogInCard extends React.Component {
   }
 
   handleLogIn = (d) => {
-      d.preventDefault();
-      let username = "alisha" // Hard code for now
-      let password = "asdfadf"
       fetch('/api/login', {
         method: 'POST',
         headers: {
@@ -70,17 +69,13 @@ class LogInCard extends React.Component {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: username,
-            password: password,
+            username: d.username,
+            password: d.password,
         })
     })
     .then(res => {
-        // Left off here: Need to figure out what this this.props.history.push thing is to
-        // save the cookies returned. Need to make sure that when its not successful it doesn't
-        // crash with the other methods. Need to make the secret token an environment variable. 
         if (res.status === 200) {
           console.log("Logged In");
-          // this.context.history.push('/path'); // wtf is this
         } else {
           alert('Incorrect User Name or Password, Please try again')
         }
@@ -90,6 +85,7 @@ class LogInCard extends React.Component {
         alert('Incorrect User Name or Password, Please try again');
       });   
   }
+
 
   handleSubmit = (d) => {
       this.setState({
@@ -180,20 +176,10 @@ class LogInCard extends React.Component {
                     style={{width:"100%", paddingTop:"none"}}>
                     Continue as Guest 
                 </Button>
-                <div style={{textAlign:"center"}}>Have an account already? <a href="" onClick={this.showModal}>Log In!</a></div>
+                <CollectionsPage login={this.handleLogIn}></CollectionsPage>
             </Form.Item>
             </Form> 
-        </Card>
-        <Modal
-          title="Log In"
-          visible={visible}
-          onOk={this.handleOk}
-          confirmLoading={confirmLoading}
-          onCancel={this.handleCancel}
-        >
-          <p>{ModalText}</p>
-        </Modal>        
-        {/* <CardBody tabList={this.state.tabList} key={this.state.key} onTabChange={this.onTabChange} content={this.state.contentList[this.state.key]}></CardBody> */}
+        </Card>       
       </div>
     );
   }

@@ -4,6 +4,7 @@ import NavBar from './components/NavBar'
 import CustomFooter from './components/Footer'
 import TabsCard from './components/TabsCard'
 import LogInCard from './components/LogInCard'
+import CollectionsPage from './components/CollectionsPage'
 import { Card, Col, Row } from 'antd';
 
 const titleFont = {
@@ -43,6 +44,7 @@ class App extends Component {
               </Col>
             </Row>
           </div>
+        {/* <CollectionsPage></CollectionsPage> */}
         <div className="Footer">
           <CustomFooter></CustomFooter>
         </div>
