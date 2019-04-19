@@ -97,7 +97,15 @@ app.post("/api/getListings", (req, res) => {
 
 })
 
-// app.get('/api/users', db.getUsers)
+app.post('/api/register', db.registerUser);
+
+app.get('/api/getUsers', db.getUsers)
+
+app.post('/api/login', db.logInUser)
+
+app.get('/api/clearDB', (req, res) => {
+  db.dropDB();
+})
 
 app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));

@@ -73,7 +73,7 @@ class TextForm extends Component {
             console.log("Neighborhood: ", cityNeighborhood)
             console.log("Num Day ", values.numDays)
             }
-            fetch('/api/getListings', {
+            fetch('/api/register', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

@@ -22,6 +22,26 @@ class LogInCard extends React.Component {
       console.log("here")
   }
 
+  handleLogIn = (d) => {
+      d.preventDefault();
+      let username = "alisha" // Hard code for now
+      let password = "love"
+      fetch('/api/login', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        })
+    })
+    .then((res) => res.text())
+    .then((res) => console.log(res))
+    .catch(err => console.log(err))      
+  }
+
   handleSubmit = (d) => {
       d.preventDefault();
       this.props.form.validateFields((err, values) => {
@@ -29,25 +49,20 @@ class LogInCard extends React.Component {
         console.log('Destination ', values.Username);
         console.log('Slider ', values.Password);
         }
-        // fetch('/api/getListings', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({
-        //         destination: values.destination,
-        //         maxPrice: values.slider,
-        //         dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
-        //         numberAdults: numAdults,
-        //         duration: values.numDays,
-        //         neighborhood: cityNeighborhood,
-        //         keywords: values.keyWords.split(", ")
-        //     })
-        // })
-        // .then(res => res.json())
-        // .then(d => this.receivedResultsHandler(d))
-        // .catch(err => console.log(err))
+
+        fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: values.Username,
+                password: values.Password,
+            })
+        })
+        .then((res) => console.log(res))
+        .catch(err => console.log(err))
     });
   }
 
@@ -103,7 +118,7 @@ class LogInCard extends React.Component {
                     style={{width:"100%", paddingTop:"none"}}>
                     Continue as Guest 
                 </Button>
-                <div style={{textAlign:"center"}}>Have an account already? <a href="">Log In!</a></div>
+                <div style={{textAlign:"center"}}>Have an account already? <a href="" onClick={this.handleLogIn}>Log In!</a></div>
             </Form.Item>
             </Form> 
         </Card>
