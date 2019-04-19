@@ -69,7 +69,7 @@ logInUser = (request, response) => {
   let {username, password} = request.body;
   pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
   .then((data) => bcrypt.compare(password, data.rows[0].password, (err, result) => {
-    if (!result) response.send("Incorrect Username or Password")
+    if (!result) response.status(401).send("Incorrect Username or Password")
     else {
       console.log("SUCCESSFUL LOGIN");
       const SECRET = "tripitsecret"; // PUT IN ENV VARIABLES LATER! DO NOT HARD CODE
@@ -82,7 +82,7 @@ logInUser = (request, response) => {
   }))
   .catch((err) => {
     console.log(err);
-    response.send("Incorrect Username or Password")
+    response.status(401).send("Incorrect Username or Password")
   })
 
 
