@@ -107,6 +107,12 @@ app.get('/api/clearDB', (req, res) => {
   db.dropDB();
 })
 
+// app.post('/api/authenticate', (req, res) => {
+//   const {username, password} = req.body;
+//   db.logInUser()
+// })
+
+
 app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });

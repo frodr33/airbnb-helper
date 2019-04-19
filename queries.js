@@ -2,6 +2,7 @@ const { Pool } = require('pg');
 var config = require('./db-config.js');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 var getUsers;
 
 let pool;
@@ -52,17 +53,49 @@ registerUser = (request, response) => {
     .catch((err) => console.error("ERROR Executing query: ", err.stack))
 }
 
+// works
+// logInUser = (request, response) => {
+//   let {username, password} = request.body;
+//   pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
+//   .then((data) => bcrypt.compare(password, data.rows[0].password))
+//   .then((result) => {
+//     if (result) response.send("SUCCESSFUL LOGIN");
+//     else response.send("LOGIN FAILED")
+//   })
+//   .catch((err) => console.error("ERROR Logging in: ", err.stack)) 
+// }
+
 logInUser = (request, response) => {
   let {username, password} = request.body;
-
-  // First obtain secret password stored in data base
   pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
-  .then((data) => bcrypt.compare(password, data.rows[0].password))
-  .then((result) => {
-    if (result) response.send("SUCCESSFUL LOGIN");
-    else response.send("LOGIN FAILED")
+  .then((data) => bcrypt.compare(password, data.rows[0].password, (err, result) => {
+    if (!result) response.send("Incorrect Username or Password")
+    else {
+      console.log("SUCCESSFUL LOGIN");
+      const SECRET = "tripitsecret"; // PUT IN ENV VARIABLES LATER! DO NOT HARD CODE
+      const token = jwt.sign({username}, SECRET, {
+        expiresIn: "1h"
+      });
+      response.cookie('token', token, {httpOnly: true})
+        .sendStatus(200);
+    }
+  }))
+  .catch((err) => {
+    console.log(err);
+    response.send("Incorrect Username or Password")
   })
-  .catch((err) => console.error("ERROR Logging in: ", err.stack)) 
+
+
+  // pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
+  // .then((data) => bcrypt.compare(password, data.rows[0].password))
+  // .then((result) => {
+  //   if (result) response.send("SUCCESSFUL LOGIN");
+  //   else response.send("LOGIN FAILED")
+  // })
+  // .catch((err) => {
+  //   console.error("ERROR Logging in: ", err.stack);
+  //   response.send("INCORRECT EMAIL OR PASSWORD")
+  // }) 
 }
 
 dropDB = () => {

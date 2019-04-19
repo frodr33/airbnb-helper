@@ -16,7 +16,14 @@ const bodyStyles = {
   }
 
 class LogInCard extends React.Component {
-  state = {guest:false} 
+  constructor(props) {
+    super(props)
+    this.state = {
+        email : '',
+        password: '',
+        guest: false
+    };
+  }
 
   guestSignIn = () => {
       console.log("here")
@@ -37,9 +44,22 @@ class LogInCard extends React.Component {
             password: password,
         })
     })
-    .then((res) => res.text())
-    .then((res) => console.log(res))
-    .catch(err => console.log(err))      
+    .then(res => {
+        // Left off here: Need to figure out what this this.props.history.push thing is to
+        // save the cookies returned. Need to make sure that when its not successful it doesn't
+        // crash with the other methods. Need to make the secret token an environment variable. 
+        if (res.status === 200) {
+          console.log("Logged In");
+          // this.context.history.push('/path'); // wtf is this
+        } else {
+          const error = new Error(res.error);
+          throw error;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error logging in please try again');
+      });   
   }
 
   handleSubmit = (d) => {
