@@ -10,12 +10,7 @@ const titleFont = {
     fontSize:"25px",
   }
 
-const bodyStyles = {
-    fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
-    color:"black",
-    fontSize:"18px",
-  }
-
+// Look at Login react-router component
 class LogInCard extends React.Component {
   constructor(props) {
     super(props)
@@ -75,6 +70,7 @@ class LogInCard extends React.Component {
     })
     .then(res => {
         if (res.status === 200) {
+          // Save cookie
           console.log("Logged In");
         } else {
           alert('Incorrect User Name or Password, Please try again')
