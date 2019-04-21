@@ -79,6 +79,54 @@ class TFIDF(object):
 
         return id_keywords
 
+class SVD(object):
+    def __init__(self, review_file, listings_file):
+        self.review_df = pd.read_csv(review_file)
+        self.listing_df = pd.read_csv(listings_file)
+
+        self.words_comp, self.reviews_comp, self.index_to_word = self.svd()
+
+    def svd(self):
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from scipy.sparse.linalg import svds
+        import matplotlib.pyplot as plt
+        from sklearn.preprocessing import normalize
+
+        vectorizer = TfidfVectorizer(stop_words='english', max_df=.7, min_df=75)
+        mat = vectorizer.fit_transform([r for r in self.review_df['comments'] if type(r) == str]).transpose()
+        print(mat.shape)
+
+        words_comp, _, reviews_comp = svds(mat, k=40)
+        reviews_comp = reviews_comp.transpose()
+
+        word_to_index = vectorizer.vocabulary_
+        index_to_word = {i:t for t,i in word_to_index.items()}
+
+        words_comp = normalize(words_comp, axis=1)
+        reviews_comp = normalize(reviews_comp, axis=1)
+
+        return words_comp, reviews_comp, index_to_word
+
+    def gen_keyword_dict(self):
+        id_keywords = {}
+        reviews = self.review_df
+        reviews = reviews.loc[reviews['comments'].notnull()].reset_index()
+        for listing_id in self.listing_df['id']:
+            listing_idxs = reviews.loc[reviews['listing_id'] == listing_id].index
+            if len(listing_idxs) > 0:
+                listing_vec = np.average(self.reviews_comp[listing_idxs], axis=0)
+
+                sims = self.words_comp.dot(listing_vec)
+                asort = np.argsort(-sims)[:11]
+
+                id_keywords[listing_id] = [self.index_to_word[i] for i in asort[1:]]
+            else:
+                id_keywords[listing_id] = []
+
+        with open('id_keywords_svd.pickle', 'wb') as f:
+            pickle.dump(id_keywords, f)
+
+
 """
 END KEYWORD GENERATION
 """
@@ -107,10 +155,11 @@ def rank_listings(listings, query):
     for l in listings:
         keywords = set(id_keywords[l])
         # for now, number of keywords in common between query and listing
-        sims.append((l, len(keywords.intersection(query))))
+        keys = keywords.intersection(query)
+        sims.append((l, len(keys), keys))
 
-    sims = sorted(sims, key=lambda x: x[1], reverse=True)
-    return [x[0] for x in sims][:100]
+    sims = sorted(sims, key=lambda x: x[1], reverse=True)[:10]
+    return [x[0] for x in sims], [x[2] for x in sims]
 
 
 
