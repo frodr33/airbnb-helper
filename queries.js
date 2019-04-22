@@ -7,25 +7,12 @@ var getUsers;
 
 let pool;
 if (config.production){
-  getUsers = (req, response) => {
-    pool = new Pool({
-      connectionString: config.prod_db.host,
-      ssl: true
-    });
-    
-    pool.connect().then( client => {
-      client.query('SELECT * FROM team_members;', (err, res) => {
-        if (err) {
-          console.log(err);
-        }
-        response.status(200).json(res.rows);
-      })
-    })
-    .catch(e=> {
-      console.log(e);
-    })
-  };
-
+  pool = new Pool({
+    connectionString: config.prod_db.host,
+    ssl: true    
+  })
+  console.log("set up Production Database");
+  
 } else {
   pool = new Pool({
     port: config.local_db.port,

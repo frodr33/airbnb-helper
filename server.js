@@ -90,12 +90,6 @@ app.post("/api/getListings", (req, res) => {
       console.log(err);
     })
   });
-
-  // pyProgram.on("close", code => {
-  //   console.log(result)
-  //   res.send(result);
-  // })
-
 })
 
 app.post('/api/register', db.registerUser);
