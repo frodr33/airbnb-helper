@@ -26,9 +26,7 @@ class TextForm extends Component {
         
         // Create new Tab
         console.log("...received", listings)
-
         this.props.addTab(listings);
-
         this.setState({
             submitted: !this.state.submitted
         })

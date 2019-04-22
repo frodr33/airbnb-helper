@@ -83,6 +83,7 @@ app.post("/api/getListings", (req, res) => {
     })
     .then((d) => {
       // result = d;
+      console.log("...Sending Listings", d)
       res.send(d);
     })
     .catch((err) => {

@@ -3,6 +3,7 @@ import 'antd/dist/antd.css'
 import React, { Component } from 'react';
 import '../App.css';
 import CollectionsPage from './CollectionsPage';
+import { Route, Redirect } from "react-router-dom";
 
 const titleFont = {
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
@@ -22,6 +23,7 @@ class LogInCard extends React.Component {
         ModalText: 'Content of the modal',
         visible: false,
         confirmLoading: false,
+        redirecting: false,
     };
   }
   showModal = (d) => {
@@ -70,8 +72,12 @@ class LogInCard extends React.Component {
     })
     .then(res => {
         if (res.status === 200) {
-          // Save cookie
+          // TODO: Save Cookie
           console.log("Logged In");
+          this.setState({
+            redirecting: !this.state.redirecting
+          });          
+
         } else {
           alert('Incorrect User Name or Password, Please try again')
         }
@@ -110,6 +116,10 @@ class LogInCard extends React.Component {
             this.setState({
                 submitted: !this.state.submitted
             });
+            this.handleLogIn({
+              username: values.Username,
+              password: values.Password,
+            })
             console.log(res)
         })
         .catch(err => console.log(err))
@@ -119,6 +129,9 @@ class LogInCard extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { visible, confirmLoading, ModalText } = this.state;
+    const { redirecting } = this.state
+
+    if (redirecting) return <Redirect to={'/home/'} />;
 
     let onChange = (_) => {
         this.setState({

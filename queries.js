@@ -105,6 +105,7 @@ dropDB = () => {
 }
 
 signUp = (user) => {
+  console.log(user);
   hashPassword(user.password)
     .then((hashedPassword) => {
       console.log(hashedPassword)

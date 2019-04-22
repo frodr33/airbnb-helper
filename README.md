@@ -66,9 +66,6 @@ INSERT INTO team_members (name, netID)<br/>
 
 `SELECT * FROM team_members;`  Should print out names and netIDs in a table
 
-After doing this, individually start the server with `npm start`. Then go to the endpoint 
-`localhost:5000/api/users`. If you see our names and netIDs, it worked
-
 ## Pushing to Production Database
 https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl
 

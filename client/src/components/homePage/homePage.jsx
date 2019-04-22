@@ -1,10 +1,11 @@
-import { Card, Icon, Spin } from 'antd';
+import { Card, Icon, Tabs } from 'antd';
 import 'antd/dist/antd.css'
-import React, { Component } from 'react';
-import '../App.css';
-import TextForm from './TextForm'
-import Listing from './Listing'
-import InfiniteScroller from './InfiniteScroller';
+import React from 'react';
+import '../../App.css';
+import TextForm from './textform'
+import Listing from '../Listing'
+import InfiniteScroller from '../InfiniteScroller';
+const TabPane = Tabs.TabPane;
 
 let createItineraryIcon = 
     <div style={{alignItems: 'center'}}>
@@ -21,7 +22,7 @@ let tabList = [{
 //   createNewItinerary: <TextForm addTab={this.createTab}></TextForm>,
 // };
 
-class TabsCard extends React.Component {
+class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.createTab = this.createTab.bind(this);
@@ -48,12 +49,13 @@ class TabsCard extends React.Component {
 
       let content = this.state.contentList;
       let airbnbInfScroller = this.state.infiniteScrollerList[key];
-      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="250px" infPadleft="5%" infWidth="45%" input={venueCards}></InfiniteScroller>   
+      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="100%" infPadleft="5%" infWidth="45%" input={venueCards}></InfiniteScroller>   
       var newContent = <div>{airbnbInfScroller}{venueScroller}</div>
+
+      console.log(key)
       content[key] = newContent
 
-      // Refresh by calling tab again?
-
+      
       console.log(content);
       this.setState({
         key: "createNewItinerary",
@@ -64,7 +66,6 @@ class TabsCard extends React.Component {
     }
 
     createTab = (listings) => {
-        if (!listings) return;
         let tabs = this.state.tabList;
         let content = this.state.contentList;
         let key = "Itinerary: " + this.state.itineraryNum;
@@ -88,7 +89,7 @@ class TabsCard extends React.Component {
             )
         }
 
-        let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="400px" infPadleft="0%" infWidth="50%" input={table}></InfiniteScroller>;
+        let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="80%" infPadtop="2%" infPadleft="0%" infWidth="50%" input={table}></InfiniteScroller>;
         content[key] = <div style={{width:'100%', height:'100%'}}>{infScroller}</div>
         let infScrollerList = this.state.infiniteScrollerList;
         infScrollerList[key] = infScroller;
@@ -97,7 +98,8 @@ class TabsCard extends React.Component {
             tabList: tabs,
             contentList: content,
             itineraryNum: this.state.itineraryNum + 1,
-            infiniteScrollerList: infScrollerList
+            infiniteScrollerList: infScrollerList,
+            key: key
         })
     }
 
@@ -115,6 +117,7 @@ class TabsCard extends React.Component {
     }
 
   onTabChange = (key, type) => {
+    console.log("On tab change")
     console.log(key, type);
     console.log(this.state.contentList[key])
 
@@ -123,19 +126,21 @@ class TabsCard extends React.Component {
   
   render() {
     return (
-      <div>
-        <Card
-          style={{ width: '100%', height:"50%", padding:"none" }}
-          tabList={tabList}
-          activeTabKey={this.state.key}
-          onTabChange={(key) => { this.onTabChange(key, 'key'); }}
+      <div style={{height:"75%", width:"95%", paddingLeft:"5%"}}>
+        <Tabs
+          defaultActiveKey={this.state.key}
+          tabPosition={"left"}
+          style={{ height: "100%", width:"100%", background: "white" }}
         >
-          {this.state.contentList[this.state.key]}
-        </Card>
-        {/* <CardBody tabList={this.state.tabList} key={this.state.key} onTabChange={this.onTabChange} content={this.state.contentList[this.state.key]}></CardBody> */}
+          {
+            tabList.map((tab, i) => {
+              return <TabPane tab={tab.tab} key={tab.key}>{this.state.contentList[tab.key]}</TabPane>
+            })
+          }
+        </Tabs>
       </div>
     );
   }
 }
 
-export default TabsCard;
+export default HomePage;
