@@ -1,4 +1,4 @@
-import { Card, Icon, Tabs } from 'antd';
+import { Card, Icon, Tabs, Form, Button } from 'antd';
 import 'antd/dist/antd.css'
 import React from 'react';
 import '../../App.css';
@@ -29,6 +29,11 @@ class HomePage extends React.Component {
     }
     
 
+    handleSubmit = (d) => {
+      d.preventDefault();
+      console.log("SUBMITTED VENUES AND AIRBNB CHOICE")
+    }
+
     addVenuesCard = (venues) => {
       console.log("IN ADDVENUES")
       console.log(venues);
@@ -46,11 +51,30 @@ class HomePage extends React.Component {
           </div>
         )
       }
+      
+      let submit =       
+      <Form onSubmit={this.handleSubmit}>         
+      <Form.Item>
+      {/* {
+          submitted ? <Spin tip="Loading"></Spin> : 
+          <Button
+              type="primary"
+              htmlType="submit">
+              Submit 
+           </Button>
+      } */}
+      <Button
+              type="primary"
+              htmlType="submit">
+              Submit 
+      </Button>
+      </Form.Item>
+      </Form> 
 
       let content = this.state.contentList;
       let airbnbInfScroller = this.state.infiniteScrollerList[key];
-      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="100%" infPadleft="5%" infWidth="45%" input={venueCards}></InfiniteScroller>   
-      var newContent = <div>{airbnbInfScroller}{venueScroller}</div>
+      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller>   
+      var newContent = <div style={{width:"100%", height:"100%", paddingTop:"5%"}}>{airbnbInfScroller}{venueScroller}{submit}</div>
 
       console.log(key)
       content[key] = newContent
@@ -89,8 +113,8 @@ class HomePage extends React.Component {
             )
         }
 
-        let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="80%" infPadtop="2%" infPadleft="0%" infWidth="50%" input={table}></InfiniteScroller>;
-        content[key] = <div style={{width:'100%', height:'100%'}}>{infScroller}</div>
+        let infScroller = <InfiniteScroller key={key + "infscroller"} infHeight="100%" infPadtop="2%" infPadleft="0%" infWidth="50%" input={table} title="Pick an AirBnB!"></InfiniteScroller>;
+        content[key] = <div style={{width:'100%', height:'100%', paddingTop:"5%"}}>{infScroller}</div>
         let infScrollerList = this.state.infiniteScrollerList;
         infScrollerList[key] = infScroller;
 
@@ -134,7 +158,7 @@ class HomePage extends React.Component {
         >
           {
             tabList.map((tab, i) => {
-              return <TabPane tab={tab.tab} key={tab.key}>{this.state.contentList[tab.key]}</TabPane>
+              return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>
             })
           }
         </Tabs>

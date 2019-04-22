@@ -64,6 +64,10 @@ h1 {
   height: 100%;
 }
 
+.ant-tabs-content {
+  height: 100%;
+}
+
 /* div #root {
   height: 100%;
 } */
