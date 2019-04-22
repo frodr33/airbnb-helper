@@ -217,7 +217,7 @@ class TextForm extends Component {
                         />
                     )}
                 </Form.Item>
-                <Form.Item style={{float:"right", paddingTop:"70%"}}>
+                <Form.Item style={{float:"right"}}>
                 {
                     submitted ? <Spin tip="Loading"></Spin> : 
                     <Button
