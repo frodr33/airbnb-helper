@@ -105,6 +105,7 @@ class HomePage extends React.Component {
                   hostName={listings[i].host_name}
                   price={listings[i].price}
                   name={listings[i].name}
+                  keywords={listings[i].keywords}
                   ></Listing>
             )
         }

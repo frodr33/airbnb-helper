@@ -36,7 +36,8 @@ class Listing extends React.Component {
          <img src={this.createImgURL(this.props.imgURL)} width="20%" height="100%"></img>
          <div style={{float:'right'}}>
             <h2>{this.props.name}</h2>
-            <h4>{"Owner: " + this.props.hostName + ", $" + this.props.price + "/night"}</h4>             
+            <h4>{"Owner: " + this.props.hostName + ", $" + this.props.price + "/night"}</h4>       
+            <h4>{"Key words: " + this.props.keywords}</h4>      
          </div>
       </Card>
     );

@@ -77,7 +77,8 @@ app.post("/api/getListings", (req, res) => {
             name: listingObjs[i].name,
             host_name: listingObjs[i].host_name,
             price: listingObjs[i].price,
-            listingURL: d
+            listingURL: d,
+            keywords: listingObjs[i].keywords
           }
         ))
       }
