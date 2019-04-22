@@ -34,6 +34,8 @@ app.post("/api/getListings", (req, res) => {
   pyProgram.stdout.on("data", (chunk) => {
     console.log(chunk.toString('utf8'))
     let df = JSON.parse(chunk.toString('utf8'));
+    console.log("RETURN FROM KEYWORDS");
+    console.log(df);
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;

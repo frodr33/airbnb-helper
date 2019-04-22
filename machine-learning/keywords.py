@@ -167,49 +167,52 @@ def rank_listings(listings, query, testing=False):
 
 
 if __name__ == '__main__':
-
-    testing = True
-    if testing:
-        d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
-            "bio":"I like big clean rooms with a pool."}
-    else:
-        d = sys.argv[1]
-        d = json.loads(d)
-
-    date_range, duration = d["dates"], d["duration"]
-    neighborhood = d["neighborhood"]
-    keywords = nltk.word_tokenize(d["bio"])
-    # nltk.download('stopwords')
-    keywords = [w for w in keywords if w not in nltk.corpus.stopwords.words('english')]
-
-    import daterank
-
-    if testing:
-        neighborhood_dict = pickle.load(open("./calendar_with_neighborhood.pickle", "rb"))
-    else:
-        neighborhood_dict = pickle.load(open("./machine-learning/calendar_with_neighborhood.pickle", "rb"))
-
-    listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
-
-    # rank + restrict by keywords
-    listings, keys = rank_listings(listings, keywords, testing)
-
-    if testing:
-        with open('./id_info.pickle', 'rb') as f:
-            id_info = pickle.load(f)
-    else:
-        with open('./machine-learning/id_info.pickle', 'rb') as f:
-            id_info = pickle.load(f)
-
-    listings_infos = []
-    for i, listingID in enumerate(listings[:5]):
-        if listingID in id_info:
-            info = id_info[listingID]
-            info['keywords'] = keys[i]
-            listings_infos.append(id_info[listingID])
+    try:
+        testing = False
+        if testing:
+            d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
+                "bio":"I like big clean rooms with a pool."}
         else:
-            print("key error:" + listingID)
+            d = sys.argv[1]
+            d = json.loads(d)
 
-    res = json.dumps({"start_date": "", "end_date": "", "listings": listings_infos})
-    print(res)
+        date_range, duration = d["dates"], d["duration"]
+        neighborhood = d["neighborhood"]
+        keywords = nltk.word_tokenize(d["bio"])
+        # nltk.download('stopwords')
+        keywords = [w for w in keywords if w not in nltk.corpus.stopwords.words('english')]
+
+        import daterank
+
+        if testing:
+            neighborhood_dict = pickle.load(open("./calendar_with_neighborhood.pickle", "rb"))
+        else:
+            neighborhood_dict = pickle.load(open("./machine-learning/calendar_with_neighborhood.pickle", "rb"))
+
+        listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
+
+        # rank + restrict by keywords
+        listings, keys = rank_listings(listings, keywords, testing)
+
+        if testing:
+            with open('./id_info.pickle', 'rb') as f:
+                id_info = pickle.load(f)
+        else:
+            with open('./machine-learning/id_info.pickle', 'rb') as f:
+                id_info = pickle.load(f)
+
+        listings_infos = []
+        for i, listingID in enumerate(listings[:5]):
+            if listingID in id_info:
+                info = id_info[listingID]
+                info['keywords'] = keys[i]
+                listings_infos.append(id_info[listingID])
+            else:
+                print("key error:" + listingID)
+
+        res = json.dumps({"start_date": "", "end_date": "", "listings": listings_infos})
+        print(res)
+    except Exception as e:
+        print(e)
+
     sys.stdout.flush()

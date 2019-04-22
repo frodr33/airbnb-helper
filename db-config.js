@@ -1,6 +1,6 @@
 // const PRODUCTION = false;
 var config = {
-    production: true,
+    production: false,
     local_db : {
       host:"localhost",
       database:"api",

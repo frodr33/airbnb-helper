@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import {
-    Form, Icon, Input, Button, DatePicker, TimePicker, Select, Col, Slider, Spin
+    Form, Input, Button, DatePicker, Select, Col, Slider, Spin
   } from 'antd'
 
     
-const { MonthPicker, RangePicker } = DatePicker;
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 const { Option } = Select;
 let numAdults = 1;
 let cityNeighborhood = "Midtown";
@@ -202,6 +203,8 @@ class TextForm extends Component {
                 </Form.Item>
             </Form> 
         </Col>
+
+        <TextArea rows={4}/>
         </div>
     );
   }
