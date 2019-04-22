@@ -86,3 +86,6 @@ heroku logs --tail
 ## Adding Buildpacks -- setting up Node.js & Python Backend
 heroku buildpacks:add heroku/python
 heroku buildpacks:add heroku/nodejs
+
+## DB set up on Heroku
+heroku addons:create heroku-postgresql:hobby-dev
