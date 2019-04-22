@@ -49,7 +49,7 @@ class HomePage extends React.Component {
       }
       
       let submit =       
-      <Form onSubmit={this.handleSubmit}>         
+      <Form onSubmit={this.handleSubmit} style={{float:"right"}}>         
       <Form.Item>
       {/* {
           submitted ? <Spin tip="Loading"></Spin> : 
