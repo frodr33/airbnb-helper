@@ -83,3 +83,4 @@ yarn-error.log*
 
 # python
 machine-learning/__pycache__/
+*.pickle
