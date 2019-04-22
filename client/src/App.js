@@ -60,7 +60,6 @@ class App extends Component {
             <Route path="/landing/" component={landingPage} />
             <Route path="/home/" component={homePage} />
             <Route path="/testHome/" component={HomePage} />
-
           </div>
         </Router>
 
