@@ -168,7 +168,7 @@ def rank_listings(listings, query, testing=False):
 
 if __name__ == '__main__':
 
-    testing = True
+    testing = False
     if testing:
         d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
             "bio":"I like big clean rooms with a pool."}
