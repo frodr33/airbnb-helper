@@ -1,12 +1,11 @@
 import nltk
-import pandas as pd
+# import pandas as pd
 from collections import defaultdict
 import string
 import os.path
 import pickle
 import numpy as np
 import sys
-import datetime
 import json
 
 """
@@ -79,6 +78,54 @@ class TFIDF(object):
 
         return id_keywords
 
+class SVD(object):
+    def __init__(self, review_file, listings_file):
+        self.review_df = pd.read_csv(review_file)
+        self.listing_df = pd.read_csv(listings_file)
+
+        self.words_comp, self.reviews_comp, self.index_to_word = self.svd()
+
+    def svd(self):
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from scipy.sparse.linalg import svds
+        import matplotlib.pyplot as plt
+        from sklearn.preprocessing import normalize
+
+        vectorizer = TfidfVectorizer(stop_words='english', max_df=.7, min_df=75)
+        mat = vectorizer.fit_transform([r for r in self.review_df['comments'] if type(r) == str]).transpose()
+        print(mat.shape)
+
+        words_comp, _, reviews_comp = svds(mat, k=40)
+        reviews_comp = reviews_comp.transpose()
+
+        word_to_index = vectorizer.vocabulary_
+        index_to_word = {i:t for t,i in word_to_index.items()}
+
+        words_comp = normalize(words_comp, axis=1)
+        reviews_comp = normalize(reviews_comp, axis=1)
+
+        return words_comp, reviews_comp, index_to_word
+
+    def gen_keyword_dict(self):
+        id_keywords = {}
+        reviews = self.review_df
+        reviews = reviews.loc[reviews['comments'].notnull()].reset_index()
+        for listing_id in self.listing_df['id']:
+            listing_idxs = reviews.loc[reviews['listing_id'] == listing_id].index
+            if len(listing_idxs) > 0:
+                listing_vec = np.average(self.reviews_comp[listing_idxs], axis=0)
+
+                sims = self.words_comp.dot(listing_vec)
+                asort = np.argsort(-sims)[:11]
+
+                id_keywords[listing_id] = [self.index_to_word[i] for i in asort[1:]]
+            else:
+                id_keywords[listing_id] = []
+
+        with open('id_keywords_svd.pickle', 'wb') as f:
+            pickle.dump(id_keywords, f)
+
+
 """
 END KEYWORD GENERATION
 """
@@ -98,63 +145,71 @@ def build_listing_info(listings_file):
 
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
-def rank_listings(listings, query):
-    with open('./machine-learning/id_keywords.pickle', 'rb') as f:
-        id_keywords = pickle.load(f)
+def rank_listings(listings, query, testing=False):
+    if testing:
+        with open('./id_keywords_svd.pickle', 'rb') as f:
+            id_keywords = pickle.load(f)
+    else:
+        with open('./machine-learning/id_keywords_svd.pickle', 'rb') as f:
+            id_keywords = pickle.load(f)
 
     query = set(query)
     sims = []
     for l in listings:
         keywords = set(id_keywords[l])
         # for now, number of keywords in common between query and listing
-        sims.append((l, len(keywords.intersection(query))))
+        keys = keywords.intersection(query)
+        sims.append((l, len(keys), list(keys)))
 
-    sims = sorted(sims, key=lambda x: x[1], reverse=True)
-    return [x[0] for x in sims][:100]
+    sims = sorted(sims, key=lambda x: x[1], reverse=True)[:10]
+    return [x[0] for x in sims], [x[2] for x in sims]
 
 
 
 if __name__ == '__main__':
 
-    # d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":"4","neighborhood":"Hell's Kitchen","keywords":["Hot","Cool","Pool"]}
-    try:
+    testing = True
+    if testing:
+        d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
+            "bio":"I like big clean rooms with a pool."}
+    else:
         d = sys.argv[1]
         d = json.loads(d)
-        date_range, duration = d["dates"], d["duration"]
-        neighborhood, keywords = d["neighborhood"], d["keywords"]
 
-        import daterank
+    date_range, duration = d["dates"], d["duration"]
+    neighborhood = d["neighborhood"]
+    keywords = nltk.word_tokenize(d["bio"])
+    # nltk.download('stopwords')
+    keywords = [w for w in keywords if w not in nltk.corpus.stopwords.words('english')]
 
-        # calendar_dict = pickle.load(open("./machine-learning/optimized_calendar_data.pickle", "rb" ))
+    import daterank
+
+    if testing:
+        neighborhood_dict = pickle.load(open("./calendar_with_neighborhood.pickle", "rb"))
+    else:
         neighborhood_dict = pickle.load(open("./machine-learning/calendar_with_neighborhood.pickle", "rb"))
 
-        # print(calendar_dict['Harlem'])
-        listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
-        # print("HERE")
-        # print(listings)
+    listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
 
+    # rank + restrict by keywords
+    listings, keys = rank_listings(listings, keywords, testing)
 
-        # rank + restrict by keywords
-        listings = rank_listings(listings, keywords)
-
-        start_date = datetime.datetime.strptime(date_range[0][:10], "%Y-%m-%d")
-        end_date = datetime.datetime.strptime(date_range[1][:10], "%Y-%m-%d")
-
-        # _, min_ratio, dict_ratio, best_start_date, best_end_date = daterank.average_ratio(listings, calendar_dict, start_date, end_date, 4)
-        # listings = dict_ratio[min_ratio]
-
+    if testing:
+        with open('./id_info.pickle', 'rb') as f:
+            id_info = pickle.load(f)
+    else:
         with open('./machine-learning/id_info.pickle', 'rb') as f:
-            id_location = pickle.load(f)
+            id_info = pickle.load(f)
 
-        listings_locations = []
-        for listingID in listings:
-            if listingID in id_location:
-                listings_locations.append(id_location[listingID])
-            else:
-                print("key error:" + listingID)
+    listings_infos = []
+    for i, listingID in enumerate(listings[:5]):
+        if listingID in id_info:
+            info = id_info[listingID]
+            info['keywords'] = keys[i]
+            listings_infos.append(id_info[listingID])
+        else:
+            print("key error:" + listingID)
 
-        res = json.dumps({"start_date": "", "end_date": "", "listings": listings_locations[:5]})
-        print(res)
-    except Exception as e:
-        print(e)
+    res = json.dumps({"start_date": "", "end_date": "", "listings": listings_infos})
+    print(res)
     sys.stdout.flush()
