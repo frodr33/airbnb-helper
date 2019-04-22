@@ -7,7 +7,12 @@ const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 require('dotenv').config()
 const foursquareRequest = require('./api.js')
+var http = require("http");
 let listingVenueMap = new Map();
+
+// setInterval(function() {
+//     http.get("http://trip-it-v2.herokuapp.com");
+// }, 300000); 
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());

@@ -11,7 +11,7 @@ if (config.production){
     connectionString: config.prod_db.host,
     ssl: true    
   })
-  console.log("set up Production Database");
+  console.log("Set up Production Database");
   
 } else {
   pool = new Pool({
@@ -36,21 +36,18 @@ registerUser = (request, response) => {
   pool.query(`CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, username VARCHAR(100)
    NOT NULL, password VARCHAR(100) NOT NULL)`)
     .then(() => signUp(request.body))
-    .then(() => response.send("User Registered"))
+    .then(() => {
+      console.log("REGISTERED USER")
+      const SECRET = "tripitsecret"; // PUT IN ENV VARIABLES LATER! DO NOT HARD CODE
+      const username = request.body.username;
+      const token = jwt.sign({username}, SECRET, {
+        expiresIn: "1h"
+      });      
+      response.cookie('token', token, {httpOnly: true})
+        .sendStatus(200);
+    })
     .catch((err) => console.error("ERROR Executing query: ", err.stack))
 }
-
-// works
-// logInUser = (request, response) => {
-//   let {username, password} = request.body;
-//   pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
-//   .then((data) => bcrypt.compare(password, data.rows[0].password))
-//   .then((result) => {
-//     if (result) response.send("SUCCESSFUL LOGIN");
-//     else response.send("LOGIN FAILED")
-//   })
-//   .catch((err) => console.error("ERROR Logging in: ", err.stack)) 
-// }
 
 logInUser = (request, response) => {
   let {username, password} = request.body;
@@ -71,18 +68,6 @@ logInUser = (request, response) => {
     console.log(err);
     response.status(401).send("Incorrect Username or Password")
   })
-
-
-  // pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
-  // .then((data) => bcrypt.compare(password, data.rows[0].password))
-  // .then((result) => {
-  //   if (result) response.send("SUCCESSFUL LOGIN");
-  //   else response.send("LOGIN FAILED")
-  // })
-  // .catch((err) => {
-  //   console.error("ERROR Logging in: ", err.stack);
-  //   response.send("INCORRECT EMAIL OR PASSWORD")
-  // }) 
 }
 
 dropDB = () => {
@@ -92,19 +77,15 @@ dropDB = () => {
 }
 
 signUp = (user) => {
-  console.log(user);
   hashPassword(user.password)
     .then((hashedPassword) => {
-      console.log(hashedPassword)
       delete user.password
       user.secret_password = hashedPassword
     })
     .then(() => createToken())
     .then(token => user.token = token)
     .then(() => createUser(user))
-    .then(user => {
-      delete user.secret_password
-    })
+    .catch((err) => console.log(err))
 }
 
 // app/models/user.js
@@ -124,7 +105,6 @@ const createUser = (user) => {
     if (error) {
       console.log(error);
     }
-    console.log(results);
   })
 }
 
