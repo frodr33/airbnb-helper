@@ -109,7 +109,7 @@ app.post('/api/register', db.registerUser);
 
 console.log("CRASHED HERE 4")
 
-app.get('/api/getUsers', db.getUsers)
+// app.get('/api/getUsers', db.getUsers)
 
 console.log("CRASHED HERE 5")
 
@@ -117,9 +117,9 @@ app.post('/api/login', db.logInUser)
 
 console.log("CRASHED HERE 6")
 
-app.get('/api/clearDB', (req, res) => {
-  db.dropDB();
-})
+// app.get('/api/clearDB', (req, res) => {
+//   db.dropDB();
+// })
 
 // app.post('/api/authenticate', (req, res) => {
 //   const {username, password} = req.body;
