@@ -82,3 +82,7 @@ MUST be in bash to use this, not the windows terminal
 ## Deploying to Heroku using CLI
 git push heroku master
 heroku logs --tail
+
+## Adding Buildpacks -- setting up Node.js & Python Backend
+heroku buildpacks:add heroku/python
+heroku buildpacks:add heroku/nodejs
