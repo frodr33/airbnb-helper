@@ -17,12 +17,17 @@ app.listen(port);
 console.log(`Server listening on ${port}`);
 
 /* Endpoints */
+
+console.log("CRASHED HERE 1")
+
 app.get("/api/getVenues/:id", (req, res) => {
   /* Returns the venue information given the specific
    * listing ID provided as a query parameter to the
    * endpoint */
   res.json(listingVenueMap.get(parseInt(req.params.id)))
 });
+
+console.log("CRASHED HERE 2")
 
 app.post("/api/getListings", (req, res) => {
   /* Use python scripts and req to obtain the
@@ -90,13 +95,27 @@ app.post("/api/getListings", (req, res) => {
       console.log(err);
     })
   });
+
+  // pyProgram.on("close", code => {
+  //   console.log(result)
+  //   res.send(result);
+  // })
+
 })
+
+console.log("CRASHED HERE 3")
 
 app.post('/api/register', db.registerUser);
 
+console.log("CRASHED HERE 4")
+
 app.get('/api/getUsers', db.getUsers)
 
+console.log("CRASHED HERE 5")
+
 app.post('/api/login', db.logInUser)
+
+console.log("CRASHED HERE 6")
 
 app.get('/api/clearDB', (req, res) => {
   db.dropDB();
@@ -106,6 +125,8 @@ app.get('/api/clearDB', (req, res) => {
 //   const {username, password} = req.body;
 //   db.logInUser()
 // })
+
+console.log("CRASHED HERE 7")
 
 
 app.get('*', (_, res) => {
