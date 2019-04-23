@@ -69,18 +69,26 @@ class HomePage extends React.Component {
 
       let content = this.state.contentList;
       let airbnbInfScroller = this.state.infiniteScrollerList[key];
-      let venueScroller = <InfiniteScroller id={venues[0].id} key={key + "venueScroller"}infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller>   
-      var newContent = <div id={venues[0].id} style={{width:"100%", height:"100%", paddingTop:"5%"}}>{airbnbInfScroller}{venueScroller}</div>
+      let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} key={key + "venueScroller"}infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller>   
+      var newContent = <div id={venues[0].id + "VENUESCROLLERWRAPPER"} style={{width:"100%", height:"100%", paddingTop:"5%"}}>{venueScroller}</div>
         
-      console.log(key)
-      this.setState((previousState) => {
-        previousState.contentList[key] = newContent;
-        return previousState;
+      let venuesList = this.state.venueList;
+      venuesList[key] = newContent;
+      this.setState({
+        key: "createNewItinerary",
+        venueList: venuesList,
+        numVenues: this.state.numVenues + 1,
       })
 
-      console.log("sdfsdffsddfsdf")
+      // content[key] = newContent
+      // console.log(content);
+      // this.setState({
+      //   key: "createNewItinerary",
+      //   contentList: content,
+      //   numVenues: this.state.venueCards + 1
+      // })      
 
-      this.onTabChange(key, 'key') 
+      this.onTabChange(key, 'key')
     }
 
     createTab = (listings) => {
@@ -113,12 +121,16 @@ class HomePage extends React.Component {
         let infScrollerList = this.state.infiniteScrollerList;
         infScrollerList[key] = infScroller;
 
+        let venuesList = this.state.venueList;
+        venuesList[key] = <h2>Choose an Airbnb to see possible venues!</h2>
+
         this.setState({
             tabList: tabs,
             contentList: content,
             itineraryNum: this.state.itineraryNum + 1,
             infiniteScrollerList: infScrollerList,
-            key: key
+            key: key,
+            venueList: venuesList
         })
     }
 
@@ -133,6 +145,8 @@ class HomePage extends React.Component {
             createNewItinerary: <TextForm addTab={this.createTab}></TextForm>,
         },
         infiniteScrollerList: {},
+        venueList: {},
+        numVenues: 0,
     }
 
   onTabChange = (key, type) => {
@@ -153,8 +167,14 @@ class HomePage extends React.Component {
         >
           {
             tabList.map((tab, i) => {
-              return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>
-            })
+              if (tab.key === "createNewItinerary"){
+                return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>
+              } else {
+                console.log(tab.key)
+                console.log(this.state.venueList)
+                return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.infiniteScrollerList[tab.key]}{this.state.venueList[tab.key]}</TabPane>
+              }            
+              })
           }
         </Tabs>
       </div>

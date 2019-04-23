@@ -58,8 +58,9 @@ class App extends Component {
           <div style={{height:"100%"}}>
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
-            {/* <Route path="/home/" component={homePage} /> */}
             <Route path="/home/" component={HomePage} />
+            {/* <Route path="/testPage/" component={homePage} /> */}
+            {/* <Route path="/home/" component={HomePage} /> */}
           </div>
         </Router>
 
