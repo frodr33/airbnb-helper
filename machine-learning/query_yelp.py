@@ -51,21 +51,22 @@ def main():
         # radius = None
        # d = {"term":"dinner","latitude":37.782907, "longitude": -122.418898, "radius": 3200}
 
-        testing = True
+        testing = False
         if testing:
             term = 'dinner' 
             lat = Decimal(37.782907)
             longi  = Decimal(-122.418898)
-            radius = None
+            # radius = None
         else:
             d = sys.argv[1]
             d = json.loads(d)
             term = d['term']
-            latitude = d['latitude']
-            longitude = d['longitude']
+            lat = d['latitude']
+            longi = d['longitude']
         #Radius Value
 
         #Sample query
+        radius = None
         if radius is not None:
             query_api_lat_Long(term, lat, longi, radius)
         else:
@@ -73,14 +74,9 @@ def main():
             print(res)
 
 
-    except HTTPError as error:
-        sys.exit(
-            'Encountered HTTP error {0} on {1}:\n {2}\nAbort program.'.format(
-                error.code,
-                error.url,
-                error.read(),
-            )
-        )
+    except Exception as e:
+        print("Exception" + " " + e)
+    sys.stdout.flush()
 
 def request(host, path, api_key, url_params=None):
     """Given your API_KEY, send a GET request to the API.

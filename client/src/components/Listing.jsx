@@ -9,10 +9,12 @@ class Listing extends React.Component {
   }
 
   receivedVenuesHandler = (data) => {
+    console.log(data);
     this.props.addVenuesCard(data)
   }
 
   fetchVenues = (listingID) => {
+    console.log(listingID)
     fetch('/api/getVenues/' + listingID, {
       method: 'GET',
       headers: {

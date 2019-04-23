@@ -39,10 +39,14 @@ class HomePage extends React.Component {
       
       for (let i = 0; i < venues.length; i++) {
         venueCards.push(
-          <div key={"venue: " + venues[i].id}>
+          <div key={"venue: " + venues[i].name}>
+          
             <Card>
+              <div>
+              <img src={venues[i].source} width="20%" height="100%"></img>
               <h3 style={{padding:"none"}}><b>{venues[i].name}</b></h3>
-              <h4>{venues[i].postalAddress}</h4>
+              {/* <h4>{venues[i].postalAddress}</h4> */}
+              </div>
             </Card>
           </div>
         )
@@ -67,10 +71,11 @@ class HomePage extends React.Component {
       </Form.Item>
       </Form> 
 
+      console.log(venues);
       let content = this.state.contentList;
       let airbnbInfScroller = this.state.infiniteScrollerList[key];
-      let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} key={key + "venueScroller"}infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller>   
-      var newContent = <div id={venues[0].id + "VENUESCROLLERWRAPPER"} style={{width:"100%", height:"100%", paddingTop:"5%"}}>{venueScroller}</div>
+      let venueScroller = <InfiniteScroller id={venues[0].name + "VENUESCROLLER"} key={key + "venueScroller"}infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller>   
+      var newContent = <div id={venues[0].name + "VENUESCROLLERWRAPPER"} style={{width:"100%", height:"100%", paddingTop:"5%"}}>{venueScroller}</div>
         
       let venuesList = this.state.venueList;
       venuesList[key] = newContent;

@@ -30,34 +30,30 @@ app.get("/api/getVenues/:id", (req, res) => {
 });
 
 app.get("/api/getYelpData", (req, res) => {
-  const input = {
-    term: "dinner",
-    latitude: 37.782907,
-    longitude: -122.418898,
-    radius: "none"
-  }
-  const yelpProgram = spawn("python", ["./machine-learning/query_yelp.py",JSON.stringify(input)])
-  yelpProgram.stdout.on("data", (chunk) => {
-    console.log(chunk.toString('utf8'))
-    let out = JSON.parse(chunk.toString('utf8'));
-    console.log(out);
-    res.send(out)
-  })
+  getYelpData(37.782907, -122.418898, "dinner")
+  .then(d => res.send(d));
 })
 
 function getYelpData(lat, long, term) {
-  const input = {
+  // console.log("INSIDE OF GET YELP DATA")
+  // console.log(lat, long, term)
+  let input = {
     term: term,
     latitude: lat,
     longitude: long,
     radius: "none"
   }
-  const yelpProgram = spawn("python", ["./machine-learning/query_yelp.py",JSON.stringify(input)])
-  yelpProgram.stdout.on("data", (chunk) => {
-    console.log(chunk.toString('utf8'))
-    let out = JSON.parse(chunk.toString('utf8'));
-    console.log(out);
-    res.send(out)
+  let yelpProgram = spawn("python", ["./machine-learning/query_yelp.py",JSON.stringify(input)])
+  
+  return new Promise((resolve, reject) => {
+    yelpProgram.stdout.on("data", (chunk) => {
+      // console.log("OUTPUT OF YELP PROGRAM")
+      // console.log(input)
+      // console.log(chunk.toString('utf8'))
+      let out = JSON.parse(chunk.toString('utf8'));
+      // console.log(out);
+      resolve(out);
+    })    
   })
 }
 
@@ -69,39 +65,23 @@ app.post("/api/getListings", (req, res) => {
   let result;
   const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
-    console.log(chunk.toString('utf8'))
+    // console.log(chunk.toString('utf8'))
     let df = JSON.parse(chunk.toString('utf8'));
-    console.log("RETURN FROM KEYWORDS");
-    console.log(df);
+    // console.log("RETURN FROM KEYWORDS");
+    // console.log(df);
     let listingPromises = []
+    let venuePromises = []
     let listings = []
     let listingObjs = df.listings;
 
+    let globalListings;
+
+
     for (let i = 0; i < listingObjs.length; i++) {
       let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
-      let venues = foursquareRequest(coordinates[0], coordinates[1], 10);
-      venues.then((d) => {
-        let venueDatas = [];
-        d.forEach((venueResponse) => {
-          // console.log(venueResponse)
-          let venue = venueResponse.venue;
-          let location = venue.location;
-          let venueData = {
-            id: venue.id,
-            name: venue.name,
-            address: location.address,
-            crossStreet: location.crossStreet,
-            latitude: location.lat,
-            longitude: location.lng,
-            distance: location.distance,
-            postalAddress: location.address + " " + location.city + " " + location.state + ", " + location.cc + ", " + location.postalCode
-          }
-          venueDatas.push(venueData);
-        })
-        listingVenueMap.set(listingObjs[i].id, venueDatas)
-      })
-
+      let venues = getYelpData(coordinates[0], coordinates[1], "dinner"); 
       listingPromises.push(retrieveImage(listingObjs[i].id));
+      venuePromises.push(venues)
     }
 
     Promise.all(listingPromises)
@@ -121,15 +101,41 @@ app.post("/api/getListings", (req, res) => {
       }
       return listings;
     })
-    .then((d) => {
-      // result = d;
-      console.log("...Sending Listings", d)
-      res.send(d);
+    .then((listings) => {
+      globalListings = listings;
+      return Promise.all(venuePromises).then((data) => data).catch(err => console.log(err))
     })
+    .then((res) => {
+      console.log(res)
+      return new Promise((resolve, reject) => {
+        for (let i = 0; i < res.length; i++) {
+          console.log(res[i])
+          let data = res[i].results;
+          let venueDatas = [];
+          data.forEach((venue) => {
+            let venueData = {
+              name: venue[1],
+              rating: venue[0],
+              latitude: venue[4][0],
+              longitude: venue[4][1],
+              type: venue[3],
+              source: venue[2]
+            }
+            venueDatas.push(venueData);
+          })
+          listingVenueMap.set(listingObjs[i].id, venueDatas)  
+        }   
+        resolve("Done")     
+      })
+    })
+    .then((d) => {
+      return globalListings;
+    })
+    .then((d) => res.send(d))
     .catch((err) => {
       console.log(err);
     })
-  });
+  })
 })
 
 app.post('/api/register', db.registerUser);
