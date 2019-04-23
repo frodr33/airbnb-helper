@@ -45,13 +45,25 @@ SEARCH_LIMIT = 5
 def main():
     try:
         #Sample Latitude and Longitude Data
-        term = 'dinner' 
-        lat = Decimal(37.782907)
-        longi  = Decimal(-122.418898)
+        # term = 'dinner' 
+        # lat = Decimal(37.782907)
+        # longi  = Decimal(-122.418898)
+        # radius = None
+       # d = {"term":"dinner","latitude":37.782907, "longitude": -122.418898, "radius": 3200}
+        d = sys.argv[1]
+        d = json.loads(d)
+        term = d['term']
+        latitude = d['latitude']
+        longitude = d['longitude']
+        radius = d['radius']
         #Radius Value
 
         #Sample query
-        list_of_ranked_results = query_api_lat_Long(term, lat, longi)
+        if radius is not None:
+            query_api_lat_Long(term, lat, longi, radius)
+        else:
+            query_api_lat_Long(term, lat, longi)
+
 
     except HTTPError as error:
         sys.exit(
@@ -185,7 +197,9 @@ def query_api_lat_Long(term, latitude, longitude, radius= 40000):
     if not businesses:
         #print(u'No businesses for {0} in {1} found.'.format(term, location))
         #print ('no businesses found')
-        return 
+        empty_list = []
+        result = json.dumps({"results":empty_list})
+        return result
     for value in businesses:
         business_id = value['id']
         response = get_business(API_KEY, business_id)
@@ -198,9 +212,8 @@ def query_api_lat_Long(term, latitude, longitude, radius= 40000):
 
     list_of_results.sort()
     list_of_results.reverse()
-
-    return list_of_results
-
+    result = json.dumps({"results":list_of_results})
+    return result
 
 
 if __name__ == '__main__':
