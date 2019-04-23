@@ -29,6 +29,38 @@ app.get("/api/getVenues/:id", (req, res) => {
   res.json(listingVenueMap.get(parseInt(req.params.id)))
 });
 
+app.get("/api/getYelpData", (req, res) => {
+  const input = {
+    term: "dinner",
+    latitude: 37.782907,
+    longitude: -122.418898,
+    radius: "none"
+  }
+  const yelpProgram = spawn("python", ["./machine-learning/query_yelp.py",JSON.stringify(input)])
+  yelpProgram.stdout.on("data", (chunk) => {
+    console.log(chunk.toString('utf8'))
+    let out = JSON.parse(chunk.toString('utf8'));
+    console.log(out);
+    res.send(out)
+  })
+})
+
+function getYelpData(lat, long, term) {
+  const input = {
+    term: term,
+    latitude: lat,
+    longitude: long,
+    radius: "none"
+  }
+  const yelpProgram = spawn("python", ["./machine-learning/query_yelp.py",JSON.stringify(input)])
+  yelpProgram.stdout.on("data", (chunk) => {
+    console.log(chunk.toString('utf8'))
+    let out = JSON.parse(chunk.toString('utf8'));
+    console.log(out);
+    res.send(out)
+  })
+}
+
 app.post("/api/getListings", (req, res) => {
   /* Use python scripts and req to obtain the
    * listing ID's, for now, listingID is hard

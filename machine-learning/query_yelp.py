@@ -34,7 +34,7 @@ SEARCH_PATH = '/v3/businesses/search'
 BUSINESS_PATH = '/v3/businesses/'  # Business ID will come after slash.
 
 #Dictionary to classify sentiment
-word_sentiment_dictionary = pickle.load(open("word_sentiment.pickle", "rb" ))
+word_sentiment_dictionary = pickle.load(open("./machine-learning/word_sentiment.pickle", "rb" ))
 
 
 # Search default because the Free API Limit is 5000 returned queries
@@ -50,19 +50,27 @@ def main():
         # longi  = Decimal(-122.418898)
         # radius = None
        # d = {"term":"dinner","latitude":37.782907, "longitude": -122.418898, "radius": 3200}
-        d = sys.argv[1]
-        d = json.loads(d)
-        term = d['term']
-        latitude = d['latitude']
-        longitude = d['longitude']
-        radius = d['radius']
+
+        testing = True
+        if testing:
+            term = 'dinner' 
+            lat = Decimal(37.782907)
+            longi  = Decimal(-122.418898)
+            radius = None
+        else:
+            d = sys.argv[1]
+            d = json.loads(d)
+            term = d['term']
+            latitude = d['latitude']
+            longitude = d['longitude']
         #Radius Value
 
         #Sample query
         if radius is not None:
             query_api_lat_Long(term, lat, longi, radius)
         else:
-            query_api_lat_Long(term, lat, longi)
+            res = query_api_lat_Long(term, lat, longi)
+            print(res)
 
 
     except HTTPError as error:
