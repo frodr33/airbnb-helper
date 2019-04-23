@@ -5,6 +5,7 @@ import CustomFooter from './components/Footer'
 import TabsCard from './components/TabsCard'
 import LogInCard from './components/LogInCard'
 import HomePage from './components/homePage/homePage'
+import GoogleMap from './components/maps/GoogleMap'
 import { Col, Row } from 'antd';
 import { BrowserRouter as Router, Route, Redirect  } from "react-router-dom";
 
@@ -18,7 +19,7 @@ const titleFont = {
 
 function landingPage() {
   return (
-    <div style={{ background: '#ECECEC', padding: '30px' }}>
+    <div style={{padding: '30px' }}>
     <Row gutter={16}>
       <Col span={8} offset={2}>
         <p style={titleFont}>
@@ -46,9 +47,9 @@ function homePage() {
 class App extends Component { 
   render() {
     return (
-      <div  style={{height:"100%"}}>
-      <div className="blurred-img">
-      </div>
+      <div  style={{height:"100%"}} className="blurred-img">
+      {/* <div className="blurred-img">
+      </div> */}
       <div style={{height:"100%"}}>
        <div>
           <NavBar></NavBar>
@@ -59,6 +60,7 @@ class App extends Component {
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
             <Route path="/home/" component={HomePage} />
+            <Route path="/testPage/" component={GoogleMap} />
             {/* <Route path="/testPage/" component={homePage} /> */}
             {/* <Route path="/home/" component={HomePage} /> */}
           </div>
