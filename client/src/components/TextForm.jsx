@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import 'antd/dist/antd.css'
 import {
-    Form, Icon, Input, Button, DatePicker, TimePicker, Select, Col, Slider, Spin
+    Form, Input, Button, DatePicker, Select, Col, Slider, Spin
   } from 'antd'
 
-
-const { MonthPicker, RangePicker } = DatePicker;
+    
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
 const { Option } = Select;
 let numAdults = 1;
 let cityNeighborhood = "Midtown";
-let neighborhoods =
+let neighborhoods = 
 [
   "Upper West Side",
   "Hell's Kitchen",
@@ -20,11 +21,13 @@ let neighborhoods =
 ]
 
 class TextForm extends Component {
-    state = {submitted:false}
+    state = {submitted:false}  
 
     receivedResultsHandler = (listings) => {
-
+        
         // Create new Tab
+        console.log("...received", listings)
+
         this.props.addTab(listings);
 
         this.setState({
@@ -54,15 +57,17 @@ class TextForm extends Component {
         }
 
         table.push(<Select key={"select-neighborhoods"} placeholder="Midtown" onChange={this.handleNeighborhoodsChange}>{options}</Select>)
-        return table;
+        return table;        
     }
 
     handleSubmit = (e) => {
+        console.log("...finding listings", e)
+
         e.preventDefault();
         this.setState({
             submitted: !this.state.submitted
         })
-
+        
         this.props.form.validateFields((err, values) => {
             if (!err) {
             console.log('Destination ', values.destination);
@@ -75,7 +80,6 @@ class TextForm extends Component {
             }
             fetch('/api/getListings', {
                 method: 'POST',
-                dataType: 'text',
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
@@ -123,7 +127,7 @@ class TextForm extends Component {
           sm: { span: 8 },
         },
     };
-
+    
     return (
         <div>
 
@@ -148,7 +152,7 @@ class TextForm extends Component {
                 </Form.Item>
             </Form>
         </Col>
-
+        
         <Col span={8} style={{display: "block", paddingLeft: "3%"}}>
             <Form layout="horizontal" style={{width: "100%"}} onSubmit={this.handleSubmit}>
                 <Form.Item label="Number of Guests">
@@ -172,7 +176,7 @@ class TextForm extends Component {
                     <Input placeholder=""/>
                 )}
             </Form.Item>
-            </Form>
+            </Form> 
         </Col>
 
         <Col span={8} style={{display: "block", paddingLeft: "3%"}}>
@@ -189,16 +193,18 @@ class TextForm extends Component {
                 </Form.Item>
                 <Form.Item>
                 {
-                    submitted ? <Spin tip="Loading"></Spin> :
+                    submitted ? <Spin tip="Loading"></Spin> : 
                     <Button
                         type="primary"
                         htmlType="submit">
-                        Submit
+                        Submit 
                      </Button>
                 }
                 </Form.Item>
-            </Form>
+            </Form> 
         </Col>
+
+        <TextArea rows={4}/>
         </div>
     );
   }

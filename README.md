@@ -66,9 +66,6 @@ INSERT INTO team_members (name, netID)<br/>
 
 `SELECT * FROM team_members;`  Should print out names and netIDs in a table
 
-After doing this, individually start the server with `npm start`. Then go to the endpoint 
-`localhost:5000/api/users`. If you see our names and netIDs, it worked
-
 ## Pushing to Production Database
 https://devcenter.heroku.com/articles/heroku-postgresql#heroku-postgres-ssl
 
@@ -85,3 +82,10 @@ MUST be in bash to use this, not the windows terminal
 ## Deploying to Heroku using CLI
 git push heroku master
 heroku logs --tail
+
+## Adding Buildpacks -- setting up Node.js & Python Backend
+heroku buildpacks:add heroku/python
+heroku buildpacks:add heroku/nodejs
+
+## DB set up on Heroku
+heroku addons:create heroku-postgresql:hobby-dev

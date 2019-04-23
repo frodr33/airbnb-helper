@@ -1,26 +1,30 @@
 import React, { Component, Children } from 'react';
-import { PageHeader } from 'antd';
-import 'antd/dist/antd.css'
-import Button from '@material-ui/core/Button';
+import { PageHeader, Button} from 'antd';
+// import 'antd/dist/antd.css'
+// import Button from '@material-ui/core/Button';
 
 const buttonStyles = {
-  fontFamily: "Courier New"
+  fontSize: "20px",
+  color: "white",
+  backgroundColor: "transparent !important"
+}
+
+const headerStyles = {
+  backgroundColor: "transparent"
 }
 
 class NavBar extends Component {
     render() {  
 
       return (
-        <div>
+        <div style={{color: "white"}}>
                <PageHeader
-                title="TripIt!"
-                subTitle="A personalized travel iternary"
+                title={<p style={{color:"white", fontSize:"20px"}}>TripIt!</p>}
                 extra={[
-                  <Button styles={buttonStyles} key="2">Sign Up</Button>,
-                    <Button styles={buttonStyles} key="1">
-                    Log In
-                  </Button>,
+                  <Button key="2" ghost>{<b><p style={buttonStyles}>Sign Up</p></b>}</Button>,
+                  <Button key="1" ghost>{<b><p style={buttonStyles}>Log In</p></b>}</Button>,                  
                 ]}
+                style={{backgroundColor: "transparent", color:"white"}}
                 />
         </div>
       );

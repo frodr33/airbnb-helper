@@ -10,7 +10,7 @@ const { Footer } = Layout;
 class CustomFooter extends Component {
     render () {
         return (
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer style={{ textAlign: 'center', backgroundColor:"white", padding:"none"}}>
             Cornell University CS 4300 Final Project<br/>
             Frank Rodriguez Aditya Jha Jacob Mathai Tharun Sankar
         </Footer>

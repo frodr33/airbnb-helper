@@ -2,7 +2,7 @@ import { Card, Icon, Spin } from 'antd';
 import 'antd/dist/antd.css'
 import React, { Component } from 'react';
 import '../App.css';
-import TextForm from './TextForm'
+import TextForm from './textform-new'
 import Listing from './Listing'
 import InfiniteScroller from './InfiniteScroller';
 
@@ -48,7 +48,7 @@ class TabsCard extends React.Component {
 
       let content = this.state.contentList;
       let airbnbInfScroller = this.state.infiniteScrollerList[key];
-      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="250px" infPadleft="5%" infWidth="45%" input={venueCards}></InfiniteScroller>   
+      let venueScroller = <InfiniteScroller key={key + "venueScroller"}infHeight="300px" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick some restauraunts!"></InfiniteScroller>   
       var newContent = <div>{airbnbInfScroller}{venueScroller}</div>
       content[key] = newContent
 
@@ -64,6 +64,7 @@ class TabsCard extends React.Component {
     }
 
     createTab = (listings) => {
+        if (!listings) return;
         let tabs = this.state.tabList;
         let content = this.state.contentList;
         let key = "Itinerary: " + this.state.itineraryNum;
@@ -83,11 +84,12 @@ class TabsCard extends React.Component {
                   hostName={listings[i].host_name}
                   price={listings[i].price}
                   name={listings[i].name}
+                  keywords={listings[i].keywords}
                   ></Listing>
             )
         }
 
-        let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="400px" infPadleft="0%" infWidth="50%" input={table}></InfiniteScroller>;
+        let infScroller = <InfiniteScroller key={key + "infscroller"}infHeight="500px" infPadleft="0%" infWidth="50%" input={table} title="Pick an AirBnB!"></InfiniteScroller>;
         content[key] = <div style={{width:'100%', height:'100%'}}>{infScroller}</div>
         let infScrollerList = this.state.infiniteScrollerList;
         infScrollerList[key] = infScroller;
@@ -122,9 +124,9 @@ class TabsCard extends React.Component {
   
   render() {
     return (
-      <div>
+      <div style={{height:"100%"}}>
         <Card
-          style={{ width: '100%', height:"50%", padding:"none" }}
+          style={{ width: '100%', height:"80%", padding:"none" }}
           tabList={tabList}
           activeTabKey={this.state.key}
           onTabChange={(key) => { this.onTabChange(key, 'key'); }}

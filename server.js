@@ -7,7 +7,12 @@ const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 require('dotenv').config()
 const foursquareRequest = require('./api.js')
+var http = require("http");
 let listingVenueMap = new Map();
+
+// setInterval(function() {
+//     http.get("http://trip-it-v2.herokuapp.com");
+// }, 300000); 
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
@@ -30,10 +35,12 @@ app.post("/api/getListings", (req, res) => {
    * coded below */
 
   let result;
-  const pyProgram = spawn("python3", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
+  const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
     console.log(chunk.toString('utf8'))
     let df = JSON.parse(chunk.toString('utf8'));
+    console.log("RETURN FROM KEYWORDS");
+    console.log(df);
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;
@@ -75,7 +82,8 @@ app.post("/api/getListings", (req, res) => {
             name: listingObjs[i].name,
             host_name: listingObjs[i].host_name,
             price: listingObjs[i].price,
-            listingURL: d
+            listingURL: d,
+            keywords: listingObjs[i].keywords
           }
         ))
       }
@@ -83,21 +91,24 @@ app.post("/api/getListings", (req, res) => {
     })
     .then((d) => {
       // result = d;
+      console.log("...Sending Listings", d)
       res.send(d);
     })
     .catch((err) => {
       console.log(err);
     })
   });
-
-  // pyProgram.on("close", code => {
-  //   console.log(result)
-  //   res.send(result);
-  // })
-
 })
 
-// app.get('/api/users', db.getUsers)
+app.post('/api/register', db.registerUser);
+
+app.post('/api/login', db.logInUser)
+
+// app.get('/api/getUsers', db.getUsers)
+
+// app.get('/api/clearDB', (req, res) => {
+//   db.dropDB();
+// })
 
 app.get('*', (_, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));

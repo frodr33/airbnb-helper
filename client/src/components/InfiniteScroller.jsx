@@ -20,7 +20,8 @@ class InfiniteScroller extends React.Component {
     overflow: "auto",
     width: this.props.infWidth,
     float: "left",
-    paddingLeft: this.props.infPadleft
+    paddingLeft: this.props.infPadleft,
+    textAlign: "center"
   }
   
   // Dummy Function
@@ -29,12 +30,16 @@ class InfiniteScroller extends React.Component {
   render() {
     return (
       <div style={this.styles}>
+      <div><h2>{this.props.title}</h2></div>
+      <div>
         <InfiniteScroll
           loadMore={this.fetchMoreData}
           hasMore={false}
+          useWindow={true}
         >
         {this.state.items}
         </InfiniteScroll>
+      </div>
       </div>
     );
   }
