@@ -3,3 +3,4 @@ nltk==3.2.5
 pandas==0.24.2
 awscli==1.16.140
 requests==2.21.0
+uber_rides==0.6.0
