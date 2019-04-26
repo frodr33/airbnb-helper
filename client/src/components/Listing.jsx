@@ -8,8 +8,9 @@ class Listing extends React.Component {
     super(props);
   }
 
-  receivedVenuesHandler = (data) => {
-    this.props.addVenuesCard(data)
+  receivedVenuesHandler = (data, listingID) => {
+    console.log("...received venues", data)
+    this.props.addVenuesCard(data, listingID, this.props.coordinates)
   }
 
   fetchVenues = (listingID) => {
@@ -21,7 +22,7 @@ class Listing extends React.Component {
       }
     })
     .then(res => res.json())
-    .then(data => this.receivedVenuesHandler(data))
+    .then(data => this.receivedVenuesHandler(data, listingID))
     .catch(err => console.log(err))    
   }
 

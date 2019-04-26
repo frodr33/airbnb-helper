@@ -44,15 +44,21 @@ export class GoogleMap extends Component {
         style={mapStyles}
         initialCenter={{ lat: this.props.lat || 40.6, lng: this.props.long || -73.9 }}
       >
-        <Polyline
-          path={triangleCoords}
-          geodesic={true}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2} />
+        {this.props.venues.map((venue) => {
+          let lat = venue.latitude;
+          let long = venue.longitude;
+          let markerKey = this.props.listingID + "" + venue.name
+          
+          return <Marker key={markerKey} name={venue.name} onClick={this.onMarkerClick} position={{lat:lat, lng:long}}/>
+        })}
+
+        {/* {this.props.venueCoords.map((coords) => {
+          return <Marker key={this.props.listingID} position={{lat:coords[0], lng: coords[1]}}/>
+        })} */}
+
         <Marker
           onClick={this.onMarkerClick}
-          name={'Kenyatta International Convention Centre'}
+          name={this.props.airbnbName}
         />
         <InfoWindow
           marker={this.state.activeMarker}

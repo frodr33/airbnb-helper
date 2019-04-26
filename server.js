@@ -6,7 +6,7 @@ const app = express();
 const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 require('dotenv').config()
-const {foursquareRequest, uberCreateRequest} = require('./api.js')
+const {foursquareCreateRequest, uberCreateRequest} = require('./api.js')
 // const uberPriceRequest = require('./uber_api.js')
 var http = require("http");
 let listingVenueMap = new Map();
@@ -33,10 +33,10 @@ app.get("/api/getVenues/:id", (req, res) => {
 app.post("/api/uberPrices", (req, res) => {
   const body = req.body;
   uberCreateRequest(body.lat1,body.long1,body.lat2,body.long2)
-  .then((res) => {
-    console.log("IN SERVER")
-    console.log(res);
+  .then((prices) => {
+    res.send(prices);
   })
+  .catch((err) => console.log(err))
 })
 
 app.get("/api/getYelpData", (req, res) => {
@@ -89,7 +89,7 @@ app.post("/api/getListings", (req, res) => {
 
     for (let i = 0; i < listingObjs.length; i++) {
       let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
-      let venues = foursquareRequest(coordinates[0], coordinates[1], 10);
+      let venues = foursquareCreateRequest(coordinates[0], coordinates[1], 10);
       venues.then((d) => {
         let venueDatas = [];
         d.forEach((venueResponse) => {
@@ -122,6 +122,8 @@ app.post("/api/getListings", (req, res) => {
           {
             listingID: listingObjs[i].id,
             name: listingObjs[i].name,
+            latitude: listingObjs[i].location.latitude,
+            longitude: listingObjs[i].location.longitude,
             host_name: listingObjs[i].host_name,
             price: listingObjs[i].price,
             listingURL: d,

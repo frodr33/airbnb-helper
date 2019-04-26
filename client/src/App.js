@@ -4,7 +4,8 @@ import NavBar from './components/NavBar'
 import CustomFooter from './components/Footer'
 import TabsCard from './components/TabsCard'
 import LogInCard from './components/LogInCard'
-import HomePage from './components/homePage/homePage'
+import HomePage from './components/homePage/homePageNew'
+// import HomePage from './components/homePage/homePage'
 import GoogleMap from './components/maps/GoogleMap'
 import { Col, Row } from 'antd';
 import { BrowserRouter as Router, Route, Redirect  } from "react-router-dom";
@@ -43,31 +44,31 @@ function homePage() {
     </div> 
   );
 }
-const lat1 = 37;
-const long1 = -122;
-const lat2 = 37.7;
-const long2 = -122.5;
+// const lat1 = 37;
+// const long1 = -122;
+// const lat2 = 37.7;
+// const long2 = -122.5;
 
-var fetchUberPrices = () => {
-  fetch('/api/uberPrices/', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      lat1: lat1,
-      long1: long1,
-      lat2: lat2,
-      long2: long2
-    })
-  })
-  .then(res => res.json())
-  .then(data => console.log(data))
-  .catch(err => console.log(err))       
-}
+// var fetchUberPrices = () => {
+//   fetch('/api/uberPrices/', {
+//     method: 'POST',
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       lat1: lat1,
+//       long1: long1,
+//       lat2: lat2,
+//       long2: long2
+//     })
+//   })
+//   .then(res => res.json())
+//   .then(data => console.log(data))
+//   .catch(err => console.log(err))       
+// }
 
-fetchUberPrices();
+// fetchUberPrices();
 
 class App extends Component { 
 
