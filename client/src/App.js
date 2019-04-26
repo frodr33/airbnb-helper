@@ -43,8 +43,34 @@ function homePage() {
     </div> 
   );
 }
+const lat1 = 37;
+const long1 = -122;
+const lat2 = 37.7;
+const long2 = -122.5;
+
+var fetchUberPrices = () => {
+  fetch('/api/uberPrices/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      lat1: lat1,
+      long1: long1,
+      lat2: lat2,
+      long2: long2
+    })
+  })
+  .then(res => res.json())
+  .then(data => console.log(data))
+  .catch(err => console.log(err))       
+}
+
+fetchUberPrices();
 
 class App extends Component { 
+
   render() {
     return (
       <div  style={{height:"100%"}} className="blurred-img">

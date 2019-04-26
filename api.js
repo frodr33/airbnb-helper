@@ -36,4 +36,30 @@ function foursquareCreateRequest (latitude, longitude, limit) {
     })
 }
 
-module.exports = foursquareCreateRequest;
+function uberCreateRequest(lat1, long1, lat2, long2) {
+    var options = {
+        uri: "https://api.uber.com/v1.2/estimates/price",
+        qs: {
+            server_token:'WFldMoj7parIbXJLHJjVMsYhfs7qBDHFS02PTtkK',
+            start_latitude: lat1,
+            start_longitude: long1, 
+            end_latitude: lat2,
+            end_longitude: long2
+        },
+        json:true
+    }
+
+    return new Promise((resolve, _) => {
+        rp(options)
+        .then((res) => {
+            resolve(res);          
+        })  
+        .catch(err => console.log(err))
+    })
+}
+
+
+module.exports = {
+    foursquareCreateRequest,
+    uberCreateRequest
+}

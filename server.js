@@ -6,7 +6,8 @@ const app = express();
 const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 require('dotenv').config()
-const foursquareRequest = require('./api.js')
+const {foursquareRequest, uberCreateRequest} = require('./api.js')
+// const uberPriceRequest = require('./uber_api.js')
 var http = require("http");
 let listingVenueMap = new Map();
 
@@ -28,6 +29,15 @@ app.get("/api/getVenues/:id", (req, res) => {
    * endpoint */
   res.json(listingVenueMap.get(parseInt(req.params.id)))
 });
+
+app.post("/api/uberPrices", (req, res) => {
+  const body = req.body;
+  uberCreateRequest(body.lat1,body.long1,body.lat2,body.long2)
+  .then((res) => {
+    console.log("IN SERVER")
+    console.log(res);
+  })
+})
 
 app.get("/api/getYelpData", (req, res) => {
   const input = {

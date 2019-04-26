@@ -55,7 +55,10 @@ class LogInCard extends React.Component {
   }
 
   guestSignIn = () => {
-      console.log("here")
+    console.log("guest")
+    this.setState({
+      redirecting: !this.state.redirecting
+    });     
   }
 
   handleLogIn = (d) => {
