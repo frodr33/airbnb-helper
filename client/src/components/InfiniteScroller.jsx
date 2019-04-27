@@ -17,7 +17,7 @@ class InfiniteScroller extends React.Component {
 
   styles = {
     height: this.props.infHeight,
-    overflow: "auto",
+    overflow: this.props.overflow || "auto",
     width: this.props.infWidth,
     float: "left",
     paddingLeft: this.props.infPadleft,

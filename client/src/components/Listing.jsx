@@ -34,7 +34,7 @@ class Listing extends React.Component {
   render() {
     return (
       <Card onClick={() => this.fetchVenues(this.props.listingKey)} bordered={true} style={{width:'100%', height:"10%"}} hoverable={true}>
-         <img src={this.createImgURL(this.props.imgURL)} width="20%" height="100%"></img>
+         <img style={{float:"left"}} src={this.createImgURL(this.props.imgURL)} width="20%" height="100%"></img>
          <div style={{float:'right'}}>
             <h2>{this.props.name}</h2>
             <h4>{"Owner: " + this.props.hostName + ", $" + this.props.price + "/night"}</h4>       

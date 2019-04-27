@@ -89,18 +89,20 @@ class HomePage extends React.Component {
           </div>
         )
       }
+      let listingComp = <InfiniteScroller key={key + "mainListing"} infHeight="30%" overflow={"unset"} infPadtop="0%" infPadleft="0%" infWidth="100%" input={listing}></InfiniteScroller>;
       let uberComponent = <UberCard prices={pricePromises}></UberCard>
-      let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} key={key + "venueScroller"}
-        infHeight="70%" infPadleft="5%" infWidth="45%" input={venueCards} title="Pick k restauraunts!"></InfiniteScroller> 
+      let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} infPadTop="2%" key={key + "venueScroller"}
+        infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
 
       // Get lat and long for particular listing
 
       let newContent = 
-      <div style={{width:'100%', height:'100%', paddingTop:"5%"}}>
-        {listing}
-        {venueScroller}
-        {uberComponent}
-        <GoogleMap airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap>
+      <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
+        {listingComp}
+        {/* <div style={{width:"100%", height:"100%"}}>.</div> */}
+        <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{venueScroller}</div>
+        {/* {uberComponent} */}
+        <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
       </div>
       content[key] = newContent;
 
