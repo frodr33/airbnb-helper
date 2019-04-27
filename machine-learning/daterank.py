@@ -143,6 +143,21 @@ def applicable_listings(optimized_calendar_dict, entered_neighborhood):
 		return optimized_calendar_dict[entered_neighborhood]
 	else:
 		print ('There was an error. ')
+
+def find_applicable_prices(listing_dictionary, neighborhood, maximum_price):
+	neighborhood_tuple_list = listing_dictionary[neighborhood]
+	dict_id_review = {}
+	price_value_list = []
+	for x, y, z in neighborhood_tuple_list:
+		if (y < maximum_price):
+			tuple_val = (x,y,z)
+			price_value_list.append(x)
+			dict_id_review[x] = z
+			#price_value_list.append(tuple_val)
+
+	#print (price_value_list)
+	return (price_value_list, dict_id_review)
+f
 	# list_of_applicable_listings = []
 	# for key, value in neighborhood_calendar_dict.items():
 	# 	if (value['neighborhood'] == entered_neighborhood):

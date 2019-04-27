@@ -206,6 +206,8 @@ if __name__ == '__main__':
 
         date_range, duration = d["dates"], d["duration"]
         neighborhood = d["neighborhood"]
+        #Addition from Aditya to incorporate the price value
+        maxPrice = d["maxPrice"]
         keywords = nltk.word_tokenize(d["bio"])
         # nltk.download('stopwords')
         keywords = [w for w in keywords if w not in nltk.corpus.stopwords.words('english')]
@@ -213,12 +215,15 @@ if __name__ == '__main__':
 
         import daterank
 
+        #Changed to default to the new york city
         if testing:
             neighborhood_dict = pickle.load(open("./calendar_with_neighborhood.pickle", "rb"))
         else:
-            neighborhood_dict = pickle.load(open("./machine-learning/calendar_with_neighborhood.pickle", "rb"))
+            neighborhood_dict = pickle.load(open("./machine-learning/new_york_city_neighborhood_listing_data.pickle", "rb"))
 
-        listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
+        #listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
+        #Calling the new applicable prices function
+        listings, id_review_dict = daterank.find_applicable_prices(neighborhood_dict, neighborhood, maxPrice)
 
         # rank + restrict by keywords
         listings, keys = rank_listings(listings, keywords, testing)
