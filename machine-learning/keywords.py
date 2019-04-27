@@ -1,5 +1,5 @@
 import nltk
-# import pandas as pd
+import pandas as pd
 from collections import defaultdict
 import string
 import os.path
@@ -92,7 +92,22 @@ class SVD(object):
         from sklearn.preprocessing import normalize
 
         vectorizer = TfidfVectorizer(stop_words='english', max_df=.7, min_df=75)
-        mat = vectorizer.fit_transform([r for r in self.review_df['comments'] if type(r) == str]).transpose()
+
+        reviews = self.review_df
+        reviews = reviews.loc[reviews['comments'].notnull()].reset_index()
+        reviews = reviews[['listing_id', 'comments']]
+
+        # add names of listings as "reviews"
+        listing_names = []
+        listing_df = self.listing_df.loc[self.listing_df['name'].notnull()].reset_index()
+        for listing in listing_df.itertuples():
+            listing_names.append([listing.id, listing.name])
+
+        listing_names = pd.DataFrame(listing_names, columns=['listing_id', 'comments'])
+        reviews = reviews.append(listing_names, ignore_index=True)
+        self.reviews = reviews
+
+        mat = vectorizer.fit_transform(reviews['comments']).transpose()
         print(mat.shape)
 
         words_comp, _, reviews_comp = svds(mat, k=40)
@@ -108,8 +123,7 @@ class SVD(object):
 
     def gen_keyword_dict(self):
         id_keywords = {}
-        reviews = self.review_df
-        reviews = reviews.loc[reviews['comments'].notnull()].reset_index()
+        reviews = self.reviews
         for listing_id in self.listing_df['id']:
             listing_idxs = reviews.loc[reviews['listing_id'] == listing_id].index
             if len(listing_idxs) > 0:
@@ -180,7 +194,7 @@ if __name__ == '__main__':
         with nostdout():
             nltk.download('punkt')
             nltk.download('stopwords')
-            
+
         testing = False
         if testing:
             d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
