@@ -9,6 +9,7 @@ import sys
 import json
 import contextlib
 import io
+import traceback
 
 """
 FOR KEYWORD GENERATION
@@ -183,6 +184,7 @@ def rank_listings(listings, query, city, testing=False):
         with open('./machine-learning/id_keywords_' + city + '.pickle', 'rb') as f:
             id_keywords = pickle.load(f)
 
+    # print(True if 5441 in id_keywords else False)
     query = set(query)
     sims = []
     for l in listings:
@@ -273,6 +275,6 @@ if __name__ == '__main__':
         res = json.dumps({"start_date": "", "end_date": "", "listings": listings_infos})
         print(res)
     except Exception as e:
-        print(e)
+        print(traceback.format_exc())
 
     sys.stdout.flush()
