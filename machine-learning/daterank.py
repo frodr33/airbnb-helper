@@ -157,7 +157,7 @@ def find_applicable_prices(listing_dictionary, neighborhood, maximum_price):
 
 	#print (price_value_list)
 	return (price_value_list, dict_id_review)
-f
+
 	# list_of_applicable_listings = []
 	# for key, value in neighborhood_calendar_dict.items():
 	# 	if (value['neighborhood'] == entered_neighborhood):
