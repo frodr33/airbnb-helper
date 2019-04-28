@@ -122,7 +122,7 @@ class SVD(object):
 
         return words_comp, reviews_comp, index_to_word
 
-    def gen_keyword_dict(self):
+    def gen_keyword_dict(self, fname):
         id_keywords = {}
         reviews = self.reviews
         for listing_id in self.listing_df['id']:
@@ -137,7 +137,7 @@ class SVD(object):
             else:
                 id_keywords[listing_id] = []
 
-        with open('id_keywords_svd.pickle', 'wb') as f:
+        with open(fname, 'wb') as f:
             pickle.dump(id_keywords, f)
 
 
@@ -145,27 +145,43 @@ class SVD(object):
 END KEYWORD GENERATION
 """
 
+def gen_city_keywords():
+    cities = ['sea', 'sf', 'bos']
+    for city in cities:
+        print('Loading ' + city)
+        listings_file = '~/CS4300/listings_' + city + '.csv'
+        reviews_file = '~/CS4300/reviews_' + city + '.csv'
+        S = SVD(reviews_file, listings_file)
+        S.gen_keyword_dict('id_keywords_' + city + '.pickle')
+
+def gen_city_info():
+    cities = ['sea', 'sf', 'bos']
+    for city in cities:
+        print('Loading ' + city)
+        listings_file = '/home/tharun/CS4300/listings_' + city + '_full.csv'
+        build_listing_info(listings_file, 'id_info_' + city + '.pickle')
+
 # builds map of listings to information
-def build_listing_info(listings_file):
+def build_listing_info(listings_file, fname):
     with open(listings_file, 'rb') as f:
         listing_df = pd.read_csv(f)
 
     id_info = {}
     for row in listing_df.itertuples():
         id_info[row.id] = {"id": row.id, "name": row.name, "host_name": row.host_name,\
-            "price": row.price, "location": {"latitude": row.latitude, "longitude": row.longitude}}
+            "price": row.price, "review_score": row.review_scores_rating, "location": {"latitude": row.latitude, "longitude": row.longitude}}
 
-    with open('id_info.pickle', 'wb') as f:
+    with open(fname, 'wb') as f:
         pickle.dump(id_info, f)
 
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
-def rank_listings(listings, query, testing=False):
+def rank_listings(listings, query, city, testing=False):
     if testing:
-        with open('./id_keywords_svd.pickle', 'rb') as f:
+        with open('./id_keywords_' + city + '.pickle', 'rb') as f:
             id_keywords = pickle.load(f)
     else:
-        with open('./machine-learning/id_keywords_svd.pickle', 'rb') as f:
+        with open('./machine-learning/id_keywords_' + city + '.pickle', 'rb') as f:
             id_keywords = pickle.load(f)
 
     # print(True if 5441 in id_keywords else False)
@@ -174,8 +190,8 @@ def rank_listings(listings, query, testing=False):
     for l in listings:
         keywords = set(id_keywords[l])
         # for now, number of keywords in common between query and listing
-        keys = keywords.intersection(query)
-        sims.append((l, len(keys), list(keys)))
+        keys = sorted(keywords, key=lambda x: int(x in query), reverse=True)[:5]
+        sims.append((l, len(keywords.intersection(query)), list(keys)))
 
     sims = sorted(sims, key=lambda x: x[1], reverse=True)[:10]
     return [x[0] for x in sims], [x[2] for x in sims]
@@ -199,7 +215,7 @@ if __name__ == '__main__':
 
         testing = False
         if testing:
-            d = {"destination":"nyc","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Hell's Kitchen",\
+            d = {"destination":"Boston","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Fenway",\
                 "bio":"I like big clean rooms with a pool."}
         else:
             d = sys.argv[1]
@@ -210,31 +226,41 @@ if __name__ == '__main__':
         neighborhood = d["neighborhood"]
         #Addition from Aditya to incorporate the price value
         maxPrice = d["maxPrice"]
+        destination = d["destination"]
         keywords = nltk.word_tokenize(d["bio"])
-        # nltk.download('stopwords')
+
         keywords = [w for w in keywords if w not in nltk.corpus.stopwords.words('english')]
+        if destination == 'San Francisco':
+            city = 'sf'
+        elif destination == 'Seattle':
+            city = 'sea'
+        elif destination == 'Boston':
+            city = 'bos'
+        else:
+            city = 'nyc'
 
 
         import daterank
 
         #Changed to default to the new york city
         if testing:
-            neighborhood_dict = pickle.load(open("./calendar_with_neighborhood.pickle", "rb"))
+            neighborhood_dict = pickle.load(open("./" + city + "_neighborhood_listing_data.pickle", "rb"))
         else:
-            neighborhood_dict = pickle.load(open("./machine-learning/new_york_city_neighborhood_listing_data.pickle", "rb"))
+            with open("./machine-learning/" + city + "_neighborhood_listing_data.pickle", "rb") as f:
+                neighborhood_dict = pickle.load(f)
 
         #listings = daterank.applicable_listings(neighborhood_dict, neighborhood)
         #Calling the new applicable prices function
         listings, id_review_dict = daterank.find_applicable_prices(neighborhood_dict, neighborhood, maxPrice)
 
         # rank + restrict by keywords
-        listings, keys = rank_listings(listings, keywords, testing)
+        listings, keys = rank_listings(listings, keywords, city, testing)
 
         if testing:
-            with open('./id_info.pickle', 'rb') as f:
+            with open('./id_info_' + city + '.pickle', 'rb') as f:
                 id_info = pickle.load(f)
         else:
-            with open('./machine-learning/id_info.pickle', 'rb') as f:
+            with open('./machine-learning/id_info_' + city + '.pickle', 'rb') as f:
                 id_info = pickle.load(f)
 
         listings_infos = []
