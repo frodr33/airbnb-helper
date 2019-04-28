@@ -152,7 +152,7 @@ def build_listing_info(listings_file):
     id_info = {}
     for row in listing_df.itertuples():
         id_info[row.id] = {"id": row.id, "name": row.name, "host_name": row.host_name,\
-            "price": row.price, "location": {"latitude": row.latitude, "longitude": row.longitude}}
+            "price": row.price, "review_score": row.review_scores_rating, "location": {"latitude": row.latitude, "longitude": row.longitude}}
 
     with open('id_info.pickle', 'wb') as f:
         pickle.dump(id_info, f)
