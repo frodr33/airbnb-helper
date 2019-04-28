@@ -8,19 +8,105 @@ import {
 const { MonthPicker, RangePicker } = DatePicker;
 const { Option } = Select;
 let numAdults = 1;
+
 let cityNeighborhood = "Midtown";
-let neighborhoods = 
+let city = "New York City";
+let neighborhoodInCity = "";
+
+let destinations =
 [
-  "Upper West Side",
-  "Hell's Kitchen",
-  "Midtown",
-  "Upper East Side",
-  "Flushing",
-  "Jackson Heights"
+    "New York City",
+    "San Francisco",
+    "Seattle",
+    "Boston"
+]
+
+let bostonNeighorhoods = 
+[
+    "East Boston",
+    "Charlestown",
+    "West End",
+    "North End",
+    "Downtown",
+    "Beacon Hill",
+    "Chinatown",
+    "Bay Village",
+    "Back Bay",
+    "South End",
+    "South Boston",
+]
+
+let sanFranciscoNeighborhoods = 
+[
+    "Mission",
+    "North Beach",
+    "South of Market",
+    "Western Addition",
+    "Marina",
+    "Inner Richmond",
+    "Potrero Hill",
+    "Nob Hill",
+    "Downtown/Civic Center",
+    "Chinatown",
+]
+
+let seattleNeighborhoods =
+[
+    "Pike-Market",
+    "Pioneer Square",
+    "Lower Queen Anne",
+    "South Lake Union",
+    "Central Business District",
+    "Atlantic",
+    "Madrona",
+    "Wallingford",
+    "First Hill",
+    "Belltown",
+    "Broadway",
+    "Eastlake"
+]
+
+
+// let neighborhoods = 
+// [
+//   "Upper West Side",
+//   "Hell's Kitchen",
+//   "Midtown",
+//   "Upper East Side",
+//   "Flushing",
+//   "Jackson Heights"
+// ]
+
+let newYorkCityneighborhoods =
+[
+    "Bedford-Stuyvesant",
+    "Harlem",
+    "Midtown",
+    "Hell's Kitchen",
+    "Upper West Side",
+    "Upper East Side",
+    "Chinatown",
+    "Chelsea",
+    "Flatiron District",
+    "Lower East Side",
+    "West Village",
+    "Forest Hills",
+    "Williamsburg",
+    "Flushing",
+    "Jackson Heights",
+    "Greenpoint",
+    "Long Island City",
+    "SoHo",
+    "Greenwich Village",
+    "Bronxdale"
 ]
 
 class TextForm extends Component {
-    state = {submitted:false}  
+    state = {
+        submitted:false,
+        currentNeighborhoods: newYorkCityneighborhoods,
+        selectedCity: ""
+    }  
 
     receivedResultsHandler = (listings) => {
         
@@ -47,17 +133,6 @@ class TextForm extends Component {
         return table;
     }
 
-    createNeighborhoods = () => {
-        let table = [];
-        let options = [];
-        for (let i = 0; i <= neighborhoods.length; i++) {
-        options.push(<Option key={"neighborhood"+i} value={i}>{neighborhoods[i]}</Option>)
-        }
-
-        table.push(<Select key={"select-neighborhoods"} placeholder="Midtown" onChange={this.handleNeighborhoodsChange}>{options}</Select>)
-        return table;        
-    }
-
     handleSubmit = (e) => {
         console.log("...finding listings", e)
         
@@ -68,14 +143,14 @@ class TextForm extends Component {
         
         this.props.form.validateFields((err, values) => {
             const duration = 3; // Hard code while still in keywords
-
             if (!err) {
             console.log('Destination ', values.destination);
+            console.log("Neighborhood", values.neighborhood)
             console.log('Slider ', values.slider);
             console.log(values.keyWords.split(" "))
             console.log(values["range-picker"][0]._d)
             console.log("Number of Adults: ", numAdults)
-            console.log("Neighborhood: ", cityNeighborhood)
+            // console.log("Neighborhood: ", cityNeighborhood)
             console.log("text", values.bio)
                 fetch('/api/getListings', {
                     method: 'POST',
@@ -89,7 +164,7 @@ class TextForm extends Component {
                         dates: [values["range-picker"][0]._d, values["range-picker"][1]._d],
                         numberAdults: numAdults,
                         duration: duration,
-                        neighborhood: cityNeighborhood,
+                        neighborhood: values.neighborhood,
                         keywords: values.keyWords.split(", "),
                         bio: values.bio
                     })
@@ -112,14 +187,39 @@ class TextForm extends Component {
     numAdults = value;
   }
 
+
   handleNeighborhoodsChange = (value) => {
-      cityNeighborhood = neighborhoods[value];
+      cityNeighborhood = this.state.currentNeighborhoods[value];
+      neighborhoodInCity = city;
+  }
+
+  handleDestinationChange = (value) => {
+      city = value
+      let newNeighborhoods;
+      if (city === "New York City") newNeighborhoods = newYorkCityneighborhoods;
+      else if (city === "Seattle") newNeighborhoods = seattleNeighborhoods;
+      else if (city === "San Francisco") newNeighborhoods = sanFranciscoNeighborhoods;
+      else newNeighborhoods = bostonNeighorhoods;
+
+      this.setState({
+          currentNeighborhoods: newNeighborhoods,
+          selectedCity: city
+      })
+
+      // Clear neighborhood selection
   }
 
   handleTextChange = (val) => {
       console.log(val);
   }
 
+  neighborhoodValidator = (rules, value, callback) => {
+      const form = this.props.form;
+      console.log(value)
+      if (neighborhoodInCity !== this.state.selectedCity) {
+        callback("The destination has changed, pick a new neighborhood!")
+      }
+  }
 
   render() {
     const { submitted } = this.state;
@@ -147,18 +247,20 @@ class TextForm extends Component {
     
     return (
         <div>
-
         <Col span={10} style={{display: "block"}}>
             <Form style={{width:"100%"}} >
             <Form.Item label="Destination">
                 {getFieldDecorator('destination', {
                     rules: [{
-                    initialValue: "New York City",
                     required: true,
-                    message: "Please enter the Destination!"
+                    message: "Please choose your destination!"
                     }],
                 })(
-                    <Input placeholder="New York City"/>
+                    <Select onChange={this.handleDestinationChange}>
+                        {destinations.map((d, i) => {
+                            return <Option key={"destination"+i} value={d}>{d}</Option>
+                        })}
+                    </Select>
                 )}
             </Form.Item>
             <Form.Item label="Dates of travel">
@@ -167,7 +269,22 @@ class TextForm extends Component {
                 )}
             </Form.Item>
             <Form.Item label="Neighborhoods">
-                    {this.createNeighborhoods()}
+                {getFieldDecorator('neighborhood', {
+                        rules: [{
+                            required: true,
+                            message: "Please choose your neighborhood!",
+                        },{
+                            validator: this.neighborhoodValidator
+                        }
+                        ],
+                    })(
+                        <Select onChange={this.handleNeighborhoodsChange}>
+                            {this.state.currentNeighborhoods.map((d, i) => {
+                                return <Option key={"neighborhood"+i} value={d}>{d}</Option>
+                            })}
+                        </Select>
+                    )}
+                    {/* {this.createNeighborhoods()} */}
                 </Form.Item>
             <Form.Item label="bio">
             {getFieldDecorator('bio', {
