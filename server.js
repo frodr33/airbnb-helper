@@ -128,7 +128,8 @@ app.post("/api/getListings", (req, res) => {
             host_name: listingObjs[i].host_name,
             price: listingObjs[i].price,
             listingURL: d,
-            keywords: listingObjs[i].keywords
+            keywords: listingObjs[i].keywords,
+            reviewScore: listingObjs[i].review_score
           }
         ))
       }

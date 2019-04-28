@@ -138,6 +138,7 @@ class HomePage extends React.Component {
               name={listings[i].name}
               keywords={listings[i].keywords}
               coordinates = {[listings[i].latitude, listings[i].longitude]}
+              rating={listings[i].reviewScore}
               ></Listing>
 
             listingMap[listings[i].listingID] = listing
