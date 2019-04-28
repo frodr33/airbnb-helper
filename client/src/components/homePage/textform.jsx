@@ -140,9 +140,10 @@ class TextForm extends Component {
         this.setState({
             submitted: !this.state.submitted
         })
-        
+        // Deub this
         this.props.form.validateFields((err, values) => {
             const duration = 3; // Hard code while still in keywords
+            console.log("jhfkhjfkufghjgfjkhgfk")
             if (!err) {
             console.log('Destination ', values.destination);
             console.log("Neighborhood", values.neighborhood)
@@ -214,10 +215,10 @@ class TextForm extends Component {
   }
 
   neighborhoodValidator = (rules, value, callback) => {
-      const form = this.props.form;
-      console.log(value)
       if (neighborhoodInCity !== this.state.selectedCity) {
         callback("The destination has changed, pick a new neighborhood!")
+      } else {
+          callback()
       }
   }
 
