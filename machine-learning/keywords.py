@@ -125,15 +125,22 @@ class SVD(object):
     def gen_keyword_dict(self, fname):
         id_keywords = {}
         reviews = self.reviews
-        for listing_id in self.listing_df['id']:
+        for listing in self.listing_df.itertuples():
+            listing_id = listing.id
             listing_idxs = reviews.loc[reviews['listing_id'] == listing_id].index
             if len(listing_idxs) > 0:
                 listing_vec = np.average(self.reviews_comp[listing_idxs], axis=0)
 
                 sims = self.words_comp.dot(listing_vec)
-                asort = np.argsort(-sims)[:11]
+                asort = np.argsort(-sims)
+                keys = [self.index_to_word[i] for i in asort[1:]]
+                host_name = listing.host_name
+                if type(host_name) == str:
+                    keys = [k for k in keys if not k.isdigit() and k != listing.host_name.lower()][:11]
+                else:
+                    keys = [k for k in keys if not k.isdigit()][:11]
 
-                id_keywords[listing_id] = [self.index_to_word[i] for i in asort[1:]]
+                id_keywords[listing_id] = keys
             else:
                 id_keywords[listing_id] = []
 
@@ -146,7 +153,7 @@ END KEYWORD GENERATION
 """
 
 def gen_city_keywords():
-    cities = ['sea', 'sf', 'bos']
+    cities = ['sea', 'sf', 'bos', 'nyc']
     for city in cities:
         print('Loading ' + city)
         listings_file = '~/CS4300/listings_' + city + '.csv'
@@ -213,10 +220,10 @@ if __name__ == '__main__':
             nltk.download('punkt')
             nltk.download('stopwords')
 
-        testing = False
+        testing = True
         if testing:
-            d = {"destination":"Boston","maxPrice":194,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"Fenway",\
-                "bio":"I like big clean rooms with a pool."}
+            d = {"destination":"San Francisco","maxPrice":550,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"South of Market",\
+                "bio":"asdf"}
         else:
             d = sys.argv[1]
             d = json.loads(d)
