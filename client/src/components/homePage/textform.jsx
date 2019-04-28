@@ -140,14 +140,14 @@ class TextForm extends Component {
         this.setState({
             submitted: !this.state.submitted
         })
-        
+        // Deub this
         this.props.form.validateFields((err, values) => {
             const duration = 3; // Hard code while still in keywords
+            console.log("jhfkhjfkufghjgfjkhgfk")
             if (!err) {
             console.log('Destination ', values.destination);
             console.log("Neighborhood", values.neighborhood)
             console.log('Slider ', values.slider);
-            console.log(values.keyWords.split(" "))
             console.log(values["range-picker"][0]._d)
             console.log("Number of Adults: ", numAdults)
             // console.log("Neighborhood: ", cityNeighborhood)
@@ -165,7 +165,6 @@ class TextForm extends Component {
                         numberAdults: numAdults,
                         duration: duration,
                         neighborhood: values.neighborhood,
-                        keywords: values.keyWords.split(", "),
                         bio: values.bio
                     })
                 })
@@ -214,10 +213,10 @@ class TextForm extends Component {
   }
 
   neighborhoodValidator = (rules, value, callback) => {
-      const form = this.props.form;
-      console.log(value)
       if (neighborhoodInCity !== this.state.selectedCity) {
         callback("The destination has changed, pick a new neighborhood!")
+      } else {
+          callback()
       }
   }
 
@@ -268,24 +267,6 @@ class TextForm extends Component {
                     <RangePicker />
                 )}
             </Form.Item>
-            <Form.Item label="Neighborhoods">
-                {getFieldDecorator('neighborhood', {
-                        rules: [{
-                            required: true,
-                            message: "Please choose your neighborhood!",
-                        },{
-                            validator: this.neighborhoodValidator
-                        }
-                        ],
-                    })(
-                        <Select onChange={this.handleNeighborhoodsChange}>
-                            {this.state.currentNeighborhoods.map((d, i) => {
-                                return <Option key={"neighborhood"+i} value={d}>{d}</Option>
-                            })}
-                        </Select>
-                    )}
-                    {/* {this.createNeighborhoods()} */}
-                </Form.Item>
             <Form.Item label="bio">
             {getFieldDecorator('bio', {
                     rules: [{
@@ -305,19 +286,26 @@ class TextForm extends Component {
 
         <Col span={10} style={{display: "block", paddingLeft: "3%"}}>
             <Form layout="horizontal" style={{width: "100%"}} onSubmit={this.handleSubmit}>
+            <Form.Item label="Neighborhoods">
+                {getFieldDecorator('neighborhood', {
+                        rules: [{
+                            required: true,
+                            message: "Please choose your neighborhood!",
+                        },{
+                            validator: this.neighborhoodValidator
+                        }
+                        ],
+                    })(
+                        <Select onChange={this.handleNeighborhoodsChange}>
+                            {this.state.currentNeighborhoods.map((d, i) => {
+                                return <Option key={"neighborhood"+i} value={d}>{d}</Option>
+                            })}
+                        </Select>
+                    )}
+                    {/* {this.createNeighborhoods()} */}
+                </Form.Item>
                 <Form.Item label="Number of Guests">
                     {this.createTable()}
-                </Form.Item>
-                <Form.Item label="Key words">
-                {getFieldDecorator('keyWords', {
-                    rules: [{
-                    initialValue: "",
-                    required: true,
-                    message: "Please enter some Keywords!"
-                    }],
-                })(
-                    <Input placeholder=""/>
-                )}
                 </Form.Item>
                 <Form.Item
                     label="Max Price Per Night"

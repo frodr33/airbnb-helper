@@ -76,6 +76,7 @@ app.post("/api/getListings", (req, res) => {
    * listing ID's, for now, listingID is hard
    * coded below */
 
+  console.log("RECEVIED REQUEST FOR GET LISTINGS")
   let result;
   const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
@@ -127,7 +128,8 @@ app.post("/api/getListings", (req, res) => {
             host_name: listingObjs[i].host_name,
             price: listingObjs[i].price,
             listingURL: d,
-            keywords: listingObjs[i].keywords
+            keywords: listingObjs[i].keywords,
+            reviewScore: listingObjs[i].review_score
           }
         ))
       }

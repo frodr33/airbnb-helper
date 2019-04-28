@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card } from 'antd';
+import { Card, Rate } from 'antd';
 import 'antd/dist/antd.css'
 import airbnbImage from '../resources/airbnb.jpg'
 
@@ -39,6 +39,7 @@ class Listing extends React.Component {
             <h2>{this.props.name}</h2>
             <h4>{"Owner: " + this.props.hostName + ", $" + this.props.price + "/night"}</h4>       
             <h4>{"Key words: " + this.props.keywords}</h4>      
+            <Rate allowHalf defaultValue={Math.floor((this.props.rating/20)*2)/2} />
          </div>
       </Card>
     );
