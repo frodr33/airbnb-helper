@@ -7,6 +7,7 @@ import Listing from '../Listing'
 import InfiniteScroller from '../InfiniteScroller';
 import GoogleMap from '../maps/GoogleMap';
 import UberCard from './uber'
+import VenueCards from './venues';
 const TabPane = Tabs.TabPane;
 
 let createItineraryIcon = 
@@ -77,20 +78,25 @@ class HomePage extends React.Component {
       for (let i = 0; i < venues.length; i++) {
         var pricePromise = this.getUberPrices(coordinates[0], coordinates[1], venues[i].latitude, venues[i].longitude)
         // console.log(pricePromise) 
-        pricePromises.push(pricePromise);
+        // pricePromises.push(pricePromise);
         
 
         venueCards.push(
           <div key={"venue: " + venues[i].id}>
-            <Card>
-              <h3 style={{padding:"none"}}><b>{venues[i].name}</b></h3>
-              <h4>{venues[i].postalAddress}</h4>
-            </Card>
+          <VenueCards key={"venueCard:" + venues[i].id} venues={venues[i]} uberPromise={pricePromise}></VenueCards>
+            {/* <Card>
+              <div style={{width:"50%", float:"left"}}>
+                <h3 style={{padding:"none"}}><b>{venues[i].name}</b></h3>
+                <h4>{venues[i].postalAddress}</h4>         
+              </div>
+              <img style={{float:"right"}}  src={uberIcon}/>
+              <h3 style={{float:"right", paddingRight:"2%"}}>UberXL: $6-8</h3>
+            </Card> */}
           </div>
         )
       }
       let listingComp = <InfiniteScroller key={key + "mainListing"} infHeight="30%" overflow={"unset"} infPadtop="0%" infPadleft="0%" infWidth="100%" input={listing}></InfiniteScroller>;
-      let uberComponent = <UberCard prices={pricePromises}></UberCard>
+      // let uberComponent = <UberCard prices={pricePromises}></UberCard>
       let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} infPadTop="2%" key={key + "venueScroller"}
         infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
 
