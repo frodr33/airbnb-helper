@@ -17,36 +17,19 @@ class VenueCards extends Component {
             console.log(price.prices)
             console.log(price.prices.estimate)
             this.setState({
-                prices: price.prices[1].estimate,
+                uberX: price.prices[1].estimate,
+                uberXL: price.prices[3].estimate,
+                uberPool: price.prices[0].estimate,
                 retrived: true
             })
         })
         .catch((err) => console.log(err))
-
-        // let promises = this.props.prices;
-        // Promise.all(promises)
-        // .then(() => {
-        //     let finishedPricePromises = [];
-        //     for (let i = 0; i < promises.length; i++) {
-        //         promises[i].then((d) => {
-        //             console.log(d);
-        //             finishedPricePromises.push(d);
-        //         })
-        //     }
-        //     return finishedPricePromises;
-        // })
-        // .then((uberPrices) => {
-        //     console.log(uberPrices)
-        //     this.setState({
-        //         prices: uberPrices,
-        //         retrived: true
-        //     })
-        // })
-        // .catch((err) => console.log(err))
     }
 
     state = {
-        prices: 0,
+        uberX: 0,
+        uberXL: 0,
+        uberPool: 0,
         retrived: false,
         fakeKey: 0,
     }
@@ -72,10 +55,15 @@ class VenueCards extends Component {
               </div>
               <img style={{float:"right"}}  src={uberIcon}/>
               {/* <h3 style={{float:"right", paddingRight:"2%"}}>UberXL: $6-8 */}
-              <div id="uber-price">
+              <div id="uber-price" style={{float:"right", paddingRight:"2%"}}>
                 {
                     !this.state.retrived ? <Spin tip="Loading"></Spin> : 
-                    <h3>{this.state.prices}</h3>
+                    <div>
+                    <h4>UberX: {this.state.uberX}</h4>
+                    <h4>UberXL: {this.state.uberXL}</h4>
+                    <h4>UberPool: {this.state.uberPool}</h4>
+                    </div>
+
                 }
                 </div>              
               {/* </h3> */}
