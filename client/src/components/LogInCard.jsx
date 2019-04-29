@@ -5,6 +5,7 @@ import '../App.css';
 import CollectionsPage from './CollectionsPage';
 import { Route, Redirect } from "react-router-dom";
 import Cookies from 'universal-cookie';
+import NavBar from './NavBar'
 const cookies = new Cookies();
 // cookies.set('myCat', 'Pacman', { path: '/' });
 // console.log(cookies.get('myCat'));

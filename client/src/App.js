@@ -73,26 +73,21 @@ function homePage() {
 // fetchUberPrices();
 
 class App extends Component { 
-
   render() {
     return (
       <div  style={{height:"100%"}} className="blurred-img">
       {/* <div className="blurred-img">
       </div> */}
       <div style={{height:"100%"}}>
-       <div>
-          <NavBar></NavBar>
-        </div>
-
         <Router>
-          <div style={{height:"100%"}}>
+          <div>
+            <NavBar guest={false} landing={true}></NavBar>
+          </div>
+          <div style={{height:"90%"}}>
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
             <Route path="/home/" component={withAuth(HomePage)} />
             <Route path="/guestHome/" component={GuestHome} />
-            {/* <Route path="/testPage/" component={} /> */}
-            {/* <Route path="/testPage/" component={homePage} /> */}
-            {/* <Route path="/home/" component={HomePage} /> */}
           </div>
         </Router>
 

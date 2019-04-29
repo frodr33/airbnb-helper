@@ -9,6 +9,7 @@ import GoogleMap from '../maps/GoogleMap';
 import UberCard from './uber'
 import VenueCards from './venues';
 import Itinerary from './itinerary';
+import NavBar from '../NavBar'
 const TabPane = Tabs.TabPane;
 
 let createItineraryIcon = 
@@ -285,7 +286,7 @@ class HomePage extends React.Component {
   
   render() {
     return (
-      <div style={{height:"90%", width:"100%", paddingLeft:"0%"}}>
+      <div style={{height:"85%", width:"95%", paddingLeft:"5%"}}>
         <Tabs
           defaultActiveKey={this.state.key}
           // activeKey={this.state.key}

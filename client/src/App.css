@@ -1,6 +1,6 @@
 .App {
   font-family: "Courier New", monospace;
-	position:relative;
+	position:fixed;
 	z-index:2;
 	color:#fff;
 }
@@ -8,7 +8,7 @@
 .Header {
   font-family: "Courier New", monospace;
 	position:relative;
-	z-index:2;
+	z-index:-2;
 	color:#fff;
 }
 
