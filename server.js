@@ -5,6 +5,8 @@ const db = require('./queries');
 const app = express();
 const { spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
+const withAuth = require('./middleware');
+var cookieParser = require('cookie-parser')
 require('dotenv').config()
 const {foursquareCreateRequest, uberCreateRequest} = require('./api.js')
 // const uberPriceRequest = require('./uber_api.js')
@@ -17,6 +19,7 @@ let listingVenueMap = new Map();
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 const port = process.env.PORT || 5000;
 app.listen(port);
@@ -147,9 +150,23 @@ app.post("/api/getListings", (req, res) => {
   });
 })
 
+app.post('/api/saveListings', withAuth, db.saveListings);
+
+app.get('/api/checkToken', withAuth, (req, res) => {
+  res.sendStatus(200);
+});
+
 app.post('/api/register', db.registerUser);
 
 app.post('/api/login', db.logInUser)
+
+app.get('/api/seeListings', db.seeListings)
+
+app.get('/api/retrieveListings', db.retriveListings)
+
+app.get('/api/clearListings', (req, res) => {
+  db.dropListings();
+})
 
 // app.get('/api/getUsers', db.getUsers)
 

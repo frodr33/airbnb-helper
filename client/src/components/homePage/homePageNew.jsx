@@ -8,6 +8,7 @@ import InfiniteScroller from '../InfiniteScroller';
 import GoogleMap from '../maps/GoogleMap';
 import UberCard from './uber'
 import VenueCards from './venues';
+import Itinerary from './itinerary';
 const TabPane = Tabs.TabPane;
 
 let createItineraryIcon = 
@@ -25,6 +26,51 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.createTab = this.createTab.bind(this);
+    }
+
+    componentDidMount() {
+      fetch("/api/retrieveListings")
+      .then((data) => data.json())
+      .then((res) => {
+        console.log(res)
+        // Load this data into
+
+        res.forEach((d) => {
+          let data = d.data;
+          let tabs = this.state.tabList;
+          let custom_key = data.itineraryName;
+          let key = "Itinerary: " + this.state.itineraryNum;
+          key = custom_key ? custom_key : key;
+          tabs.push({
+              key: key,
+              tab: key,
+          })
+          this.setState({
+            tabList: tabs,
+            itineraryNum: this.state.itineraryNum + 1,
+            key: key
+        })
+          let coords = [data.listing.latitude, data.listing.longitude];
+          this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
+        })
+        
+        // let tabs = this.state.tabList;
+        // let custom_key = data.itineraryName;
+        // let key = "Itinerary: " + this.state.itineraryNum;
+        // key = custom_key ? custom_key : key;
+        // tabs.push({
+        //     key: key,
+        //     tab: key,
+        // })
+
+      //   this.setState({
+      //     tabList: tabs,
+      //     itineraryNum: this.state.itineraryNum + 1,
+      //     key: key
+      // })
+      //   let coords = [data.listing.latitude, data.listing.longitude];
+      //   this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
+      })
     }
     
 
@@ -58,15 +104,42 @@ class HomePage extends React.Component {
       });
     }
 
-    addVenuesCard = (venues, listingID, coordinates) => {
-      // console.log(venues);
-      // console.log(listingID);
-      // console.log(this.state.key);
+    handleBack = () => {
+      console.log("BACK")
+    }
 
+    handleSave = (airbnbID) => {
+      console.log(airbnbID)
+    }
+
+    addVenuesCard = (venues, listingID, coordinates, rawListing) => {
+      let listing;
+      let allowSaving = true;
+      if (!rawListing) {
+        listing = this.state.listingMap[listingID];
+        rawListing = this.state.rawListingMap[listingID];
+      } else {
+        // Loading listing form DB
+        allowSaving = false;
+        listing = 
+        <Listing 
+        key={key + ": " +  rawListing.listingID} 
+        imgURL={rawListing.listingURL} 
+        listingKey={rawListing.listingID}
+        hostName={rawListing.host_name}
+        price={rawListing.price}
+        name={rawListing.name}
+        keywords={rawListing.keywords}
+        coordinates = {[rawListing.latitude, rawListing.longitude]}
+        rating={rawListing.reviewScore}
+        ></Listing>
+        
+      }
       let content = this.state.contentList;
       let key = this.state.key;
 
-      let listing = this.state.listingMap[listingID];
+      // let listing = this.state.listingMap[listingID];
+      // let rawListing = this.state.rawListingMap[listingID];
 
       // console.log("Building Itinerary...")
       // console.log(listingID)
@@ -84,14 +157,6 @@ class HomePage extends React.Component {
         venueCards.push(
           <div key={"venue: " + venues[i].id}>
           <VenueCards key={"venueCard:" + venues[i].id} venues={venues[i]} uberPromise={pricePromise}></VenueCards>
-            {/* <Card>
-              <div style={{width:"50%", float:"left"}}>
-                <h3 style={{padding:"none"}}><b>{venues[i].name}</b></h3>
-                <h4>{venues[i].postalAddress}</h4>         
-              </div>
-              <img style={{float:"right"}}  src={uberIcon}/>
-              <h3 style={{float:"right", paddingRight:"2%"}}>UberXL: $6-8</h3>
-            </Card> */}
           </div>
         )
       }
@@ -101,15 +166,18 @@ class HomePage extends React.Component {
         infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
 
       // Get lat and long for particular listing
-
+      let gmap = <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
       let newContent = 
-      <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
-        {listingComp}
-        {/* <div style={{width:"100%", height:"100%"}}>.</div> */}
-        <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{venueScroller}</div>
-        {/* {uberComponent} */}
-        <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
-      </div>
+      <Itinerary saving={allowSaving} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller} gmap={gmap}>
+      </Itinerary>
+
+      // <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
+      //   {listingComp}
+      //   <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{venueScroller}</div>
+      //   <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
+      //   <Button onClick={this.handleBack}>Back</Button>
+      //   <Button onClick={(listingID) => this.handleSave}>Save</Button>
+      // </div>
       content[key] = newContent;
 
 
@@ -125,6 +193,7 @@ class HomePage extends React.Component {
         let content = this.state.contentList;
         let key = "Itinerary: " + this.state.itineraryNum;
         let listingMap = this.state.listingMap;
+        let rawListingMap = this.state.rawListingMap;
 
         let table = []
         tabs.push({
@@ -148,6 +217,8 @@ class HomePage extends React.Component {
               ></Listing>
 
             listingMap[listings[i].listingID] = listing
+            rawListingMap[listings[i].listingID] = listings[i]
+
             table.push(listing)
         }
 
@@ -185,6 +256,9 @@ class HomePage extends React.Component {
         numVenues: 0,
         chosenListing: {},
         listingMap: {
+          test: <h1>HELLO WORLD</h1>
+        },
+        rawListingMap: {
           test: <h1>HELLO WORLD</h1>
         }
     }

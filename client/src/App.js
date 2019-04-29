@@ -9,6 +9,7 @@ import HomePage from './components/homePage/homePageNew'
 import GoogleMap from './components/maps/GoogleMap'
 import { Col, Row } from 'antd';
 import { BrowserRouter as Router, Route, Redirect  } from "react-router-dom";
+import withAuth from './components/withAuth';
 
 
 const titleFont = {
@@ -86,8 +87,8 @@ class App extends Component {
           <div style={{height:"100%"}}>
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
-            <Route path="/home/" component={HomePage} />
-            <Route path="/testPage/" component={GoogleMap} />
+            <Route path="/home/" component={withAuth(HomePage)} />
+            {/* <Route path="/testPage/" component={} /> */}
             {/* <Route path="/testPage/" component={homePage} /> */}
             {/* <Route path="/home/" component={HomePage} /> */}
           </div>

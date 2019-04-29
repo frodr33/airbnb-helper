@@ -70,6 +70,12 @@ logInUser = (request, response) => {
   })
 }
 
+dropListings = () => {
+  pool.query(`DROP TABLE listings`, (err, res) => {
+    if (err) console.log(err);
+  })
+}
+
 dropDB = () => {
   pool.query(`DROP TABLE users`, (err, res) => {
     if (err) console.log(err);
@@ -117,10 +123,67 @@ const createToken = () => {
   })
 }
 
+seeListings = (request, response) => {
+  pool.query('SELECT * FROM listings', (error, results) => {
+    if (error) {
+      console.log(error);
+    }
+    response.status(200).json(results.rows)
+  })
+};
+
+retriveListings = (req, res) => {
+  const token = req.cookies.token;
+  const secret =  "tripitsecret";
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      console.log("Not Authorized")
+      res.status(401).send('Unauthorized: Invalid token');
+    } else {
+      let user = decoded.username;
+      pool.query(`SELECT data FROM listings WHERE username = $1`, [user])
+      .then((data) => {
+        console.log(data.rows)
+        res.send(data.rows)
+      })  
+      .catch((err) => console.log(err))
+    }    
+  })
+}
+
+
+saveListings = (req,res) => {
+  const token = req.cookies.token;
+  const SECRET = "tripitsecret"
+  jwt.verify(token, SECRET, function(err, decoded) {
+    if (err) {
+      console.log("Not Authorized")
+      res.status(401).send('Unauthorized: Invalid token');
+    } else {
+      let user = decoded.username;
+
+      pool.query(`CREATE TABLE IF NOT EXISTS listings(id SERIAL PRIMARY KEY, username VARCHAR(100)
+      NOT NULL, data jsonb)`)
+      .then(() => {
+        pool.query(`INSERT INTO listings(username, data) VALUES($1, $2)`, [user, req.body], (err, results) => {
+          if (err) res.send("INVALID REQUEST")
+          else res.send("GOOD")
+          
+        })
+      })  
+      .catch((err) => res.send("ERROR Executing query: ", err.stack))
+    }
+  });
+}
+
 
 module.exports = {
   getUsers,
   logInUser,
   registerUser,
-  dropDB
+  dropDB,
+  saveListings,
+  seeListings,
+  retriveListings,
+  dropListings
 }

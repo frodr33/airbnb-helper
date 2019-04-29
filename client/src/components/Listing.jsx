@@ -10,7 +10,7 @@ class Listing extends React.Component {
 
   receivedVenuesHandler = (data, listingID) => {
     console.log("...received venues", data)
-    this.props.addVenuesCard(data, listingID, this.props.coordinates)
+    this.props.addVenuesCard(data, listingID, this.props.coordinates, null)
   }
 
   fetchVenues = (listingID) => {
@@ -39,7 +39,7 @@ class Listing extends React.Component {
   render() {
     return (
       <Card onClick={() => this.fetchVenues(this.props.listingKey)} bordered={true} style={{width:'100%', height:"10%"}} hoverable={true}>
-         <img style={{float:"left"}} src={this.createImgURL(this.props.imgURL)} width="15%" height="100%"></img>
+         <img style={{float:"left"}} src={this.createImgURL(this.props.imgURL)} width="11%" height="100%"></img>
          <div style={{float:'right', textAlign:"center"}}>
             <h2>{this.props.name}</h2>
             <h4>{"Owner: " + this.props.hostName + ", " + this.props.price + "/night"}</h4>       
