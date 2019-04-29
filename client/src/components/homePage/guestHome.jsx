@@ -22,45 +22,11 @@ let tabList = [{
   tab: createItineraryIcon,
 }];
 
-class HomePage extends React.Component {
+class GuestHome extends React.Component {
     constructor(props) {
         super(props);
         this.createTab = this.createTab.bind(this);
     }
-
-    componentDidMount() {
-      fetch("/api/retrieveListings")
-      .then((data) => data.json())
-      .then((res) => {
-
-        if (res.GUESTMODE === "NO SAVING") {
-          return;
-        }
-
-        console.log(res)
-        // Load this data into
-
-        res.forEach((d) => {
-          let data = d.data;
-          let tabs = this.state.tabList;
-          let custom_key = data.itineraryName;
-          let key = "Itinerary: " + this.state.itineraryNum;
-          key = custom_key ? custom_key : key;
-          tabs.push({
-              key: key,
-              tab: key,
-          })
-          this.setState({
-            tabList: tabs,
-            itineraryNum: this.state.itineraryNum + 1,
-            key: key
-        })
-          let coords = [data.listing.latitude, data.listing.longitude];
-          this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
-        })
-      })
-    }
-    
 
     handleSubmit = (d) => {
       d.preventDefault();
@@ -134,7 +100,7 @@ class HomePage extends React.Component {
 
     addVenuesCard = (venues, listingID, coordinates, rawListing) => {
       let listing;
-      let allowSaving = true;
+      let allowSaving = false;
       if (!rawListing) {
         listing = this.state.listingMap[listingID];
         rawListing = this.state.rawListingMap[listingID];
@@ -176,14 +142,6 @@ class HomePage extends React.Component {
       let newContent = 
       <Itinerary changeName={this.changeTabName} saving={allowSaving} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller} gmap={gmap}>
       </Itinerary>
-
-      // <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
-      //   {listingComp}
-      //   <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{venueScroller}</div>
-      //   <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
-      //   <Button onClick={this.handleBack}>Back</Button>
-      //   <Button onClick={(listingID) => this.handleSave}>Save</Button>
-      // </div>
       content[key] = newContent;
 
 
@@ -269,14 +227,6 @@ class HomePage extends React.Component {
         }
     }
 
-  // onTabChange = (key, type) => {
-  //   console.log("On tab change")
-  //   console.log(key, type);
-  //   console.log(this.state.contentList[key])
-
-  //   this.setState({ [type]: key });
-  // }
-
   onTabChange = (key) => {
     this.setState({
       key: key
@@ -311,4 +261,4 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+export default GuestHome;

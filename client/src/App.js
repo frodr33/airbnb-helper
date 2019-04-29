@@ -5,6 +5,7 @@ import CustomFooter from './components/Footer'
 import TabsCard from './components/TabsCard'
 import LogInCard from './components/LogInCard'
 import HomePage from './components/homePage/homePageNew'
+import GuestHome from './components/homePage/guestHome'
 // import HomePage from './components/homePage/homePage'
 import GoogleMap from './components/maps/GoogleMap'
 import { Col, Row } from 'antd';
@@ -88,6 +89,7 @@ class App extends Component {
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
             <Route path="/home/" component={withAuth(HomePage)} />
+            <Route path="/guestHome/" component={GuestHome} />
             {/* <Route path="/testPage/" component={} /> */}
             {/* <Route path="/testPage/" component={homePage} /> */}
             {/* <Route path="/home/" component={HomePage} /> */}

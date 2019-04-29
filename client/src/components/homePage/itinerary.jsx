@@ -13,6 +13,7 @@ class Itinerary extends Component {
     handleSave = (itineraryName) => {
         console.log(itineraryName);
         console.log("SAVING...")
+
         fetch("/api/saveListings", {
             method: "POST",
             headers: {
@@ -26,12 +27,22 @@ class Itinerary extends Component {
                 listing: this.props.rawListing
             })          
         })
-        .then((res) => console.log(res))
+        .then((res) => {
+            console.log(res)
+            this.props.changeName(itineraryName);
+        })
     }
 
     handleSaveFunc = (savedItinerary) => {
+        // this.setState({
+        //     saving: !this.state.saving
+        // })
         this.handleSave(savedItinerary.itineraryName);
     }
+
+    // state = {
+    //     saving: this.props.saving
+    // }
 
     renderButtons = () => {
         if (this.props.saving) {
