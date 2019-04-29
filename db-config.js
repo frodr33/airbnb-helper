@@ -1,5 +1,5 @@
 var config = {
-    production: false,
+    production: true,
     local_db : {
       host:"localhost",
       database:"api",
