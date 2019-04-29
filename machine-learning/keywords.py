@@ -220,7 +220,7 @@ if __name__ == '__main__':
             nltk.download('punkt')
             nltk.download('stopwords')
 
-        testing = True
+        testing = False
         if testing:
             d = {"destination":"San Francisco","maxPrice":550,"dates":["2019-04-12T03:42:22.217Z","2019-05-21T03:42:22.217Z"],"numberAdults":3,"duration":4,"neighborhood":"South of Market",\
                 "bio":"asdf"}
