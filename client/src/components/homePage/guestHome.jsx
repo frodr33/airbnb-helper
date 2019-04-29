@@ -196,6 +196,7 @@ class GuestHome extends React.Component {
         venuesList[key] = <h2>Choose an Airbnb to build your itinerary!</h2>
 
         this.setState({
+            key:key,
             tabList: tabs,
             contentList: content,
             itineraryNum: this.state.itineraryNum + 1,
@@ -239,7 +240,7 @@ class GuestHome extends React.Component {
       <div style={{height:"85%", width:"95%", paddingLeft:"5%"}}>
         <Tabs
           defaultActiveKey={this.state.key}
-          // activeKey={this.state.key}
+          activeKey={this.state.key}
           onChange = {(key) => this.onTabChange(key)}
           tabPosition={"left"}
           style={{ height: "100%", width:"100%", background: "white" }}
