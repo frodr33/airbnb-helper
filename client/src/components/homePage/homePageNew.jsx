@@ -53,23 +53,6 @@ class HomePage extends React.Component {
           let coords = [data.listing.latitude, data.listing.longitude];
           this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
         })
-        
-        // let tabs = this.state.tabList;
-        // let custom_key = data.itineraryName;
-        // let key = "Itinerary: " + this.state.itineraryNum;
-        // key = custom_key ? custom_key : key;
-        // tabs.push({
-        //     key: key,
-        //     tab: key,
-        // })
-
-      //   this.setState({
-      //     tabList: tabs,
-      //     itineraryNum: this.state.itineraryNum + 1,
-      //     key: key
-      // })
-      //   let coords = [data.listing.latitude, data.listing.longitude];
-      //   this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
       })
     }
     
