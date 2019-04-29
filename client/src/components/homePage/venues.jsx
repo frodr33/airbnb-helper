@@ -16,10 +16,20 @@ class VenueCards extends Component {
 
             console.log(price.prices)
             console.log(price.prices.estimate)
+
+            let uberX;
+            let uberXL;
+            let uberPool;
+            price.prices.forEach((p) => {
+                if (p.localized_display_name === "UberXL") uberXL = p.estimate
+                else if  (p.localized_display_name === "UberX") uberX = p.estimate
+                else if (p.localized_display_name === "UberPool") uberPool = p.estimate
+            })
+
             this.setState({
-                uberX: price.prices[1].estimate,
-                uberXL: price.prices[3].estimate,
-                uberPool: price.prices[0].estimate,
+                uberX: uberX,
+                uberXL: uberXL,
+                uberPool: uberPool,
                 retrived: true
             })
         })

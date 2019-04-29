@@ -95,7 +95,7 @@ class HomePage extends React.Component {
           </div>
         )
       }
-      let listingComp = <InfiniteScroller key={key + "mainListing"} infHeight="30%" overflow={"unset"} infPadtop="0%" infPadleft="0%" infWidth="100%" input={listing}></InfiniteScroller>;
+      let listingComp = <InfiniteScroller key={key + "mainListing"} infHeight="30%" overflow={"unset"} infPadtop="0%" infPadleft="0%" infWidth="98%" input={listing}></InfiniteScroller>;
       // let uberComponent = <UberCard prices={pricePromises}></UberCard>
       let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} infPadTop="2%" key={key + "venueScroller"}
         infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
