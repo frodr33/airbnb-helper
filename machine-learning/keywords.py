@@ -122,6 +122,18 @@ class SVD(object):
 
         return words_comp, reviews_comp, index_to_word
 
+    def gen_listing_vecs(self):
+        id_listvec = {}
+        reviews = self.reviews
+        for listing in self.listing_df.itertuples():
+            listing_id = listing.id
+            listing_idxs = reviews.loc[reviews['listing_id'] == listing_id].index
+            if len(listing_idxs) > 0:
+                listing_vec = np.average(self.reviews_comp[listing_idxs], axis=0)
+                id_listvec[listing_id] = listing_vec
+
+        self.id_listvec = id_listvec
+
     def gen_keyword_dict(self, fname):
         id_keywords = {}
         reviews = self.reviews
@@ -181,6 +193,33 @@ def build_listing_info(listings_file, fname):
     with open(fname, 'wb') as f:
         pickle.dump(id_info, f)
 
+# def rank_listings_cos(listings, query, city, testing=False):
+#     if testing:
+#         with open('./' + city + '_listingvecs.pickle', 'rb') as f:
+#             id_keywords = pickle.load(f)
+#         with open('./' + city + '_terms.pickle', 'rb') as f:
+#             terms = pickle.load(f)
+#         with open('./' + city + '_wtoi.pickle', 'rb') as f:
+#             word_to_index = pickle.load(f)
+#     else:
+#         with open('./machine-learning/' + city + '_listingvecs.pickle', 'rb') as f:
+#             id_keywords = pickle.load(f)
+#         with open('./machine-learning/' + city + '_terms.pickle', 'rb') as f:
+#             terms = pickle.load(f)
+#         with open('./machine-learning/' + city + '_wtoi.pickle', 'rb') as f:
+#             word_to_index = pickle.load(f)
+#
+#     count = 0
+#     query_vec = np.zeros(40)
+#     for w in set(query):
+#         if w in terms:
+#             query_vec += terms[word_to_index[w]]
+#             count += 1
+#     query_vec /= count
+
+
+
+
 # input: list of listing ids and list of keywords
 # output: ids sorted based on similarity to keyword query
 def rank_listings(listings, query, city, testing=False):
@@ -198,7 +237,7 @@ def rank_listings(listings, query, city, testing=False):
         keywords = set(id_keywords[l])
         # for now, number of keywords in common between query and listing
         keys = sorted(keywords, key=lambda x: int(x in query), reverse=True)[:5]
-        sims.append((l, len(keywords.intersection(query)), list(keys)))
+        sims.append((l, len(keywords.intersection(query)) / len(keywords.union(query)), list(keys)))
 
     sims = sorted(sims, key=lambda x: x[1], reverse=True)[:10]
     return [x[0] for x in sims], [x[2] for x in sims]
