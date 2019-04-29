@@ -4,6 +4,10 @@ import React, { Component } from 'react';
 import '../App.css';
 import CollectionsPage from './CollectionsPage';
 import { Route, Redirect } from "react-router-dom";
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+// cookies.set('myCat', 'Pacman', { path: '/' });
+// console.log(cookies.get('myCat'));
 
 const titleFont = {
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'",
@@ -72,19 +76,24 @@ class LogInCard extends React.Component {
             username: d.username,
             password: d.password,
         })
-    })
+    })    
     .then(res => {
         if (res.status === 200) {
           // TODO: Save Cookie
+        
+          console.log(cookies.get('token'))
+
           console.log("Logged In");
+          console.log(res)
           this.setState({
             redirecting: !this.state.redirecting
           });          
-
+          return res.body;
         } else {
           alert('Incorrect User Name or Password, Please try again')
         }
       })
+      .then((body) => console.log(body))
       .catch(err => {
         console.error(err);
         alert('Incorrect User Name or Password, Please try again');
