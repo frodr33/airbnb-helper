@@ -159,20 +159,19 @@ class LogInCard extends React.Component {
         })
         .then(res => {
           if (res.status === 200) {
-            // TODO: Save Cookie
-            console.log("Logged In");
             this.setState({
               submitted: !this.state.submitted,
               redirecting: !this.state.redirecting
             });          
-  
           } else {
-            alert('Please Input a valid username and password')
+            res.text()
+            .then((err) => {
+              alert(err)
+            })
           }
         })
         .catch(err => {
           console.error(err);
-          alert('Please Input a valid username and password');
         });   
     });
   }

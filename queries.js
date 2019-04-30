@@ -32,13 +32,29 @@ getUsers = (request, response) => {
   };
 }
 
+
 registerUser = (request, response) => {
   if (!request.body.username || !request.body.password) {
-    response.status(401).send("Incorrect Username or Password")
+    console.log("ERROR")
+    response.status(401).send("Username and Password cannot be empty!")
     return;
   } 
+
+  pool.query(`SELECT password FROM users WHERE username = $1`, [request.body.username])
+  .then((res) => {
+    if (res.rowCount != 0) {
+      response.status(401).send("Pick another username!")
+      return;
+    } else {
+      registerUserValid(request, response)
+    }
+  })
+  .catch((err) => console.log(err))
+}
+
+registerUserValid = (request, response) => {
   console.log("STILL REGISTER")
-  pool.query(`CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, username VARCHAR(100)
+  pool.query(`CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, username VARCHAR(100) UNIQUE
    NOT NULL, password VARCHAR(100) NOT NULL)`)
     .then(() => signUp(request.body))
     .then(() => {
