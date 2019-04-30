@@ -89,6 +89,7 @@ app.post("/api/getListings", (req, res) => {
     try {
       stringChunk = chunk.toString('utf8');
       df = JSON.parse(stringChunk);
+      console.log("succsesfully parsed JSON from keywords...", df, stringChunk)
       let listingPromises = []
       let listings = []
       let listingObjs = df.listings;
@@ -144,7 +145,7 @@ app.post("/api/getListings", (req, res) => {
         return listings;
       })
       .then((d) => {  
-        console.log("...Sending Listings", d)
+        // console.log("...Sending Listings", d)
         res.send(d);
       })
       .catch((err) => {
@@ -152,6 +153,7 @@ app.post("/api/getListings", (req, res) => {
       })
     } catch (err) {
       console.log("SYSTEM CRASHED");
+      console.log(stringChunk);
       console.log("CRASHED", err);
       res.status(401).send(err)
       return;
