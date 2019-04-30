@@ -93,8 +93,9 @@ app.post("/api/getListings", (req, res) => {
       console.log("SYSTEM CRASHED");
       console.log("CRASHED", err);
       res.status(401).send(err)
+      return;
     }
-    
+
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;
