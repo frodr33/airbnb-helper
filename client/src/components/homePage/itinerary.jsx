@@ -51,11 +51,7 @@ class Itinerary extends Component {
                 </div>             
             );
         } else {
-            return (
-                <div style={{float:"right", paddingRight:"2%", paddingTop:"30%"}}>
-                <Button onClick={this.handleBack}>Back</Button>
-                </div>                   
-            )  
+            return;
         }
     }
 
