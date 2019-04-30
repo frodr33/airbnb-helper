@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const db = require('./queries');
 const app = express();
-const { spawn } = require('child_process');
+const { spawnSync, spawn } = require('child_process');
 const retrieveImage = require('./web-scraping')
 const withAuth = require('./middleware');
 var cookieParser = require('cookie-parser')
@@ -82,8 +82,8 @@ app.post("/api/getListings", (req, res) => {
   // console.log("RECEVIED REQUEST FOR GET LISTINGS")
   let result;
   let pyProgram = spawnSync("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
-  pyProgram.stdout.on("data", (chunk) => {
-    
+  
+    let chunk = pyProgram.output[1];
     let stringChunk;
     let df;
     try {
@@ -160,8 +160,7 @@ app.post("/api/getListings", (req, res) => {
       res.status(401).send(err)
       return;
     }
-  });
-})
+});
 
 app.post('/api/saveListings', withAuth, db.saveListings);
 
