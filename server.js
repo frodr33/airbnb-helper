@@ -79,14 +79,15 @@ app.post("/api/getListings", (req, res) => {
    * listing ID's, for now, listingID is hard
    * coded below */
 
-  console.log("RECEVIED REQUEST FOR GET LISTINGS")
+  // console.log("RECEVIED REQUEST FOR GET LISTINGS")
   let result;
   const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
-    console.log(chunk.toString('utf8'))
+    console.log("RETURN FROM KEYWORDS", chunk.toString('utf8'))
+    console.log("RETURN FROM KEYWORDS CONV TO JSON",  JSON.parse(chunk.toString('utf8')));
     let df = JSON.parse(chunk.toString('utf8'));
-    console.log("RETURN FROM KEYWORDS");
-    console.log(df);
+    // console.log("RETURN FROM KEYWORDS");
+    // console.log(df);
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;
