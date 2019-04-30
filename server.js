@@ -153,7 +153,8 @@ app.post("/api/getListings", (req, res) => {
       })
     } catch (err) {
       console.log("SYSTEM CRASHED");
-      console.log(stringChunk);
+      console.log("raw keywords output", chunk)
+      console.log("string chunk", stringChunk);
       console.log("CRASHED", err);
       res.status(401).send(err)
       return;
