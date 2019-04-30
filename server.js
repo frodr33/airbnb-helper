@@ -156,6 +156,8 @@ app.get('/api/checkToken', withAuth, (req, res) => {
   res.sendStatus(200);
 });
 
+app.get('/api/guestLogIn', db.guestLogIn)
+
 app.post('/api/register', db.registerUser);
 
 app.post('/api/login', db.logInUser)

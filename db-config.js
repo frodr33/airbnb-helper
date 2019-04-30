@@ -1,4 +1,3 @@
-// const PRODUCTION = false;
 var config = {
     production: true,
     local_db : {

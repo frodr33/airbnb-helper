@@ -5,6 +5,7 @@ import CustomFooter from './components/Footer'
 import TabsCard from './components/TabsCard'
 import LogInCard from './components/LogInCard'
 import HomePage from './components/homePage/homePageNew'
+import GuestHome from './components/homePage/guestHome'
 // import HomePage from './components/homePage/homePage'
 import GoogleMap from './components/maps/GoogleMap'
 import { Col, Row } from 'antd';
@@ -72,25 +73,21 @@ function homePage() {
 // fetchUberPrices();
 
 class App extends Component { 
-
   render() {
     return (
       <div  style={{height:"100%"}} className="blurred-img">
       {/* <div className="blurred-img">
       </div> */}
       <div style={{height:"100%"}}>
-       <div>
-          <NavBar></NavBar>
-        </div>
-
         <Router>
-          <div style={{height:"100%"}}>
+          <div>
+            <NavBar guest={false} landing={true}></NavBar>
+          </div>
+          <div style={{height:"90%"}}>
             <Route path="/" exact component={landingPage} />
             <Route path="/landing/" component={landingPage} />
             <Route path="/home/" component={withAuth(HomePage)} />
-            {/* <Route path="/testPage/" component={} /> */}
-            {/* <Route path="/testPage/" component={homePage} /> */}
-            {/* <Route path="/home/" component={HomePage} /> */}
+            <Route path="/guestHome/" component={GuestHome} />
           </div>
         </Router>
 

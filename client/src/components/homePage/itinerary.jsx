@@ -13,6 +13,7 @@ class Itinerary extends Component {
     handleSave = (itineraryName) => {
         console.log(itineraryName);
         console.log("SAVING...")
+
         fetch("/api/saveListings", {
             method: "POST",
             headers: {
@@ -26,19 +27,33 @@ class Itinerary extends Component {
                 listing: this.props.rawListing
             })          
         })
-        .then((res) => console.log(res))
+        .then((res) => {
+            console.log(res)
+            this.props.changeName(itineraryName);
+        })
     }
 
     handleSaveFunc = (savedItinerary) => {
+        // this.setState({
+        //     saving: !this.state.saving
+        // })
         this.handleSave(savedItinerary.itineraryName);
     }
+
+    handleBack = () => {
+        // Show listings
+        this.props.backToListings();
+    }
+    // state = {
+    //     saving: this.props.saving
+    // }
 
     renderButtons = () => {
         if (this.props.saving) {
             return (
-                <div>
+                <div style={{float:"right", paddingRight:"2%", paddingTop:"30%"}}>
                 <Button onClick={this.handleBack}>Back</Button>
-                <Form>
+                <Form style={{float:"right"}}>
                     <SavingModal save={this.handleSaveFunc}></SavingModal>
                 </Form>
                 {/* <Button onClick={this.handleSave}>Save</Button>     */}
@@ -54,7 +69,7 @@ class Itinerary extends Component {
         return (
             <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
                 {this.props.listing}
-                <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{this.props.venueScroller}</div>
+                <div style={{position:"absolute", paddingTop:"14%", width:"90%", height:"100%"}}>{this.props.venueScroller}</div>
                 {this.props.gmap}
                 {this.renderButtons()}
             </div>

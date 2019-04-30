@@ -141,6 +141,7 @@ retriveListings = (req, res) => {
       res.status(401).send('Unauthorized: Invalid token');
     } else {
       let user = decoded.username;
+      if (user === "guest") res.json({"GUESTMODE": "NO SAVING"})
       pool.query(`SELECT data FROM listings WHERE username = $1`, [user])
       .then((data) => {
         console.log(data.rows)
@@ -162,6 +163,8 @@ saveListings = (req,res) => {
     } else {
       let user = decoded.username;
 
+      if (user === "guest") res.json({"GUESTMODE": "NO SAVING"})
+
       pool.query(`CREATE TABLE IF NOT EXISTS listings(id SERIAL PRIMARY KEY, username VARCHAR(100)
       NOT NULL, data jsonb)`)
       .then(() => {
@@ -176,6 +179,54 @@ saveListings = (req,res) => {
   });
 }
 
+guestLogIn = (_, res) => {
+  const username = "guest";
+  const password = "password";
+  pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
+  .then((data) => bcrypt.compare(password, data.rows[0].password, (err, result) => {
+    if (!result) res.status(401).send("Incorrect Username or Password")
+    else {
+      console.log("SUCCESSFUL LOGIN");
+      const SECRET = "tripitsecret"; // PUT IN ENV VARIABLES LATER! DO NOT HARD CODE
+      const token = jwt.sign({username}, SECRET, {
+        expiresIn: "1h"
+      });
+      res.cookie('token', token, {httpOnly: true})
+        .sendStatus(200);
+    }
+  }))
+  .catch((err) => {
+    console.log("No guest log in yet")
+    registerUser({
+      body: {
+        username: username,
+        password: password,
+      }
+    }, res)
+  })
+
+}
+
+logInUser = (request, response) => {
+  let {username, password} = request.body;
+  pool.query(`SELECT password FROM users WHERE username = $1 `, [username])
+  .then((data) => bcrypt.compare(password, data.rows[0].password, (err, result) => {
+    if (!result) response.status(401).send("Incorrect Username or Password")
+    else {
+      console.log("SUCCESSFUL LOGIN");
+      const SECRET = "tripitsecret"; // PUT IN ENV VARIABLES LATER! DO NOT HARD CODE
+      const token = jwt.sign({username}, SECRET, {
+        expiresIn: "1h"
+      });
+      response.cookie('token', token, {httpOnly: true})
+        .sendStatus(200);
+    }
+  }))
+  .catch((err) => {
+    console.log(err);
+    response.status(401).send("Incorrect Username or Password")
+  })
+}
 
 module.exports = {
   getUsers,
@@ -185,5 +236,6 @@ module.exports = {
   saveListings,
   seeListings,
   retriveListings,
-  dropListings
+  dropListings,
+  guestLogIn
 }

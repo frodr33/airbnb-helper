@@ -23,45 +23,11 @@ let tabList = [{
   tab: createItineraryIcon,
 }];
 
-class HomePage extends React.Component {
+class GuestHome extends React.Component {
     constructor(props) {
         super(props);
         this.createTab = this.createTab.bind(this);
     }
-
-    componentDidMount() {
-      fetch("/api/retrieveListings")
-      .then((data) => data.json())
-      .then((res) => {
-
-        if (res.GUESTMODE === "NO SAVING") {
-          return;
-        }
-
-        console.log(res)
-        // Load this data into
-
-        res.forEach((d) => {
-          let data = d.data;
-          let tabs = this.state.tabList;
-          let custom_key = data.itineraryName;
-          let key = "Itinerary: " + this.state.itineraryNum;
-          key = custom_key ? custom_key : key;
-          tabs.push({
-              key: key,
-              tab: key,
-          })
-          this.setState({
-            tabList: tabs,
-            itineraryNum: this.state.itineraryNum + 1,
-            key: key
-        })
-          let coords = [data.listing.latitude, data.listing.longitude];
-          this.addVenuesCard(data.venues, data.listingID, coords, data.listing); 
-        })
-      })
-    }
-    
 
     handleSubmit = (d) => {
       d.preventDefault();
@@ -133,22 +99,9 @@ class HomePage extends React.Component {
 
     }
 
-    backToListings = () => {
-      // let listingIdMap = this.state.listingIdMap;
-      // let listingsIDs = listingIdMap[this.state.key];
-      let content = this.state.contentList;
-      let key = this.state.key
-      let infScroller = this.state.infiniteScrollerList[key]
-      content[key] = <div style={{width:'100%', height:'100%', paddingTop:"5%"}}>{infScroller}</div>
-
-      this.setState({
-        contentList: content
-      })
-    }
-
     addVenuesCard = (venues, listingID, coordinates, rawListing) => {
       let listing;
-      let allowSaving = true;
+      let allowSaving = false;
       if (!rawListing) {
         listing = this.state.listingMap[listingID];
         rawListing = this.state.rawListingMap[listingID];
@@ -188,16 +141,8 @@ class HomePage extends React.Component {
       // Get lat and long for particular listing
       let gmap = <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
       let newContent = 
-      <Itinerary backToListings={this.backToListings} changeName={this.changeTabName} saving={allowSaving} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller} gmap={gmap}>
+      <Itinerary changeName={this.changeTabName} saving={allowSaving} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller} gmap={gmap}>
       </Itinerary>
-
-      // <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
-      //   {listingComp}
-      //   <div style={{position:"absolute", paddingTop:"18%", width:"90%", height:"100%"}}>{venueScroller}</div>
-      //   <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
-      //   <Button onClick={this.handleBack}>Back</Button>
-      //   <Button onClick={(listingID) => this.handleSave}>Save</Button>
-      // </div>
       content[key] = newContent;
 
 
@@ -207,14 +152,13 @@ class HomePage extends React.Component {
 
     }
 
+
     createTab = (listings) => {
         let tabs = this.state.tabList;
         let content = this.state.contentList;
         let key = "Itinerary: " + this.state.itineraryNum;
         let listingMap = this.state.listingMap;
         let rawListingMap = this.state.rawListingMap;
-        let listingIdMap = this.state.listingIdMap;
-        let listingIDs = [];
 
         let table = []
         tabs.push({
@@ -239,12 +183,9 @@ class HomePage extends React.Component {
 
             listingMap[listings[i].listingID] = listing
             rawListingMap[listings[i].listingID] = listings[i]
-            listingIDs.push(listings[i].listingID);
 
             table.push(listing)
         }
-
-        listingIdMap[key] = listingIDs;
 
         let infScroller = <InfiniteScroller key={key + "infscroller"} infHeight="100%" infPadtop="2%" infPadleft="0%" infWidth="50%" input={table} title="Pick an AirBnB!"></InfiniteScroller>;
         content[key] = <div style={{width:'100%', height:'100%', paddingTop:"5%"}}>{infScroller}</div>
@@ -285,19 +226,8 @@ class HomePage extends React.Component {
         },
         rawListingMap: {
           test: <h1>HELLO WORLD</h1>
-        },
-        listingIdMap: {
-          test: <h1>HELLO WORLD</h1>
         }
     }
-
-  // onTabChange = (key, type) => {
-  //   console.log("On tab change")
-  //   console.log(key, type);
-  //   console.log(this.state.contentList[key])
-
-  //   this.setState({ [type]: key });
-  // }
 
   onTabChange = (key) => {
     this.setState({
@@ -333,4 +263,4 @@ class HomePage extends React.Component {
   }
 }
 
-export default HomePage;
+export default GuestHome;

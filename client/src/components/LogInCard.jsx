@@ -5,6 +5,7 @@ import '../App.css';
 import CollectionsPage from './CollectionsPage';
 import { Route, Redirect } from "react-router-dom";
 import Cookies from 'universal-cookie';
+import NavBar from './NavBar'
 const cookies = new Cookies();
 // cookies.set('myCat', 'Pacman', { path: '/' });
 // console.log(cookies.get('myCat'));
@@ -28,6 +29,7 @@ class LogInCard extends React.Component {
         visible: false,
         confirmLoading: false,
         redirecting: false,
+        guestRedirect: false,
     };
   }
   showModal = (d) => {
@@ -60,9 +62,33 @@ class LogInCard extends React.Component {
 
   guestSignIn = () => {
     console.log("guest")
-    this.setState({
-      redirecting: !this.state.redirecting
+    this.setState({ 
+      guestRedirect: !this.state.guestRedirect
     });     
+
+    // Just redirect!
+
+  //   fetch('/api/guestLogIn', {
+  //     method: 'GET',
+  //     headers: {
+  //         'Accept': 'application/json',
+  //         'Content-Type': 'application/json',
+  //     }
+  // })    
+  // .then(res => {
+  //     if (res.status === 200) {
+  //       // TODO: Save Cookie
+  //       console.log(cookies.get('token'))
+  //       console.log("Logged In");
+  //       console.log(res)
+  //       this.setState({
+  //         redirecting: !this.state.redirecting
+  //       });          
+  //       return res.body;
+  //     } else {
+  //       alert('Incorrect User Name or Password, Please try again')
+  //     }
+  //   })
   }
 
   handleLogIn = (d) => {
@@ -147,9 +173,10 @@ class LogInCard extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { visible, confirmLoading, ModalText } = this.state;
-    const { redirecting } = this.state
+    const { redirecting, guestRedirect } = this.state
 
     if (redirecting) return <Redirect to={'/home/'} />;
+    if (guestRedirect) return <Redirect to={'/guestHome/'} />;
 
     let onChange = (_) => {
         this.setState({

@@ -3,9 +3,9 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow, Polyline } from 'google-maps
 
 const mapStyles = {
   width: '40%',
-  height: '50%',
+  height: '55%',
   left: '55%',
-  top: "40%"
+  top: "35%"
 };
 
 export class GoogleMap extends Component {
