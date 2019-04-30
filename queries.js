@@ -52,7 +52,6 @@ registerUser = (request, response) => {
   })
   .catch((err) => {
     if (err.code === "42P01") {
-      // Table does not exist
       registerUserValid(request, response)
     }
     console.log(err)
