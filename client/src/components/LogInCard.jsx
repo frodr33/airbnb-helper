@@ -128,6 +128,8 @@ class LogInCard extends React.Component {
 
 
   handleSubmit = (d) => {
+      console.log("SUBMITTED")
+
       this.setState({
           submitted: !this.state.submitted
       });
@@ -137,7 +139,12 @@ class LogInCard extends React.Component {
         if (!err) {
         console.log('Destination ', values.Username);
         console.log('Slider ', values.Password);
+        } else {
+          console.log("ERROR", err)
+          return;
         }
+
+        console.log("REGISTERING", values)
 
         fetch('/api/register', {
             method: 'POST',
@@ -160,15 +167,21 @@ class LogInCard extends React.Component {
             });          
   
           } else {
-            alert('Incorrect User Name or Password, Please try again')
+            alert('Please Input a valid username and password')
           }
         })
         .catch(err => {
           console.error(err);
-          alert('Incorrect User Name or Password, Please try again');
+          alert('Please Input a valid username and password');
         });   
     });
   }
+
+  usernameValidator = (rules, value, callback) => {
+    console.log(value)
+    if (!value || value.length <= 4) callback("Username must be atleast 5 characters long")
+    else callback();
+}
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -177,12 +190,6 @@ class LogInCard extends React.Component {
 
     if (redirecting) return <Redirect to={'/home/'} />;
     if (guestRedirect) return <Redirect to={'/guestHome/'} />;
-
-    let onChange = (_) => {
-        this.setState({
-            guest: !this.state.guest
-        })
-    }
 
     return (
       <div>
@@ -194,28 +201,38 @@ class LogInCard extends React.Component {
                 <p>TripIt! is an Itinerary planner personalized to your interests. Sign up for an account to save your trips!</p>
             </div>
             <Form layout="horizontal" style={{width: "100%"}} onSubmit={this.handleSubmit}>
-                <Form.Item>
+                <Form.Item label="username">
                     {getFieldDecorator('Username', {
                         rules: [{
-                            required: this.state.guest || true, 
+                            required: true, 
                             message: 'Please input your Username!'
+                        }, {
+                          validator: this.usernameValidator
                         }],
                     })(
                         <Input placeholder="User Name"/>
                     )}
                 </Form.Item>
-                <Form.Item>
-                {getFieldDecorator('Password', {
-                    rules: [{
-                    required: this.state.guest || true, 
-                    message: 'Please input your Password!'
-                    }],
-                })(
-                    <Input.Password placeholder="Password" />
-                )}
-            </Form.Item>
-            <Form.Item style={{paddingTop:"40%", textAlign:"center"}}>
-            {
+                <Form.Item label="password">
+                  {getFieldDecorator('Password', {
+                      rules: [{
+                      required: true, 
+                      message: 'Please input your Password!'
+                      },{
+                        validator: this.usernameValidator
+                      }],
+                  })(
+                      <Input.Password placeholder="Password" />
+                  )}
+                </Form.Item>
+                <Form.Item style={{paddingTop:"40%", textAlign:"center"}}>
+                    <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{width:"100%", paddingBottom:"none"}}>
+                    Create New Account 
+                    </Button>
+                  {/* {
                     this.state.submitted ? <Spin tip="Loading"></Spin> : 
                     <Button
                     type="primary"
@@ -223,16 +240,15 @@ class LogInCard extends React.Component {
                     style={{width:"100%", paddingBottom:"none"}}>
                     Create New Account 
                     </Button>
-                }
-                <Button
-                    type="secondary"
+                  } */}
+            </Form.Item>
+            </Form> 
+            <Button
                     onClick={this.guestSignIn}
                     style={{width:"100%", paddingTop:"none"}}>
                     Continue as Guest 
-                </Button>
-                <CollectionsPage login={this.handleLogIn}></CollectionsPage>
-            </Form.Item>
-            </Form> 
+              </Button>
+              <CollectionsPage login={this.handleLogIn}></CollectionsPage>
         </Card>       
       </div>
     );

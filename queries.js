@@ -33,6 +33,11 @@ getUsers = (request, response) => {
 }
 
 registerUser = (request, response) => {
+  if (!request.body.username || !request.body.password) {
+    response.status(401).send("Incorrect Username or Password")
+    return;
+  } 
+  console.log("STILL REGISTER")
   pool.query(`CREATE TABLE IF NOT EXISTS users(id SERIAL PRIMARY KEY, username VARCHAR(100)
    NOT NULL, password VARCHAR(100) NOT NULL)`)
     .then(() => signUp(request.body))
@@ -46,7 +51,10 @@ registerUser = (request, response) => {
       response.cookie('token', token, {httpOnly: true})
         .sendStatus(200);
     })
-    .catch((err) => console.error("ERROR Executing query: ", err.stack))
+    .catch((err) => {
+      console.log("ERROR REGISTERING: ", err);
+      response.status(401).send("Incorrect Username or Password")
+    })
 }
 
 logInUser = (request, response) => {
