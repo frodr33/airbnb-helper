@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
 
         date_range, duration = d["dates"], d["duration"]
-        neighborhood = d["neighborhood"]
+        neighborhood, num_adults = d["neighborhood"], d["numberAdults"]
         #Addition from Aditya to incorporate the price value
         maxPrice = d["maxPrice"]
         destination = d["destination"]
@@ -318,7 +318,7 @@ if __name__ == '__main__':
             else:
                 print("key error:" + listingID)
 
-        res = json.dumps({"start_date": "", "end_date": "", "listings": listings_infos})
+        res = json.dumps({"start_date": date_range[0][:10], "end_date": date_range[1][:10], "listings": listings_infos, "numberAdults": num_adults})
         print(res)
     except Exception as e:
         print(traceback.format_exc())
