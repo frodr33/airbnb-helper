@@ -83,8 +83,17 @@ app.post("/api/getListings", (req, res) => {
   let result;
   const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
+    
+    let stringChunk;
+    try {
+      stringChunk = chunk.toString('utf8');
+    } catch (err) {
+      console.log("CRASHED", err);
+      res.status(401).send(err)
+    }
+
     console.log("RETURN FROM KEYWORDS", chunk.toString('utf8'))
-    console.log("RETURN FROM KEYWORDS CONV TO JSON",  JSON.parse(chunk.toString('utf8')));
+    console.log("RETURN FROM KEYWORDS CONV TO JSON",  JSON.parse(stringChunk.toString('utf8')));
     let df = JSON.parse(chunk.toString('utf8'));
     // console.log("RETURN FROM KEYWORDS");
     // console.log(df);

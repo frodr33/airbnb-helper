@@ -168,7 +168,17 @@ class TextForm extends Component {
                         bio: values.bio
                     })
                 })
-                .then(res => res.json())
+                .then(res => {
+                    if (res.status === 401) {
+                        // Crashed
+                        res.text()
+                        .then((err) => {
+                            alert(err);
+                        })
+                    } else {
+                        return res.json()
+                    }
+                })
                 .then(d => this.receivedResultsHandler(d))
                 .catch(err => console.log(err))
             } else {
