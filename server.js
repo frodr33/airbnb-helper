@@ -89,74 +89,73 @@ app.post("/api/getListings", (req, res) => {
     try {
       stringChunk = chunk.toString('utf8');
       df = JSON.parse(stringChunk);
+      let listingPromises = []
+      let listings = []
+      let listingObjs = df.listings;
+  
+      for (let i = 0; i < listingObjs.length; i++) {
+        let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
+        let venues = foursquareCreateRequest(coordinates[0], coordinates[1], 10);
+        venues.then((d) => {
+          let venueDatas = [];
+          d.forEach((venueResponse) => {
+            // console.log(venueResponse)
+            let venue = venueResponse.venue;
+            let location = venue.location;
+            let venueData = {
+              id: venue.id,
+              name: venue.name,
+              address: location.address,
+              crossStreet: location.crossStreet,
+              latitude: location.lat,
+              longitude: location.lng,
+              distance: location.distance,
+              postalAddress: location.address + " " + location.city + " " + location.state + ", " + location.cc + ", " + location.postalCode
+            }
+            venueDatas.push(venueData);
+          })
+          listingVenueMap.set(listingObjs[i].id, venueDatas)
+        })
+  
+        listingPromises.push(retrieveImage(listingObjs[i].id));
+      }
+  
+      Promise.all(listingPromises)
+      .then(() => {
+        for (let i = 0; i < listingPromises.length; i++) {
+  
+          listingPromises[i].then(d => listings.push(
+            {
+              listingID: listingObjs[i].id,
+              name: listingObjs[i].name,
+              latitude: listingObjs[i].location.latitude,
+              longitude: listingObjs[i].location.longitude,
+              host_name: listingObjs[i].host_name,
+              price: listingObjs[i].price,
+              listingURL: d,
+              keywords: listingObjs[i].keywords,
+              numAdults: df.numberAdults,
+              checkin: df.start_date,
+              checkout: df.end_date,
+              reviewScore: listingObjs[i].review_score
+            }
+          ))
+        }
+        return listings;
+      })
+      .then((d) => {  
+        console.log("...Sending Listings", d)
+        res.send(d);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     } catch (err) {
       console.log("SYSTEM CRASHED");
       console.log("CRASHED", err);
       res.status(401).send(err)
       return;
     }
-
-    let listingPromises = []
-    let listings = []
-    let listingObjs = df.listings;
-
-    for (let i = 0; i < listingObjs.length; i++) {
-      let coordinates = [listingObjs[i].location.latitude, listingObjs[i].location.longitude]
-      let venues = foursquareCreateRequest(coordinates[0], coordinates[1], 10);
-      venues.then((d) => {
-        let venueDatas = [];
-        d.forEach((venueResponse) => {
-          // console.log(venueResponse)
-          let venue = venueResponse.venue;
-          let location = venue.location;
-          let venueData = {
-            id: venue.id,
-            name: venue.name,
-            address: location.address,
-            crossStreet: location.crossStreet,
-            latitude: location.lat,
-            longitude: location.lng,
-            distance: location.distance,
-            postalAddress: location.address + " " + location.city + " " + location.state + ", " + location.cc + ", " + location.postalCode
-          }
-          venueDatas.push(venueData);
-        })
-        listingVenueMap.set(listingObjs[i].id, venueDatas)
-      })
-
-      listingPromises.push(retrieveImage(listingObjs[i].id));
-    }
-
-    Promise.all(listingPromises)
-    .then(() => {
-      for (let i = 0; i < listingPromises.length; i++) {
-
-        listingPromises[i].then(d => listings.push(
-          {
-            listingID: listingObjs[i].id,
-            name: listingObjs[i].name,
-            latitude: listingObjs[i].location.latitude,
-            longitude: listingObjs[i].location.longitude,
-            host_name: listingObjs[i].host_name,
-            price: listingObjs[i].price,
-            listingURL: d,
-            keywords: listingObjs[i].keywords,
-            numAdults: df.numberAdults,
-            checkin: df.start_date,
-            checkout: df.end_date,
-            reviewScore: listingObjs[i].review_score
-          }
-        ))
-      }
-      return listings;
-    })
-    .then((d) => {  
-      console.log("...Sending Listings", d)
-      res.send(d);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
   });
 })
 
