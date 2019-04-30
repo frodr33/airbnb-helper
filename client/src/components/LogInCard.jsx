@@ -176,6 +176,12 @@ class LogInCard extends React.Component {
     });
   }
 
+  passwordValidator = (rules, value, callback) => {
+    console.log(value)
+    if (!value || value.length <= 4) callback("Password must be atleast 5 characters long")
+    else callback();
+}
+
   usernameValidator = (rules, value, callback) => {
     console.log(value)
     if (!value || value.length <= 4) callback("Username must be atleast 5 characters long")
@@ -218,7 +224,7 @@ class LogInCard extends React.Component {
                       required: true, 
                       message: 'Please input your Password!'
                       },{
-                        validator: this.usernameValidator
+                        validator: this.passwordValidator
                       }],
                   })(
                       <Input.Password placeholder="Password" />

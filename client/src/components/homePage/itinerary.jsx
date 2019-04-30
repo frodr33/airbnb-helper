@@ -73,6 +73,7 @@ class Itinerary extends Component {
         venues={venues}>
         </GoogleMap>
         </div>
+        
         return (
             <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
                 {this.props.listing}

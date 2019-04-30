@@ -42,7 +42,8 @@ registerUser = (request, response) => {
 
   pool.query(`SELECT EXISTS (SELECT password FROM users WHERE username = $1)`, [request.body.username])
   .then((res) => {
-    if (res.rowCount != 0) {
+    console.log(res);
+    if (res.rows[0].exists) {
       response.status(401).send("Pick another username!")
       return;
     } else {
