@@ -85,18 +85,16 @@ app.post("/api/getListings", (req, res) => {
   pyProgram.stdout.on("data", (chunk) => {
     
     let stringChunk;
+    let df;
     try {
       stringChunk = chunk.toString('utf8');
+      df = JSON.parse(stringChunk);
     } catch (err) {
+      console.log("SYSTEM CRASHED");
       console.log("CRASHED", err);
       res.status(401).send(err)
     }
-
-    console.log("RETURN FROM KEYWORDS", chunk.toString('utf8'))
-    console.log("RETURN FROM KEYWORDS CONV TO JSON",  JSON.parse(stringChunk.toString('utf8')));
-    let df = JSON.parse(chunk.toString('utf8'));
-    // console.log("RETURN FROM KEYWORDS");
-    // console.log(df);
+    
     let listingPromises = []
     let listings = []
     let listingObjs = df.listings;
