@@ -120,8 +120,8 @@ class GuestHome extends React.Component {
         coordinates = {[rawListing.latitude, rawListing.longitude]}
         rating={rawListing.reviewScore}
         numAdults={rawListing.numAdults}
-        numAdults={rawListing.checkin}
-        numAdults={rawListing.checkout}
+        checkin={rawListing.checkin}
+        checkout={rawListing.checkout}
         ></Listing>
         
       }
@@ -182,9 +182,9 @@ class GuestHome extends React.Component {
               keywords={listings[i].keywords}
               coordinates = {[listings[i].latitude, listings[i].longitude]}
               rating={listings[i].reviewScore}
-              numAdults={listing[i].numAdults}
-              numAdults={listing[i].checkin}
-              numAdults={listing[i].checkout}
+              numAdults={listings[i].numAdults}
+              checkin={listings[i].checkin}
+              checkout={listings[i].checkout}
               ></Listing>
 
             listingMap[listings[i].listingID] = listing
