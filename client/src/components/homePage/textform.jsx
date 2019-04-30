@@ -119,6 +119,14 @@ class TextForm extends Component {
         })
     }
 
+    receivedResultsErrorHandler = () => {
+        this.setState({
+            submitted: !this.state.submitted,
+            bioValue: ""
+        })
+    }
+
+
 
     createTable = () => {
         let table = [];
@@ -173,6 +181,7 @@ class TextForm extends Component {
                         // Crashed
                         res.text()
                         .then((err) => {
+                            this.receivedResultsErrorHandler();
                             alert(err);
                         })
                     } else {
