@@ -182,7 +182,7 @@ class TextForm extends Component {
                         res.text()
                         .then((err) => {
                             this.receivedResultsErrorHandler();
-                            alert(err);
+                            alert("Query failed: Please try again!");
                         })
                     } else {
                         return res.json()
