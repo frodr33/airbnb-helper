@@ -185,10 +185,11 @@ class TextForm extends Component {
                             alert("Query failed: Please try again!");
                         })
                     } else {
-                        return res.json()
+                        console.log("successful")
+                        res.json()
+                        .then(d => this.receivedResultsHandler(d))
                     }
                 })
-                .then(d => this.receivedResultsHandler(d))
                 .catch(err => console.log(err))
             } else {
                 console.log("Printing errors:")
