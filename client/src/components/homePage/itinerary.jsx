@@ -51,7 +51,11 @@ class Itinerary extends Component {
                 </div>             
             );
         } else {
-            return;
+            return (
+                <div style={{float:"right", paddingRight:"2%", paddingTop:"30%"}}>
+                <Button onClick={this.handleBack}>Back</Button>
+                </div>                   
+            )  
         }
     }
 
@@ -73,7 +77,7 @@ class Itinerary extends Component {
         venues={venues}>
         </GoogleMap>
         </div>
-        
+
         return (
             <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
                 {this.props.listing}

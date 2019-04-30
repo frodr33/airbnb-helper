@@ -134,8 +134,6 @@ class HomePage extends React.Component {
     }
 
     backToListings = () => {
-      // let listingIdMap = this.state.listingIdMap;
-      // let listingsIDs = listingIdMap[this.state.key];
       let content = this.state.contentList;
       let key = this.state.key
       let infScroller = this.state.infiniteScrollerList[key]

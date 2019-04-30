@@ -99,6 +99,17 @@ class GuestHome extends React.Component {
 
     }
 
+    backToListings = () => {
+      let content = this.state.contentList;
+      let key = this.state.key
+      let infScroller = this.state.infiniteScrollerList[key]
+      content[key] = <div style={{width:'100%', height:'100%', paddingTop:"5%"}}>{infScroller}</div>
+
+      this.setState({
+        contentList: content
+      })
+    }
+
     addVenuesCard = (venues, listingID, coordinates, rawListing) => {
       let listing;
       let allowSaving = false;
