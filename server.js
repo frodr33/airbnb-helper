@@ -81,7 +81,7 @@ app.post("/api/getListings", (req, res) => {
 
   // console.log("RECEVIED REQUEST FOR GET LISTINGS")
   let result;
-  const pyProgram = spawn("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
+  let pyProgram = spawnSync("python", ["./machine-learning/keywords.py",JSON.stringify(req.body)])
   pyProgram.stdout.on("data", (chunk) => {
     
     let stringChunk;
