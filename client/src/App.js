@@ -90,10 +90,6 @@ class App extends Component {
             <Route path="/guestHome/" component={GuestHome} />
           </div>
         </Router>
-
-        <div className="Footer">
-          <CustomFooter></CustomFooter>
-        </div>
       </div>
       </div>
     )

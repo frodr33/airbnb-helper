@@ -43,7 +43,7 @@ class Itinerary extends Component {
     renderButtons = () => {
         if (this.props.saving) {
             return (
-                <div style={{float:"right", paddingRight:"2%", paddingTop:"30%"}}>
+                <div style={{position: "absolute", right:"0", bottom:"0", paddingRight:"1%", paddingBottom:"1%"}}>
                 <Button onClick={this.handleBack}>Back</Button>
                 <Form style={{float:"right"}}>
                     <SavingModal save={this.handleSaveFunc}></SavingModal>
@@ -77,7 +77,7 @@ class Itinerary extends Component {
         return (
             <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
                 {this.props.listing}
-                <div style={{position:"absolute", paddingTop:"14%", width:"90%", height:"100%"}}>{this.props.venueScroller}</div>
+                <div style={{position:"relative", paddingTop:"2%", width:"90%", height:"100%"}}>{this.props.venueScroller}</div>
                 {gmap}
                 {this.renderButtons()}
             </div>

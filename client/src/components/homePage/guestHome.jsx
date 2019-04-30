@@ -150,7 +150,7 @@ class GuestHome extends React.Component {
       let listingComp = <InfiniteScroller key={key + "mainListing"} infHeight="30%" overflow={"unset"} infPadtop="0%" infPadleft="0%" infWidth="98%" input={listing}></InfiniteScroller>;
       // let uberComponent = <UberCard prices={pricePromises}></UberCard>
       let venueScroller = <InfiniteScroller id={venues[0].id + "VENUESCROLLER"} infPadTop="2%" key={key + "venueScroller"}
-        infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
+        infHeight="70%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
 
       // Get lat and long for particular listing
       // let gmap = <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
