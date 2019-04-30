@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Button, Form } from 'antd';
 import 'antd/dist/antd.css'
 import SavingModal from '../savingModal'
+import GoogleMap from '../maps/GoogleMap';
 
 class Itinerary extends Component {
     constructor(props) {
@@ -55,11 +56,28 @@ class Itinerary extends Component {
     }
 
     render () {
+        const airbnbName = this.props.airbnbName;
+        const listingID = this.props.listingID;
+        const coordinates = this.props.coordinates;
+        const venues = this.props.venues;
+
+        console.log(coordinates);
+
+        let gmap = 
+        <div className="MapWrapper">
+        <GoogleMap class="TESTCLASS" style={{position: "none"}} 
+        airbnbName={airbnbName} 
+        listingID={listingID} 
+        lat={coordinates[0]} 
+        long={coordinates[1]}
+        venues={venues}>
+        </GoogleMap>
+        </div>
         return (
             <div style={{width:'100%', height:'100%', paddingTop:"0%"}}>
                 {this.props.listing}
                 <div style={{position:"absolute", paddingTop:"14%", width:"90%", height:"100%"}}>{this.props.venueScroller}</div>
-                {this.props.gmap}
+                {gmap}
                 {this.renderButtons()}
             </div>
         );

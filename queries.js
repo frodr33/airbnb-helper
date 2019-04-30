@@ -40,7 +40,7 @@ registerUser = (request, response) => {
     return;
   } 
 
-  pool.query(`SELECT password FROM users WHERE username = $1`, [request.body.username])
+  pool.query(`SELECT EXISTS (SELECT password FROM users WHERE username = $1)`, [request.body.username])
   .then((res) => {
     if (res.rowCount != 0) {
       response.status(401).send("Pick another username!")
@@ -49,7 +49,13 @@ registerUser = (request, response) => {
       registerUserValid(request, response)
     }
   })
-  .catch((err) => console.log(err))
+  .catch((err) => {
+    if (err.code === "42P01") {
+      // Table does not exist
+      registerUserValid(request, response)
+    }
+    console.log(err)
+  })
 }
 
 registerUserValid = (request, response) => {
@@ -157,23 +163,28 @@ seeListings = (request, response) => {
 };
 
 retriveListings = (req, res) => {
-  const token = req.cookies.token;
-  const secret =  "tripitsecret";
-  jwt.verify(token, secret, (err, decoded) => {
-    if (err) {
-      console.log("Not Authorized")
-      res.status(401).send('Unauthorized: Invalid token');
-    } else {
-      let user = decoded.username;
-      if (user === "guest") res.json({"GUESTMODE": "NO SAVING"})
-      pool.query(`SELECT data FROM listings WHERE username = $1`, [user])
-      .then((data) => {
-        console.log(data.rows)
-        res.send(data.rows)
-      })  
-      .catch((err) => console.log(err))
-    }    
-  })
+  pool.query(`CREATE TABLE IF NOT EXISTS listings(id SERIAL PRIMARY KEY, username VARCHAR(100)
+  NOT NULL, data jsonb)`)
+  .then(() => {
+    const token = req.cookies.token;
+    const secret =  "tripitsecret";
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        console.log("Not Authorized")
+        res.status(401).send('Unauthorized: Invalid token');
+      } else {
+        let user = decoded.username;
+        if (user === "guest") res.json({"GUESTMODE": "NO SAVING"})
+        pool.query(`SELECT data FROM listings WHERE username = $1`, [user])
+        .then((data) => {
+          console.log(data.rows)
+          res.send(data.rows)
+        })  
+        .catch((err) => console.log(err))
+      }    
+    })
+  })  
+  .catch((err) => res.send("ERROR Executing query: ", err.stack))
 }
 
 

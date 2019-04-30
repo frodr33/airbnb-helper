@@ -142,9 +142,9 @@ class GuestHome extends React.Component {
         infHeight="90%"  infWidth="45%" input={venueCards} title="Best things To Do!"></InfiniteScroller> 
 
       // Get lat and long for particular listing
-      let gmap = <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
+      // let gmap = <div className="MapWrapper"><GoogleMap class="TESTCLASS" style={{position: "none"}} airbnbName={"Airbnb"} listingID={listingID} lat={coordinates[0]} long={coordinates[1]} venues={venues}></GoogleMap></div>
       let newContent = 
-      <Itinerary changeName={this.changeTabName} saving={allowSaving} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller} gmap={gmap}>
+      <Itinerary backToListings={this.backToListings} airbnbName={rawListing.name} changeName={this.changeTabName} saving={allowSaving} coordinates={coordinates} listingID={listingID} rawListing={rawListing} venues={venues} listing={listingComp} venueScroller={venueScroller}>
       </Itinerary>
       content[key] = newContent;
 
