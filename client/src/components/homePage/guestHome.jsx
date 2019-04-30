@@ -119,6 +119,9 @@ class GuestHome extends React.Component {
         keywords={rawListing.keywords}
         coordinates = {[rawListing.latitude, rawListing.longitude]}
         rating={rawListing.reviewScore}
+        numAdults={rawListing.numAdults}
+        numAdults={rawListing.checkin}
+        numAdults={rawListing.checkout}
         ></Listing>
         
       }
@@ -179,6 +182,9 @@ class GuestHome extends React.Component {
               keywords={listings[i].keywords}
               coordinates = {[listings[i].latitude, listings[i].longitude]}
               rating={listings[i].reviewScore}
+              numAdults={listing[i].numAdults}
+              numAdults={listing[i].checkin}
+              numAdults={listing[i].checkout}
               ></Listing>
 
             listingMap[listings[i].listingID] = listing
@@ -247,14 +253,7 @@ class GuestHome extends React.Component {
         >
           {
             tabList.map((tab, i) => {
-              return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>
-              // if (tab.key === "createNewItinerary"){
-              //   return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>
-              // } else {
-              //   console.log(tab.key)
-              //   console.log(this.state.venueList)
-              //   return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.infiniteScrollerList[tab.key]}{this.state.venueList[tab.key]}</TabPane>
-              // }            
+              return <TabPane tab={tab.tab} key={tab.key} style={{height:"100%"}}>{this.state.contentList[tab.key]}</TabPane>         
               })
           }
         </Tabs>

@@ -3,8 +3,6 @@ import { Button, Form } from 'antd';
 import 'antd/dist/antd.css'
 import SavingModal from '../savingModal'
 
-
-
 class Itinerary extends Component {
     constructor(props) {
         super(props);
@@ -34,19 +32,12 @@ class Itinerary extends Component {
     }
 
     handleSaveFunc = (savedItinerary) => {
-        // this.setState({
-        //     saving: !this.state.saving
-        // })
         this.handleSave(savedItinerary.itineraryName);
     }
 
     handleBack = () => {
-        // Show listings
         this.props.backToListings();
     }
-    // state = {
-    //     saving: this.props.saving
-    // }
 
     renderButtons = () => {
         if (this.props.saving) {
@@ -56,8 +47,6 @@ class Itinerary extends Component {
                 <Form style={{float:"right"}}>
                     <SavingModal save={this.handleSaveFunc}></SavingModal>
                 </Form>
-                {/* <Button onClick={this.handleSave}>Save</Button>     */}
-                {/* <SavingModal></SavingModal> */}
                 </div>             
             );
         } else {

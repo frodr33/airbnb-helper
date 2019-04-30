@@ -132,15 +132,16 @@ app.post("/api/getListings", (req, res) => {
             price: listingObjs[i].price,
             listingURL: d,
             keywords: listingObjs[i].keywords,
+            numAdults: df.numberAdults,
+            checkin: df.start_date,
+            checkout: df.end_date,
             reviewScore: listingObjs[i].review_score
           }
         ))
       }
       return listings;
     })
-    .then((d) => {
-      // result = d;
-      
+    .then((d) => {  
       console.log("...Sending Listings", d)
       res.send(d);
     })

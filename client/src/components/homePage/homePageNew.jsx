@@ -166,6 +166,9 @@ class HomePage extends React.Component {
         keywords={rawListing.keywords}
         coordinates = {[rawListing.latitude, rawListing.longitude]}
         rating={rawListing.reviewScore}
+        numAdults={rawListing.numAdults}
+        checkin={rawListing.checkin}
+        checkout={rawListing.checkout}
         ></Listing>
         
       }
@@ -222,7 +225,10 @@ class HomePage extends React.Component {
             tab: key
         })
 
+        
         for (let i = 0; i < listings.length; i++) {
+            console.log("MAKING THE LISTINGS")
+            console.log(listings)
             let listing = 
               <Listing 
               addVenuesCard={this.addVenuesCard} 
@@ -235,6 +241,9 @@ class HomePage extends React.Component {
               keywords={listings[i].keywords}
               coordinates = {[listings[i].latitude, listings[i].longitude]}
               rating={listings[i].reviewScore}
+              numAdults={listings[i].numAdults}
+              checkin={listings[i].checkin}
+              checkout={listings[i].checkout}
               ></Listing>
 
             listingMap[listings[i].listingID] = listing

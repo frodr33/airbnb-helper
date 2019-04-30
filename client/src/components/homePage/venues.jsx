@@ -13,10 +13,6 @@ class VenueCards extends Component {
     componentDidMount() {
         let promise = this.props.uberPromise;
         promise.then((price) => {
-
-            console.log(price.prices)
-            console.log(price.prices.estimate)
-
             let uberX;
             let uberXL;
             let uberPool;

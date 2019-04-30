@@ -31,8 +31,6 @@ export class GoogleMap extends Component {
       }
     };
 
-
-  // Will make center be airbnb and all the restauarunts be other pins on the map
   render() {
     const triangleCoords = [
         {lat: 40.7447766, lng: -73.9101444},
@@ -53,10 +51,6 @@ export class GoogleMap extends Component {
           
           return <Marker key={markerKey} name={venue.name} onClick={this.onMarkerClick} position={{lat:lat, lng:long}}/>
         })}
-
-        {/* {this.props.venueCoords.map((coords) => {
-          return <Marker key={this.props.listingID} position={{lat:coords[0], lng: coords[1]}}/>
-        })} */}
 
         <Marker
           onClick={this.onMarkerClick}

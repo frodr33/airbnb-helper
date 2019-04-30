@@ -32,8 +32,10 @@ class Listing extends React.Component {
   }
 
   createAirbnbUrl = () => {
+    console.log(this.props.checkin)
     let airbnb = "https://www.airbnb.com/rooms/"
-    return airbnb + this.props.listingKey;
+    return airbnb + this.props.listingKey + "?" + "adults=" + this.props.numAdults + "&check_in=" + this.props.checkin
+     + "&check_out=" + this.props.checkout;
   }
 
   render() {
@@ -46,9 +48,7 @@ class Listing extends React.Component {
             <h4>{"Key words: " + this.props.keywords}</h4>      
             <Rate allowHalf defaultValue={Math.floor((this.props.rating/20)*2)/2} />
             <a style={{position:"relative", zIndex:"1", display:"block"}} target="_blank" href={this.createAirbnbUrl()}>See on the Airbnb Website!</a>
-
          </div>
-         {/* <a style={{position:"absolute", zIndex:"1", float:"right"}} target="_blank" href={this.createAirbnbUrl()}>See on the Airbnb Website!</a> */}
       </Card>
     );
   }
