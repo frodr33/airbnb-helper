@@ -171,7 +171,7 @@ app.get('/api/clearListings', (req, res) => {
   db.dropListings();
 })
 
-app.get('/api/getUsers', db.getUsers)
+// app.get('/api/getUsers', db.getUsers)
 
 // app.get('/api/clearDB', (req, res) => {
 //   db.dropDB();
