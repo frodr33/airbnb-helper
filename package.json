@@ -24,7 +24,7 @@
   "homepage": "https://github.com/frodr33/airbnb-helper#readme",
   "dependencies": {
     "@material-ui/core": "^3.9.2",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.3",
     "cheerio": "^1.0.0-rc.3",
     "cookie-parser": "^1.4.4",
