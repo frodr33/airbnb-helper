@@ -1,5 +1,5 @@
 numpy==1.16.2
-nltk==3.2.5
+nltk==3.6.3
 pandas==0.24.2
 awscli==1.16.140
 requests==2.21.0
